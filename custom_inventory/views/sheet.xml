@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <template id="assets_backend" name="custom_inventory assets" inherit_id="report.minimal_layout">
+      <xpath expr="." position="inside">
+        <link rel="stylesheet" href="/custom_inventory/static/src/css/base.css"/>
+        <link rel="stylesheet" href="/custom_inventory/static/src/css/fancy.css"/>
+        <link rel="stylesheet" href="/custom_inventory/static/src/css/main.css"/>
+        <link rel="stylesheet" href="/custom_inventory/static/src/css/sheet.css"/>
+      </xpath>
+    </template>
+  </data>
+</openerp>

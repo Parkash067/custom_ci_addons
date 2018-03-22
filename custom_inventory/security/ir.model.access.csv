@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+certificate_security_user,user,model_custom_stock_move,custom_inventory.group_user,1,1,1,0
+certificate_security_manager,manger,model_custom_stock_move,custom_inventory.group_manager,1,1,1,0
+certificate_security_user_invoice,user,model_custom_dummy_invoice,custom_inventory.group_user,1,1,1,0
+certificate_security_manager_invoice,manger,model_custom_dummy_invoice,custom_inventory.group_manager,1,1,1,0

@@ -1,0 +1,13 @@
+.openerp .oe_form_sheet_full_screen {
+  max-width: 100%;
+  width: 95;
+  margin: 0 auto;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}

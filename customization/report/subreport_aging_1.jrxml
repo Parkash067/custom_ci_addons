@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_aging" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="to_date" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="partner_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	SUM(s.total) AS balance,
+	SUM(s.days_due_01to30) AS days_30,
+	SUM(s.days_due_31to45) AS days_45,
+	SUM(s.days_due_46to60) AS days_60,
+	SUM(s.days_due_61to90) AS days_90,
+	SUM(s.days_due_91to120) AS days_120,
+	SUM(s.days_due_121to150) AS days_150,
+	SUM(s.days_due_grt_150) AS above_150
+FROM
+	(
+		SELECT
+			CASE
+				WHEN
+					ai.id IS NOT NULL
+				THEN
+					CASE
+						WHEN ai.type::text = 'out_refund'::text THEN (-1)::numeric * ai.residual
+						ELSE ai.residual
+					END
+				WHEN
+					ai.id IS NULL
+				THEN
+					l.debit - l.credit
+				ELSE
+					0::numeric
+			END AS total,
+			CASE
+				WHEN
+					daysdue.days_due >= 0::double precision
+				AND
+					daysdue.days_due <= 30::double precision
+				AND
+					ai.id IS NOT NULL
+				THEN
+					CASE
+						WHEN
+							ai.type::text = 'out_refund'::text
+						THEN
+							(-1)::numeric * ai.residual
+						ELSE
+							ai.residual
+					END
+				WHEN
+					daysdue.days_due >= 0::double precision
+				AND
+					daysdue.days_due <= 30::double precision
+				AND
+					ai.id IS NULL
+				THEN
+					l.debit - l.credit
+				ELSE
+					0::numeric
+			END AS days_due_01to30,
+			CASE
+				WHEN
+					daysdue.days_due >= 31::double precision
+				AND
+					daysdue.days_due <= 45::double precision
+				AND
+					ai.id IS NOT NULL
+				THEN
+					CASE
+						WHEN
+							ai.type::text = 'out_refund'::text
+						THEN
+							(-1)::numeric * ai.residual
+						ELSE
+							ai.residual
+					END
+				WHEN
+					daysdue.days_due >= 31::double precision
+				AND
+					daysdue.days_due <= 45::double precision
+				AND
+					ai.id IS NULL
+				THEN
+					l.debit - l.credit
+				ELSE
+					0::numeric
+			END AS days_due_31to45,
+			CASE
+				WHEN
+					daysdue.days_due >= 46::double precision
+				AND
+					daysdue.days_due <= 60::double precision
+				AND
+					ai.id IS NOT NULL
+				THEN
+					CASE
+						WHEN
+							ai.type::text = 'out_refund'::text
+						THEN
+							(-1)::numeric * ai.residual
+						ELSE
+							ai.residual
+					END
+				WHEN
+					daysdue.days_due >= 46::double precision
+				AND
+					daysdue.days_due <= 60::double precision
+				AND
+					ai.id IS NULL
+				THEN
+					l.debit - l.credit
+				ELSE
+					0::numeric
+			END AS days_due_46to60,
+			CASE
+				WHEN
+					daysdue.days_due >= 61::double precision
+				AND
+					daysdue.days_due <= 90::double precision
+				AND
+					ai.id IS NOT NULL
+				THEN
+					CASE
+						WHEN
+							ai.type::text = 'out_refund'::text
+						THEN
+							(-1)::numeric * ai.residual
+						ELSE
+							ai.residual
+					END
+				WHEN
+					daysdue.days_due >= 61::double precision
+				AND
+					daysdue.days_due <= 90::double precision
+				AND
+					ai.id IS NULL
+				THEN
+					l.debit - l.credit
+				ELSE
+					0::numeric
+			END AS days_due_61to90,
+			CASE
+				WHEN
+					daysdue.days_due >= 91::double precision
+				AND
+					daysdue.days_due <= 120::double precision
+				AND
+					ai.id IS NOT NULL
+				THEN
+					CASE
+						WHEN
+							ai.type::text = 'out_refund'::text
+						THEN
+							(-1)::numeric * ai.residual
+						ELSE
+							ai.residual
+					END
+				WHEN
+					daysdue.days_due >= 91::double precision
+				AND
+					daysdue.days_due <= 120::double precision
+				AND
+					ai.id IS NULL
+				THEN
+					l.debit - l.credit
+				ELSE
+					0::numeric
+			END AS days_due_91to120,
+			CASE
+				WHEN
+					daysdue.days_due >= 121::double precision
+				AND
+					daysdue.days_due <= 150::double precision
+				AND
+					ai.id IS NOT NULL
+				THEN
+					CASE
+						WHEN
+							ai.type::text = 'out_refund'::text
+						THEN
+							(-1)::numeric * ai.residual
+						ELSE
+							ai.residual
+					END
+				WHEN
+					daysdue.days_due >= 121::double precision
+				AND
+					daysdue.days_due <= 150::double precision
+				AND
+					ai.id IS NULL
+				THEN
+					l.debit - l.credit
+				ELSE
+					0::numeric
+			END AS days_due_121to150,
+			CASE
+				WHEN
+					daysdue.days_due >= 150::double precision
+				AND
+					ai.id IS NOT NULL
+				THEN
+					CASE
+						WHEN
+							ai.type::text = 'out_refund'::text
+						THEN
+							(-1)::numeric * ai.residual
+						ELSE
+							ai.residual
+					END
+				WHEN
+					daysdue.days_due >= 150::double precision
+				AND
+					ai.id IS NULL
+				THEN
+					l.debit - l.credit
+				ELSE
+					0::numeric
+			END AS days_due_grt_150
+		FROM
+			account_move_line l
+		JOIN
+			(
+				SELECT
+					lt.id,
+					CASE
+						WHEN
+							inv.id IS NOT NULL
+						THEN
+							date_part('day'::text, $P{to_date}::timestamp with time zone - inv.date_due::timestamp with time zone)
+						ELSE
+							date_part('day'::text, $P{to_date}::timestamp with time zone - lt.date_maturity::timestamp with time zone)
+					END AS days_due
+				FROM
+					account_move_line lt
+				LEFT JOIN
+					account_invoice inv ON lt.move_id = inv.move_id
+			) AS daysdue
+		ON
+			daysdue.id = l.id
+		JOIN
+			account_account
+		ON
+			account_account.id = l.account_id
+		JOIN
+			res_company
+		ON
+			account_account.company_id = res_company.id
+		JOIN
+			account_move
+		ON
+			account_move.id = l.move_id
+		LEFT JOIN
+			account_invoice ai
+		ON
+			ai.move_id = l.move_id
+		JOIN
+			res_partner
+		ON
+			res_partner.id = l.partner_id
+		WHERE
+			account_account.active = 'TRUE'
+		AND
+			ai.state::text <> 'paid'::text
+		AND
+			account_account.type::text = 'payable'::text
+		AND
+			l.reconcile_id IS NULL
+		AND
+			daysdue.days_due IS NOT NULL
+		AND
+			res_partner.id = $P{partner_id}
+	) s
+HAVING
+	SUM(s.total) > 0.0]]>
+	</queryString>
+	<field name="balance" class="java.math.BigDecimal"/>
+	<field name="days_30" class="java.math.BigDecimal"/>
+	<field name="days_45" class="java.math.BigDecimal"/>
+	<field name="days_60" class="java.math.BigDecimal"/>
+	<field name="days_90" class="java.math.BigDecimal"/>
+	<field name="days_120" class="java.math.BigDecimal"/>
+	<field name="days_150" class="java.math.BigDecimal"/>
+	<field name="above_150" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="15">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="80" height="15" backcolor="#FEFEFE"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[As on Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="80" y="0" width="65" height="15" backcolor="#FEFEFE"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[0-30]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="145" y="0" width="65" height="15" backcolor="#FEFEFE"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[31-45]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="210" y="0" width="65" height="15" backcolor="#FEFEFE"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[46-60]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="275" y="0" width="65" height="15" backcolor="#FEFEFE"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[61-90]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="405" y="0" width="65" height="15" backcolor="#FEFEFE"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[121-150]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="470" y="0" width="80" height="15" backcolor="#FEFEFE"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Above 150]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="340" y="0" width="65" height="15" backcolor="#FEFEFE"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[91-120]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="80" y="0" width="65" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{days_30}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="145" y="0" width="65" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{days_45}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="210" y="0" width="65" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{days_60}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="275" y="0" width="65" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{days_90}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="405" y="0" width="65" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{above_150}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="470" y="0" width="80" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{above_150}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="340" y="0" width="65" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{days_120}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

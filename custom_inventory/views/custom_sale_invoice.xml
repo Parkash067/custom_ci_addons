@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+       <template id="custom_sale_invoice">
+           <t t-call='report.html_container'>
+               <t t-foreach="docs" t-as="account_invoice">
+                   <t>
+                      <div class="page">
+                          <div class="row">
+                              <h1 t-esc="'%s' %res_company.name" style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
+                                         margin-right:auto;text-align:center;"/>
+                              <div style="max-width:100%;height:auto;width:80%;margin-left:auto;
+                                         margin-right:auto;text-align:center;">
+                                  <span style="font-size:18px;font-weight:bold;">Assembler Cum Manufacturer of Union Star Motorcycle</span><br/>
+                                  <span t-esc="'%s' %res_company.street" style="font-size:18px;font-weight:bold;"/>,
+                                  <span t-esc="'%s' %res_company.city"  style="font-size:18px;font-weight:bold;"/><br/>
+                                  <span style="font-size:18px;"><strong>Tel: </strong></span><span t-esc="'%s' %res_company.phone" style="font-size:18px;font-weight:bold;"/>
+                              </div>
+                              <h2 style="border:1px solid black;border-radius:5px;padding:10px;
+                                         max-width:100%;height:auto;width:60%;margin-left:auto;
+                                         margin-right:auto;text-align:center;background:lightgrey;">
+                                  Sales Tax Invoice
+                              </h2>
+                              <h3 align="center">Sales Tax Registration No.: 17-00-8711-009-55</h3><hr style="border-top:1px solid black;"/>
+                              <div style="font-size:18px">
+                                  <div>
+                                       <div style="display:inline-block;"><strong style="font-size:18px">Invoice No.</strong></div>
+                                       <div t-field="account_invoice.sara_inv_serial" style="width:20%; border-bottom:1px solid black; display:inline-block;margin-left:10px;"/>
+                                       <div t-field="account_invoice.date_invoice" style="width:20%; border-bottom:1px solid black; display:inline-block;float:right;margin-left:10px;"/>
+                                       <div style="display:inline-block;float:right"><strong style="font-size:18px">Date:</strong></div>
+                                  </div>
+                              </div>
+                              <br/><br/>
+                               <div style="font-size:18px; padding:10px;width:100%;display: inline-block;float:left">
+                                   <div>
+                                       <div style="display:inline-block;"><strong style="font-size:18px">Buyer's Name: </strong></div>
+                                       <div t-field="account_invoice.partner_id" style=" width:70%; border-bottom:1px solid black; display:inline-block;margin-left:50px;"/>
+                                   </div><br/>
+                                   <div>
+                                       <div style="display:inline-block;"><strong style="font-size:18px">Address: </strong></div>
+                                       <div t-if="account_invoice.address" style=" width:70%; border-bottom:1px solid black; display:inline-block;margin-left:100px;">
+                                           <span t-field="account_invoice.address"/>
+                                       </div>
+                                   </div><br/>
+                                   <div>
+                                       <div style="display:inline-block;"><strong style="margin-top:5px;">Sales Tax No.<sub>(IF ANY)</sub>:</strong></div>
+                                       <div style="width:70%; border-bottom:1px solid black; display:inline-block;">
+                                           <t t-if="account_invoice.ntn">
+                                               <span t-field="account_invoice.ntn"/>
+                                           </t>
+                                       </div>
+                                   </div>
+                              </div>
+                              <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                              <t t-if="account_invoice.ntn==False and account_invoice.partner_id!='Allied Business Corporation'">
+                                  <div style="font-size:16px; border:1px solid black; border-radius:10px;width:1000px;height:388px;">
+                                      <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
+                                          <thead style="border-bottom:1px solid black">
+                                              <tr>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Qty.</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Description</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Unit Price</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Total Exclu. Taxes</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Sales Tax 17%</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Further Tax 2%</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">W.H.T</td>
+                                                  <td class="right">Total Inclu. Taxes</td>
+                                              </tr>
+                                          </thead>
+                                          <tbody class="invoice_tbody">
+                                              <tr t-foreach="account_invoice.invoice_line" t-as="l">
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="round(l.quantity)"/>
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="l.products"/><br/><br/>Engine# <span t-esc="l.engine_number"/><br/><br/>Chassis# <span t-esc="l.chassis_number"/><br/><br/><span>HP 70 CC</span>
+                                                      <br/><br/><br/><br/><br/><br/><br/><br/>
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.price_unit))" />
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.price_unit)*int(l.quantity))" />
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.sales_tax))" />
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.further_tax))" />
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.wht))" />
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.wht+l.further_tax+l.sales_tax+l.price_subtotal))"/>
+                                                  </td>
+                                              </tr>
+                                          </tbody>
+                                      </table>
+                                  </div><br/>
+                                  <div class="row"><br/>
+                                      <div class="col-xs-4 pull-right">
+                                          <table class="table table-condensed" style="font-size:16px">
+                                              <t>
+                                                  <tr>
+                                                      <td style="border-top:1px solid black !important;">
+                                                          <strong>TOTAL</strong>
+                                                      </td>
+                                                      <td class="text-right" style="border-top:1px solid black !important;">
+                                                          <strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_total))"/></strong>
+                                                      </td>
+                                                  </tr>
+                                              </t>
+                                          </table>
+                                      </div>
+                                  </div>
+                                  <div class="row"><br/>
+                                      <div class="col-xs-4 pull-left">
+                                          <table class="table table-condensed" style="font-size:16px">
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;">
+                                                      <strong>Exclu. Net Tax Value</strong>
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <strong><span t-esc="'{0:,.2f}'.format(int(round(account_invoice.amount_untaxed)))"/></strong>
+                                                  </td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;"><strong>Sales Tax 17%</strong></td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;"><strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_tax))"/></strong></td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;"><strong>Further Tax 2%</strong></td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;"><strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.further_tax))"/></strong></td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;"><strong>W.H.T</strong></td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;"><strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.wht))"/></strong></td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;">
+                                                      <strong>Total Value inclu. Tax</strong>
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_total))"/></strong>
+                                                  </td>
+                                              </tr>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </t>
+                              <t t-if="account_invoice.ntn!=False and account_invoice.partner_id!='Allied Business Corporation'">
+                                  <div style="font-size:16px; border:1px solid black; border-radius:10px;width:1000px;height:395px;">
+                                      <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
+                                          <thead style="border-bottom:1px solid black">
+                                              <tr>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Qty.</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Description</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Unit Price</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Sales Tax 17%</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">W.H.T</td>
+                                                  <td class="text-right">Total Inclu. Taxes</td>
+                                              </tr>
+                                          </thead>
+                                          <tbody class="invoice_tbody">
+                                              <tr t-foreach="account_invoice.invoice_line" t-as="l">
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="round(l.quantity)"/>
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="l.products"/><br/><br/>Engine# <span t-esc="l.engine_number"/><br/><br/>Chassis# <span t-esc="l.chassis_number"/><br/><br/><span>HP 70 CC</span>
+                                                      <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.price_unit))" />
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.sales_tax))" />
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.wht))" />
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.wht+l.further_tax+l.sales_tax+l.price_subtotal))"/>
+                                                  </td>
+                                              </tr>
+                                          </tbody>
+                                      </table>
+                                  </div><br/>
+                                  <div class="row"><br/>
+                                      <div class="col-xs-4 pull-right">
+                                          <table class="table table-condensed" style="font-size:16px">
+                                              <t>
+                                                  <tr>
+                                                      <td style="border-top:1px solid black !important;">
+                                                          <strong>TOTAL</strong>
+                                                      </td>
+                                                      <td class="text-right" style="border-top:1px solid black !important;">
+                                                          <strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_total))"/></strong>
+                                                      </td>
+                                                  </tr>
+                                              </t>
+                                          </table>
+                                      </div>
+                                  </div>
+                                  <div class="row"><br/>
+                                      <div class="col-xs-4 pull-left">
+                                          <table class="table table-condensed" style="font-size:16px">
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;">
+                                                      <strong>Exclu. Net Tax Value</strong>
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <strong><span t-esc="'{0:,.2f}'.format(int(round(account_invoice.amount_untaxed)))"/></strong>
+                                                  </td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;"><strong>Sales Tax 17%</strong></td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;"><strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_tax))"/></strong></td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;"><strong>W.H.T</strong></td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;"><strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.wht))"/></strong></td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;">
+                                                      <strong>Total Value inclu. Tax</strong>
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_total))"/></strong>
+                                                  </td>
+                                              </tr>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </t>
+                              <t t-if="account_invoice.partner_id=='Allied Business Corporation'">
+                                  <div style="font-size:16px; border:1px solid black; border-radius:10px;width:1000px;height:288px;">
+                                      <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
+                                          <thead style="border-bottom:1px solid black">
+                                              <tr>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Qty.</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Description</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Unit Price</td>
+                                                   <td style="border-right: 1px solid black; padding:10px;">Total Exclu. Taxes</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Sales Tax 17%</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">W.H.T</td>
+                                                  <td class="right">Total Inclu. Taxes</td>
+                                              </tr>
+                                          </thead>
+                                          <tbody class="invoice_tbody">
+                                              <tr t-foreach="account_invoice.invoice_line" t-as="l">
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="round(l.quantity)"/>
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="l.products"/><br/><br/>Engine# <span t-esc="l.engine_number"/><br/><br/>Chassis# <span t-esc="l.chassis_number"/><br/><br/><span>HP 70 CC</span><br/><br/><br/><br/>
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.price_unit))" />
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.price_unit)*int(l.quantity))" />
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.sales_tax))" />
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.wht))" />
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.wht+l.further_tax+l.sales_tax+l.price_subtotal))"/>
+                                                  </td>
+                                              </tr>
+                                          </tbody>
+                                      </table>
+                                  </div><br/>
+                                  <div class="row"><br/>
+                                      <div class="col-xs-4 pull-right">
+                                          <table class="table table-condensed" style="font-size:16px">
+                                              <t>
+                                                  <tr>
+                                                      <td style="border-top:1px solid black !important;">
+                                                          <strong>TOTAL</strong>
+                                                      </td>
+                                                      <td class="text-right" style="border-top:1px solid black !important;">
+                                                          <strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_total))"/></strong>
+                                                      </td>
+                                                  </tr>
+                                              </t>
+                                          </table>
+                                      </div>
+                                  </div>
+                                  <div class="row"><br/>
+                                      <div class="col-xs-4 pull-left">
+                                          <table class="table table-condensed" style="font-size:16px">
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;">
+                                                      <strong>Exclu. Net Tax Value</strong>
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <strong><span t-esc="'{0:,.2f}'.format(int(round(account_invoice.amount_untaxed)))"/></strong>
+                                                  </td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;"><strong>Sales Tax 17%</strong></td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;"><strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_tax))"/></strong></td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;">
+                                                      <strong>Total Value inclu. Tax</strong>
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_total))"/></strong>
+                                                  </td>
+                                              </tr>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </t>
+                              <div>
+                                  <div style="width:20%; border-bottom:1px solid black; float:right; margin-right:10px;"/><br/>
+                                  <div style="float:right; margin-right:30px;"><strong>Authorized Signature</strong></div>
+                              </div>
+
+                          </div>
+                          <br/><br/>
+                      </div>
+                   </t>
+               </t>
+           </t>
+       </template>
+    </data>
+</openerp>

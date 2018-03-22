@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+         <menuitem
+                name="Certificates"
+                id="certificate_top_menu"
+                sequence="50"/>
+
+        <menuitem
+                name="Certificates"
+                id="certificate_side_top_menu"
+                parent="certificate_top_menu"
+                sequence="10"/>
+
+        <record id="custom_certificate_request_view" model="ir.actions.act_window">
+	        <field name="name">Pending Requests</field>
+            <field name="res_model">custom.stock.move</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('status', '=', 'Request for Certificate')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+         <record id="custom_certificate_request_duplicate_view" model="ir.actions.act_window">
+	        <field name="name">Duplicate Requests</field>
+            <field name="res_model">custom.stock.move</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+        <record id="custom_certificate_view" model="ir.actions.act_window">
+	        <field name="name">Certificate</field>
+            <field name="res_model">custom.stock.move</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+        <record id="custom_certificate_tree" model="ir.ui.view">
+            <field name="name">custom_stock.move.tree</field>
+            <field name="model">custom.stock.move</field>
+            <field name="arch" type="xml">
+                <tree string="Certificate Tree"  version="8.0" editable="top" default_order="client_name desc">
+                    <field name="engine_number" readonly="1"/>
+                    <field name="chassis_number" readonly="1"/>
+                    <field name="picking_id" string="DO" readonly="1"/>
+                    <button name="create_view_invoice" string="Create Invoice" type="object" icon="STOCK_PREFERENCES"/>
+                    <field name="partner_id" readonly="1"/>
+                    <field name="client_name"/>
+                    <field name="nic"/>
+                    <field name="ntn"/>
+                    <field name="address"/>
+                </tree>
+            </field>
+        </record>
+        <record id="custom_certificate_form" model="ir.ui.view">
+            <field name="name">stock.move.form</field>
+            <field name="model">custom.stock.move</field>
+            <field name="arch" type="xml">
+                <form string="Certificate Tree"  version="8.0" >
+                    <header>
+                        <button name="validate" type="object" string="Request for Approval" class="oe_highlight" groups="custom_inventory.group_user"/>
+                        <button name="cancel" type="object" string="Cancel" class="oe_highlight" groups="custom_inventory.group_user"/>
+                        <button name="approve" type="object" string="Approve" class="oe_highlight" groups="custom_inventory.group_manager" />
+                        <button name="create_view_invoice" type="object" string="Create &amp; View Invoice" class="oe_highlight"/>
+                        <field name="status" widget="statusbar"  statusbar_colors='{"draft":"blue","Request for Certificate":"blue","Approved":"blue"}'/>
+                    </header>
+                    <sheet>
+                        <group string="Bike Certificate">
+                            <group>
+                                <field name="picking_id" string="DO"/>
+                                <field name="product_id"/>
+                                <field name="product_qty"/>
+                                <field name="color"/>
+                                <field name="model"/>
+                                <field name="year"/>
+                                <field name="counter" string="Number of Issuance" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="date"/>
+                                <field name="chassis_number"/>
+                                <field name="engine_number"/>
+                                <field name="client_name"/>
+                                <field name="nic"/>
+                                <field name="ntn"/>
+                                <field name="issuance_date"/>
+                                <field name="certificate_issuance"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Reason">
+                                <field name="reason" placeholder="Mention your reason here...."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="custom_certificate_search" model="ir.ui.view">
+            <field name="name">custom_stock.move.search</field>
+            <field name="model">custom.stock.move</field>
+            <field name="arch" type="xml">
+                <search string="Certificate Search"  version="8.0">
+                    <field name="engine_number"/>
+                    <field name="chassis_number"/>
+                    <field name="picking_id"/>
+                    <field name="partner_id"/>
+                    <group string="Issued">
+                        <filter string="Today" domain="[('issuance_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('issuance_date', '&lt;=', datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+                        <filter name="issuance_date" string="Daily" context="{'group_by':'issuance_date:day'}"/>
+                        <filter name="issuance_date" string="Monthly" context="{'group_by':'issuance_date:month'}"/>
+                        <filter name="issuance_date" string="Yearly" context="{'group_by':'issuance_date:year'}"/>
+                    </group>
+                    <group string="Not Issued">
+                        <filter name="issuance_date" string="Pending" domain="[('issuance_date','=',False)]"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="custom_duplicate_certificate_tree" model="ir.ui.view">
+            <field name="name">custom_stock.move.tree</field>
+            <field name="model">custom.stock.move</field>
+            <field name="arch" type="xml">
+                <tree string="Certificate Tree"  version="8.0">
+                    <field name="picking_id" string="DO" readonly="1"/>
+                    <field name="engine_number"/>
+                    <field name="chassis_number"/>
+                    <field name="partner_id" readonly="1"/>
+                    <field name="date" readonly="1"/>
+                    <field name="status" readonly="1"/>
+                    <field name="counter" string="Log"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_req_new_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="custom_duplicate_certificate_tree"/>
+            <field name="act_window_id" ref="custom_certificate_request_view"/>
+        </record>
+
+        <record id="action_req_new_form" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="custom_certificate_form"/>
+            <field name="act_window_id" ref="custom_certificate_request_view"/>
+        </record>
+
+        <record id="action_req_duplicate_new_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="custom_duplicate_certificate_tree"/>
+            <field name="act_window_id" ref="custom_certificate_request_duplicate_view"/>
+        </record>
+
+        <record id="action_req_duplicate_new_form" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="custom_certificate_form"/>
+            <field name="act_window_id" ref="custom_certificate_request_duplicate_view"/>
+        </record>
+
+         <menuitem
+            name="Certificates"
+            action="custom_certificate_view"
+            id="menu_certificate_view"
+            sequence="100"
+            parent="certificate_side_top_menu"
+            groups="custom_inventory.group_user"
+           >
+        </menuitem>
+        <menuitem
+            name="Pending Requests"
+            action="custom_certificate_request_view"
+            id="menu_custom_certificate_request_view"
+            sequence="110"
+            parent="certificate_side_top_menu"
+            groups="custom_inventory.group_manager"
+            >
+        </menuitem>
+        <menuitem
+            name="Request for Duplication"
+            action="custom_certificate_request_duplicate_view"
+            id="menu_custom_certificate_request_duplicate_view"
+            sequence="120"
+            parent="certificate_side_top_menu"
+            groups="custom_inventory.group_user"
+            >
+        </menuitem>
+
+
+         <menuitem
+                name="Report"
+                id="certificate_tax_report_side_top"
+                parent="certificate_top_menu"
+                sequence="20"/>
+
+        <record id="custom_tax_report" model="ir.actions.act_window">
+	        <field name="name">Tax Report</field>
+            <field name="res_model">custom.dummy.invoice.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+
+         <menuitem
+            name="Tax Report"
+            action="custom_tax_report"
+            id="menu_custom_tax_report"
+            sequence="10"
+            parent="certificate_tax_report_side_top"
+            groups="custom_inventory.group_user"
+            >
+        </menuitem>
+
+        <record id="tax_report_tree" model="ir.ui.view">
+            <field name="name">Config Tree</field>
+            <field name="model">custom.dummy.invoice.line</field>
+            <field name="arch" type="xml">
+                <tree string="Tax Report Tree"  version="8.0" create="false">
+                    <field name="ntn"/>
+                    <field name="nic"/>
+                    <field name="name"/>
+                    <field name="products" string="Description"/>
+                    <field name="engine_number"/>
+                    <field name="chassis_number"/>
+                    <field name="sara_inv_number"/>
+                    <field name="date"/>
+                    <field name="excl_val"/>
+                    <field name="further_tax" string="Further Tax"/>
+                    <field name="sales_tax" string="S.T. Val."/>
+                    <field name="incl_val"/>
+                </tree>
+            </field>
+        </record>
+         <record id="tax_report_search" model="ir.ui.view">
+            <field name="name">Config Search</field>
+            <field name="model">custom.dummy.invoice.line</field>
+            <field name="arch" type="xml">
+                <search string="Tax Report Search"  version="8.0" create="false">
+                    <field name="date"/>
+                </search>
+            </field>
+        </record>
+
+
+         <menuitem
+                name="Configuration"
+                id="certificate_configuration_side_top"
+                parent="certificate_top_menu"
+                sequence="30"/>
+
+        <record id="custom_certificate_config" model="ir.actions.act_window">
+	        <field name="name">Configuration</field>
+            <field name="res_model">custom.cert.inv.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+
+         <menuitem
+            name="Set Price"
+            action="custom_certificate_config"
+            id="menu_custom_certificate_config"
+            sequence="10"
+            parent="certificate_configuration_side_top"
+            groups="custom_inventory.group_user"
+            >
+        </menuitem>
+
+        <record id="config_tree" model="ir.ui.view">
+            <field name="name">Config Tree</field>
+            <field name="model">custom.cert.inv.config</field>
+            <field name="arch" type="xml">
+                <tree string="Config Tree"  version="8.0">
+                    <field name="type"/>
+                    <field name="price"/>
+                </tree>
+            </field>
+        </record>
+        <record id="config_form" model="ir.ui.view">
+            <field name="name">Config Form</field>
+            <field name="model">custom.cert.inv.config</field>
+            <field name="arch" type="xml">
+                <form string="Config Form"  version="8.0">
+                    <sheet>
+                        <group string="Configuration">
+                            <field name="type"/>
+                            <field name="price"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>

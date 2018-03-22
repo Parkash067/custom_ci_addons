@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+         <record model="ir.ui.view" id="custom_stock_picking_form">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@string='Products']" position="after">
+                    <page string="Stock Split">
+                        <field name="stock_split_lines" nolabel="1" colspan="4">
+                            <tree editable="top" string="Stock Splits">
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_qty" readonly="1"/>
+                                <field name="engine_number"/>
+                                <field name="chassis_number"/>
+                                <field name="color"/>
+                                <field name="model"/>
+                                <field name="year"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+         <!--<record model="ir.ui.view" id="custom_stock_move_tree">-->
+            <!--<field name="name">stock.move.tree</field>-->
+            <!--<field name="model">stock.move</field>-->
+            <!--<field name="inherit_id" ref="stock.view_move_tree" />-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//field[@name='name']" position="attributes">-->
+                    <!--<attribute name="invisible">1</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='picking_type_id']" position="attributes">-->
+                    <!--<attribute name="invisible">1</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='location_id']" position="attributes">-->
+                    <!--<attribute name="invisible">1</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='location_dest_id']" position="attributes">-->
+                    <!--<attribute name="invisible">1</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='date_expected']" position="attributes">-->
+                    <!--<attribute name="invisible">1</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='picking_id']" position="attributes">-->
+                    <!--<attribute name="string">DO</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='origin']" position="attributes">-->
+                    <!--<attribute name="string">Sale Order</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='state']" position="after">-->
+                    <!--<field name="counter"/>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!--<record model="ir.ui.view" id="custom_stock_move_search">-->
+            <!--<field name="name">stock.move.search</field>-->
+            <!--<field name="model">stock.move</field>-->
+            <!--<field name="inherit_id" ref="stock.view_move_search"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//field[@name='origin']" position="attributes">-->
+                    <!--<attribute name="string">DO</attribute>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record model="ir.ui.menu" id="sale.menu_sale_quotations">-->
+            <!--<field name="name">Quotation For Package</field>-->
+        <!--</record>-->
+    </data>
+</openerp>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+         <record model="ir.ui.view" id="custom_stock_picking_form_">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.picking.form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="string">DO</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+
+   <fontFamily name="Century Gothic">
+       <normal><![CDATA[fonts/CenturyGothic.ttf]]></normal>
+       <bold><![CDATA[fonts/CenturyGothicBold.ttf]]></bold>
+       <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+   </fontFamily>
+
+
+</fontFamilies>

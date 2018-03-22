@@ -1,0 +1,847 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aging_detail" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="date_to" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="x" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="date_from" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	x.id,
+	x.name,
+	x.region,
+	x.region_id,
+	x.d0130,
+	x.d3145,
+	x.d4660,
+	x.d6190,
+	x.d91120,
+	x.d121150,
+	x.d150p,
+	(x.d0130+x.d3145+x.d4660+x.d6190+x.d91120+x.d121150+x.d150p) AS bal
+FROM
+(
+SELECT
+	z.id,
+	z.name,
+	z.region,
+	z.region_id,
+	(SELECT ref FROM res_partner WHERE id = z.id) AS code,
+	z.bal,
+	SUM
+	(
+		CASE
+			WHEN
+				z.resdate >= 0 AND z.resdate <= 30
+			THEN
+				z.resamt
+			ELSE
+				0.00
+		END
+	) AS d0130,
+	SUM
+	(
+		CASE
+			WHEN
+				z.resdate >= 31 AND z.resdate <= 45
+			THEN
+				z.resamt
+			ELSE
+				0.00
+		END
+	) AS d3145,
+	SUM
+	(
+		CASE
+			WHEN
+				z.resdate >= 46 AND z.resdate <= 60
+			THEN
+				z.resamt
+			ELSE
+				0.00
+		END
+	) AS d4660,
+	SUM
+	(
+		CASE
+			WHEN
+				z.resdate >= 61 AND z.resdate <= 90
+			THEN
+				z.resamt
+			ELSE
+				0.00
+		END
+	) AS d6190,
+	SUM
+	(
+		CASE
+			WHEN
+				z.resdate >= 91 AND z.resdate <= 120
+			THEN
+				z.resamt
+			ELSE
+				0.00
+		END
+	) AS d91120,
+	SUM
+	(
+		CASE
+			WHEN
+				z.resdate >= 120 AND z.resdate <= 150
+			THEN
+				z.resamt
+			ELSE
+				0.00
+		END
+	) AS d121150,
+	SUM
+	(
+		CASE
+			WHEN
+				z.resdate > 150
+			THEN
+				z.resamt
+			ELSE
+				0.00
+		END
+	) AS d150p
+FROM
+(
+SELECT
+	a.id,
+	a.name,
+	a.region,
+	a.region_id,
+	(SELECT id FROM res_partner WHERE id = (SELECT partner_id FROM res_users WHERE id = (SELECT user_id FROM res_partner WHERE id = a.id))) AS spid,
+	(SELECT name FROM res_partner WHERE id = (SELECT partner_id FROM res_users WHERE id = (SELECT user_id FROM res_partner WHERE id = a.id))) AS sp,
+	b.bal,
+	f.date_invoice,
+	f.resdate,
+	f.resamt
+FROM
+(
+	SELECT DISTINCT
+		res_partner.id AS id,
+		res_partner.name AS name,
+		(SELECT name FROM res_region WHERE id = res_partner.region_id) AS region,
+		(SELECT id FROM res_region WHERE id = res_partner.region_id) AS region_id
+	FROM
+		res_partner,
+		account_move_line AS l,
+		account_account,
+		account_move AS am
+	WHERE
+		l.account_id = account_account.id
+	AND
+		res_partner.customer = False
+	AND
+		l.move_id = am.id
+	AND
+		am.state IN ('draft', 'posted')
+	AND
+		account_account.type IN ('payable', 'receivable')
+	AND
+		account_account.active
+	AND
+		((reconcile_id IS NULL)
+	OR
+		(reconcile_id IN (	SELECT
+						recon.id
+					FROM
+						account_move_reconcile AS recon
+					WHERE
+						recon.create_date >= TO_DATE($P{date_from}, 'YYYY-MM-DD')
+					AND
+						recon.create_date <= TO_DATE($P{date_to}, 'YYYY-MM-DD')))
+				 )
+	AND
+		l.partner_id = res_partner.id
+	AND
+		l.date >= TO_DATE($P{date_from}, 'YYYY-MM-DD')
+	AND
+		l.date <= TO_DATE($P{date_to}, 'YYYY-MM-DD')
+	ORDER BY
+		res_partner.name
+) AS a
+JOIN
+(
+	SELECT
+		l.partner_id,
+		SUM(l.debit - l.credit) AS bal
+	FROM
+		account_move_line AS l,
+		account_account,
+		account_move AS am
+	WHERE
+		l.account_id = account_account.id
+	AND
+		l.move_id = am.id
+	AND
+		am.state IN ('draft', 'posted')
+	AND
+		account_account.type IN ('payable', 'receivable')
+	AND
+		((l.reconcile_id IS NULL)
+	OR
+		(l.reconcile_id IN (
+					SELECT
+						recon.id
+					FROM
+						account_move_reconcile AS recon
+					WHERE
+						recon.create_date >= TO_DATE($P{date_from} ,'YYYY-MM-DD')
+					AND
+						recon.create_date <= TO_DATE($P{date_to}, 'YYYY-MM-DD')))
+				   )
+	AND
+		account_account.active
+	AND
+		l.date >= TO_DATE($P{date_from}, 'YYYY-MM-DD')
+	AND
+		l.date <= TO_DATE($P{date_to}, 'YYYY-MM-DD')
+	GROUP BY
+		l.partner_id
+) AS b
+ON
+	a.id = b.partner_id
+JOIN
+(
+	SELECT
+		ai.partner_id,
+		ai.date_invoice,
+		DATE_PART('day', $P{date_to}::timestamp with time zone - ai.date_invoice::timestamp with time zone) AS resdate,
+		SUM(residual) AS resamt
+	FROM
+		account_invoice AS ai
+	WHERE
+		ai.residual > 0.00
+	AND
+		ai.state NOT IN ('paid')
+	AND
+		ai.date_invoice >= TO_DATE($P{date_from}, 'YYYY-MM-DD')
+	AND
+		ai.date_invoice <= TO_DATE($P{date_to}, 'YYYY-MM-DD')
+	GROUP BY
+		ai.partner_id,
+		ai.date_invoice,
+		DATE_PART('day', (($P{date_to}::timestamp with time zone)) - TO_CHAR(ai.date_invoice + INTERVAL '30 day', 'YYYY-MM-DD')::timestamp with time zone)
+) AS f
+ON
+	a.id = f.partner_id
+ORDER BY
+	a.id,
+	f.date_invoice,
+	f.resdate
+) AS z
+GROUP BY
+	z.id,
+	z.name,
+	z.region,
+	z.region_id,
+	z.bal
+) AS x
+WHERE
+	(x.d0130+x.d3145+x.d4660+x.d6190+x.d91120+x.d121150+x.d150p) > 0.00 $P!{x}
+ORDER BY
+	x.region,
+	x.name]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="region" class="java.lang.String"/>
+	<field name="region_id" class="java.lang.Integer"/>
+	<field name="d0130" class="java.math.BigDecimal"/>
+	<field name="d3145" class="java.math.BigDecimal"/>
+	<field name="d4660" class="java.math.BigDecimal"/>
+	<field name="d6190" class="java.math.BigDecimal"/>
+	<field name="d91120" class="java.math.BigDecimal"/>
+	<field name="d121150" class="java.math.BigDecimal"/>
+	<field name="d150p" class="java.math.BigDecimal"/>
+	<field name="bal" class="java.math.BigDecimal"/>
+	<variable name="30_days" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{d0130}]]></variableExpression>
+	</variable>
+	<variable name="45_days" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{d3145}]]></variableExpression>
+	</variable>
+	<variable name="60_days" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{d4660}]]></variableExpression>
+	</variable>
+	<variable name="75_days" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{d6190}]]></variableExpression>
+	</variable>
+	<variable name="90_days" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{d91120}]]></variableExpression>
+	</variable>
+	<variable name="120_above" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{d150p}]]></variableExpression>
+	</variable>
+	<variable name="balance" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{bal}]]></variableExpression>
+	</variable>
+	<variable name="30_days_s" class="java.math.BigDecimal" resetType="Group" resetGroup="salesman" calculation="Sum">
+		<variableExpression><![CDATA[$F{d0130}]]></variableExpression>
+	</variable>
+	<variable name="45_days_s" class="java.math.BigDecimal" resetType="Group" resetGroup="salesman" calculation="Sum">
+		<variableExpression><![CDATA[$F{d3145}]]></variableExpression>
+	</variable>
+	<variable name="60_days_s" class="java.math.BigDecimal" resetType="Group" resetGroup="salesman" calculation="Sum">
+		<variableExpression><![CDATA[$F{d4660}]]></variableExpression>
+	</variable>
+	<variable name="75_days_s" class="java.math.BigDecimal" resetType="Group" resetGroup="salesman" calculation="Sum">
+		<variableExpression><![CDATA[$F{d6190}]]></variableExpression>
+	</variable>
+	<variable name="90_days_s" class="java.math.BigDecimal" resetType="Group" resetGroup="salesman" calculation="Sum">
+		<variableExpression><![CDATA[$F{d91120}]]></variableExpression>
+	</variable>
+	<variable name="120_above_s" class="java.math.BigDecimal" resetType="Group" resetGroup="salesman" calculation="Sum">
+		<variableExpression><![CDATA[$F{d150p}]]></variableExpression>
+	</variable>
+	<variable name="balance_s" class="java.math.BigDecimal" resetType="Group" resetGroup="salesman" calculation="Sum">
+		<variableExpression><![CDATA[$F{bal}]]></variableExpression>
+	</variable>
+	<variable name="120_days" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{d121150}]]></variableExpression>
+	</variable>
+	<variable name="120_days_s" class="java.math.BigDecimal" resetType="Group" resetGroup="salesman" calculation="Sum">
+		<variableExpression><![CDATA[$F{d121150}]]></variableExpression>
+	</variable>
+	<group name="salesman">
+		<groupExpression><![CDATA[$F{region}]]></groupExpression>
+		<groupHeader>
+			<band height="15">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="255" height="15"/>
+					<box leftPadding="3">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{region}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+					<reportElement x="190" y="3" width="45" height="15"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{30_days_s}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+					<reportElement x="235" y="3" width="45" height="15"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{45_days_s}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+					<reportElement x="280" y="3" width="45" height="15"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{60_days_s}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+					<reportElement x="325" y="3" width="45" height="15"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{75_days_s}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+					<reportElement x="370" y="3" width="45" height="15"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{90_days_s}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+					<reportElement x="415" y="3" width="45" height="15"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{120_days_s}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+					<reportElement x="505" y="3" width="50" height="15"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{balance_s}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="108" y="3" width="82" height="15"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[City Total :]]></text>
+				</staticText>
+				<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+					<reportElement x="460" y="3" width="45" height="15"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{120_above_s}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="55" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sara Automobiles]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="555" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Supplier Againg Report]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="40" width="555" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["From: ["+ new SimpleDateFormat('dd-MMM-yyyy').format(new SimpleDateFormat("yyyy-MM-dd").parse($P{date_from}))+"] To: [" + new SimpleDateFormat('dd-MMM-yyyy').format(new SimpleDateFormat("yyyy-MM-dd").parse($P{date_to}))+ "]"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="190" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Supplier Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="190" y="0" width="45" height="15" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[1 - 30]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="235" y="0" width="45" height="15" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[31 - 45]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="280" y="0" width="45" height="15" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[46 - 60]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="325" y="0" width="45" height="15" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[61 - 90]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="415" y="0" width="45" height="15" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[121-150]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="370" y="0" width="45" height="15" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[91 - 120]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="505" y="0" width="50" height="15" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Balance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="460" y="0" width="45" height="15" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[150 +]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="505" y="0" width="50" height="15"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{bal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="190" y="0" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{d0130}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="235" y="0" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{d3145}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="280" y="0" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{d4660}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="325" y="0" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{d6190}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="370" y="0" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{d91120}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="415" y="0" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{d121150}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="190" height="15"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="460" y="0" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{d150p}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="11" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="100" height="10"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<text><![CDATA[Printing Date & Time : ]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="100" y="1" width="125" height="10"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="1" width="40" height="10"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="465" y="1" width="50" height="10"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="1" width="554" height="1"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="20">
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="190" y="5" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{30_days}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="235" y="5" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{45_days}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="280" y="5" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{60_days}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="325" y="5" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{75_days}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="370" y="5" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{90_days}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="415" y="5" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{120_days}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="505" y="5" width="50" height="15"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{balance}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="108" y="5" width="82" height="15"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grand Total :]]></text>
+			</staticText>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="460" y="5" width="45" height="15"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{120_above}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

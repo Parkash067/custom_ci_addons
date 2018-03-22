@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="custom_dummy_invoice_view" model="ir.actions.act_window">
+	        <field name="name">Certificate Invoices</field>
+            <field name="res_model">custom.dummy.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+        <menuitem
+            name="Certificate Invoices"
+            action="custom_dummy_invoice_view"
+            id="menu_custom_dummy_invoice_view"
+            sequence="130"
+            parent="certificate_side_top_menu"
+            groups="custom_inventory.group_user">
+        </menuitem>
+
+        <!-- ================================================== Begin Form view of Dummy Invoices ================================================ -->
+        <record id="custom_dummy_invoice_form" model="ir.ui.view">
+            <field name="name">account.dummy_invoice.form</field>
+            <field name="model">custom.dummy.invoice</field>
+              <field name="arch" type="xml">
+                <form string="Invoice">
+                <sheet string="Invoice">
+                    <h1>Invoice</h1>
+                    <h2><field name="sara_inv_serial" readonly="1"/></h2>
+                    <group>
+                        <group>
+                            <field string="Customer" name="partner_id"/>
+                            <field name="nic"/>
+                            <field name="ntn"/>
+                        </group>
+                        <group>
+                            <field name="date_invoice" />
+                            <field name="due_date" />
+                            <field name="from_"/>
+                            <field name="to_"/>
+                            <field name="ref_" placeholder="MAJ/2017/0000"/>
+                        </group>
+                    </group>
+                    <notebook colspan="4">
+                        <page string="Invoice Lines">
+                            <field name="invoice_line" nolabel="1" widget="one2many_list">
+                                <tree string="Invoice Lines" editable="bottom">
+                                    <field name="products"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="sales_tax"/>
+                                    <field name="wht"/>
+                                    <field name="further_tax"/>
+                                    <field name="price_subtotal"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed" widget="monetary"/>
+                                <div>
+                                    <label for="amount_tax"/>
+                                </div>
+                                <field name="amount_tax" nolabel="1" widget="monetary" />
+                                <div>
+                                    <label for="further_tax"/>
+                                </div>
+                                <field name="further_tax" nolabel="1" widget="monetary" />
+                                <div>
+                                    <label for="wht"/>
+                                </div>
+                                <field name="wht" nolabel="1" widget="monetary" />
+
+                                <field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary" />
+                            </group>
+                            <div class="oe_clear">
+                                <label for="comment"/>
+                            </div>
+                            <field name="comment" class="oe_inline" placeholder="Additional notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- ================================================== End Form view of Dummy Invoices ================================================ -->
+
+         <!-- ================================================== Begin Tree view of Dummy Invoices ================================================ -->
+        <record id="custom_dummy_invoice_tree_view" model="ir.ui.view">
+            <field name="name">custom_dummy_invoice.tree.view</field>
+            <field name="model">custom.dummy.invoice</field>
+            <field name="arch" type="xml">
+                <tree string="Invoices" version="8.0">
+                    <field name="partner_id" />
+                    <field name="date_invoice" />
+                    <field name="ref_" />
+                </tree>
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+<!--	DELIVERY ORDER	-->
+<!--
+	<report id="report_delivery_order" 
+		model="stock.picking" 
+		name="report.deliverey.order" 
+		string="Delivery Order" 
+		rml="customization/report/delivery_order.jrxml"/>
+
+-->
+	<record id="report_delivery_order" model="ir.actions.report.xml">
+		<field name="name">Delivery Order</field>
+		<field name="type">ir.actions.report.xml</field>
+		<field name="model">stock.picking</field>
+		<field name="report_name">delivery_order</field>
+		<field name="report_rml">customization/report/delivery_order.jrxml</field>
+		<field name="report_type">pdf</field>
+		<field name="jasper_report">True</field>
+		<field name="jasper_output">pdf</field>
+	</record>
+<!--
+	<report id="report_delivery_order" model="stock.picking" name="report.deliverey.order" string="Delivery Order" 
+			rml="customization/report/delivery_order.jrxml"/>
+-->
+
+<!--	CERTIFICATE PRINT	-->
+
+	<record id="report_certificate" model="ir.actions.report.xml">
+		<field name="name">Certificate</field>
+		<field name="type">ir.actions.report.xml</field>
+		<field name="model">stock.production.lot</field>
+		<field name="report_name">certificate</field>
+		<field name="report_rml">customization/report/certificate.jrxml</field>
+		<field name="report_type">pdf</field>
+		<field name="jasper_report">True</field>
+		<field name="jasper_output">pdf</field>
+	</record>
+<!--
+	<report id="report_certificate" model="stock.production.lot" name="report.certificate" string="Certificate" 
+			rml="customization/report/certificate.jrxml"/>
+-->
+
+<!-- Customer Ledger -->	    
+	    <record id="customer_ledger" model="ir.actions.report.xml">
+	        <field name="name">Receivable Ledger Report</field>
+	        <field name="type">ir.actions.report.xml</field>
+	        <field name="model">account.move.line</field>
+	        <field name="report_name">customer_ledger</field>
+	        <field name="report_rml">customization/report/customer_ledger.jrxml</field>
+	        <field name="report_type">pdf</field>
+	        <field name="jasper_report">True</field>
+	        <field name="jasper_output">pdf</field>
+	    </record>
+
+<!-- Subreport Aging -->	    
+	    <record id="subreport_aging" model="ir.actions.report.xml">
+	        <field name="name">Subreport Aging</field>
+	        <field name="type">ir.actions.report.xml</field>
+	        <field name="model">account.move.line</field>
+	        <field name="report_name">subreport_aging</field>
+	        <field name="report_rml">customization/report/subreport_aging.jrxml</field>
+	        <field name="report_type">pdf</field>
+	        <field name="jasper_report">True</field>
+	        <field name="jasper_output">pdf</field>
+	    </record>
+
+<!-- Supplier Ledger -->	    
+	    <record id="supplier_ledger" model="ir.actions.report.xml">
+	        <field name="name">Payable Ledger Report</field>
+	        <field name="type">ir.actions.report.xml</field>
+	        <field name="model">account.move.line</field>
+	        <field name="report_name">supplier_ledger</field>
+	        <field name="report_rml">customization/report/supplier_ledger.jrxml</field>
+	        <field name="report_type">pdf</field>
+	        <field name="jasper_report">True</field>
+	        <field name="jasper_output">pdf</field>
+	    </record>
+
+<!-- Subreport Aging_1 -->	    
+	    <record id="subreport_aging_1" model="ir.actions.report.xml">
+	        <field name="name">Subreport Aging_1</field>
+	        <field name="type">ir.actions.report.xml</field>
+	        <field name="model">account.move.line</field>
+	        <field name="report_name">subreport_aging_1</field>
+	        <field name="report_rml">customization/report/subreport_aging_1.jrxml</field>
+	        <field name="report_type">pdf</field>
+	        <field name="jasper_report">True</field>
+	        <field name="jasper_output">pdf</field>
+	    </record>
+
+<!-- Partner Trial -->	    
+	    <record id="partner_trail" model="ir.actions.report.xml">
+	        <field name="name">Partner Trial</field>
+	        <field name="type">ir.actions.report.xml</field>
+	        <field name="model">account.move.line</field>
+	        <field name="report_name">partner_trial</field>
+	        <field name="report_rml">customization/report/partner_trial.jrxml</field>
+	        <field name="report_type">pdf</field>
+	        <field name="jasper_report">True</field>
+	        <field name="jasper_output">pdf</field>
+	    </record>
+
+
+<!-- Aging Report -->
+	   <record id="aging_report" model="ir.actions.report.xml">
+	       <field name="name">Customer Aging Report</field>
+	       <field name="type">ir.actions.report.xml</field>
+	       <field name="model">aging.report</field>
+	       <field name="report_name">aging_report</field>
+	       <field name="report_rml">customization/report/aging_report.jrxml</field>
+	       <field name="report_type">pdf</field>
+	       <field name="jasper_report">True</field>
+	       <field name="jasper_output">pdf</field>
+	   </record>
+
+
+<!-- Supplier Aging Report -->
+	   <record id="aging_report_supplier" model="ir.actions.report.xml">
+	       <field name="name">Supplier Aging Report</field>
+	       <field name="type">ir.actions.report.xml</field>
+	       <field name="model">aging.report.supplier</field>
+	       <field name="report_name">aging_report_supplier</field>
+	       <field name="report_rml">customization/report/aging_report_supplier.jrxml</field>
+	       <field name="report_type">pdf</field>
+	       <field name="jasper_report">True</field>
+	       <field name="jasper_output">pdf</field>
+	   </record>
+
+    </data>
+</openerp>

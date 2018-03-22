@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="view_partner_trial" model="ir.ui.view">
+            <field name="name">partner_trial</field>
+            <field name="model">partner.trial</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Partner Trial">
+				<header>
+                 	<button icon="gtk-cancel" special="cancel" string="Cancel"/>
+                 	<button icon="gtk-ok" name="start_report" string="Print" type="object"/>
+                 </header>
+                 <sheet string="Partner Trial Balance">
+                 	<group> 
+                 	<group>
+                 		<field name="date_from"/>
+                    	</group>
+                    	<group>
+                    		<field name="date_to"/>
+                    	</group>
+                 	<group>
+                 		<field name="partner_id"/>
+                    	</group>
+                 	<group>
+                 		<field name="region"/>
+                    	</group>
+                    </group>
+                 </sheet>	                
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_partner_trial">
+            <field name="name">Partner Trial Balance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">partner.trial</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_partner_trial"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem icon="STOCK_PRINT" action="action_partner_trial" id="menu_partner_trial_account" 
+        	parent="account.menu_finance_reporting"/>
+<!--		
+		<menuitem icon="STOCK_PRINT" action="action_customer_ledger" id="menu_customer_ledger_sale" 
+        	parent="base.next_id_64"/>
+-->		
+    </data>
+</openerp>

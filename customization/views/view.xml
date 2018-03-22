@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="res_partner_inherit" model="ir.ui.view">
+            <field name="name">res_partner_inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='website']" position="after">
+		    <field name="taxation"/>
+                    <field name="ntn" attrs="{'required':[('taxation','=','pay')]}"/>
+                    <field name="strn" attrs="{'required':[('taxation','=','pay')]}"/>
+                    <field name="gst"/>
+                </xpath>
+            </field>
+        </record>
+
+      <!--  <record id="stock_picking_inherit" model="ir.ui.view">
+            <field name="name">stock_picking_inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+		    <field name="deliver_to"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_deliver_inherit" model="ir.ui.view">
+            <field name="name">stock_picking_inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Additional Info']" position="after">
+                        <page string="Delivery Info">
+                            <group string="Partner Info">
+                                <group>
+                                    <field name="contact_to"/>
+                                    <field name="contact_nic"/>
+                                </group>
+                            </group>
+                            <group string="Transporter Info">
+                                <group>
+                                    <field name="transporter"/>
+                                    <field name="driver"/>
+                                    <field name="vehicle"/>
+                                    <field name="contact_no"/>
+                                </group>
+                            </group>
+                        </page>
+                </xpath>
+
+            </field>
+        </record>
+
+    &lt;!&ndash; Cities View &ndash;&gt;
+    <record model="ir.ui.view" id="view_city_form">
+      <field name="name">Cities</field>
+      <field name="model">res.city</field>
+      <field name="arch" type="xml">
+            <form string="City Form">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='code'/>
+                            <field name='name'/>
+                            <field name='state'/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_city_tree">
+      <field name="name">Cities</field>
+      <field name="model">res.city</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="code"/>
+          <field name="name"/>
+          <field name='state'/>
+        </tree>
+      </field>
+    </record>
+
+
+    &lt;!&ndash; actions opening views on models &ndash;&gt;
+    <record model="ir.actions.act_window" id="action_res_city">
+      <field name="name">Cities</field>
+      <field name="res_model">res.city</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name='view_id' ref='view_city_tree'/>
+    </record>
+
+    &lt;!&ndash; actions &ndash;&gt;
+    <menuitem name="Cities" id="menu_res_cities" parent="base.menu_localisation" action="action_res_city" sequence="15"/>
+
+
+
+    &lt;!&ndash; Regions View &ndash;&gt;
+    <record model="ir.ui.view" id="view_region_form">
+      <field name="name">Regions</field>
+      <field name="model">res.region</field>
+      <field name="arch" type="xml">
+            <form string="region Form">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='code'/>
+                            <field name='name'/>
+                            <field name='city'/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_region_tree">
+      <field name="name">Regions</field>
+      <field name="model">res.region</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="code"/>
+          <field name="name"/>
+          <field name='city'/>
+        </tree>
+      </field>
+    </record>
+
+
+    &lt;!&ndash; actions opening views on models &ndash;&gt;
+    <record model="ir.actions.act_window" id="action_res_region">
+      <field name="name">Regions</field>
+      <field name="res_model">res.region</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name='view_id' ref='view_region_tree'/>
+    </record>
+
+    &lt;!&ndash; actions &ndash;&gt;
+    <menuitem name="Regions" id="menu_res_regions" parent="base.menu_localisation" action="action_res_region" sequence="16"/>
+
+
+
+    &lt;!&ndash; Colors View &ndash;&gt;
+    <record model="ir.ui.view" id="view_color_form">
+      <field name="name">Colors</field>
+      <field name="model">res.color</field>
+      <field name="arch" type="xml">
+            <form string="Color Form">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='code'/>
+                            <field name='name'/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_color_tree">
+      <field name="name">Colors</field>
+      <field name="model">res.color</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="code"/>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+
+    &lt;!&ndash; actions opening views on models &ndash;&gt;
+    <record model="ir.actions.act_window" id="action_res_color">
+      <field name="name">Colors</field>
+      <field name="res_model">res.color</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name='view_id' ref='view_color_tree'/>
+    </record>
+
+    &lt;!&ndash; actions &ndash;&gt;
+    <menuitem name="Colors" id="menu_res_color" parent="stock.menu_stock_configuration" action="action_res_color" sequence="16"/>
+
+
+    &lt;!&ndash; Models View &ndash;&gt;
+    <record model="ir.ui.view" id="view_model_form">
+      <field name="name">Models</field>
+      <field name="model">res.model</field>
+      <field name="arch" type="xml">
+            <form string="Models Form">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='code'/>
+                            <field name='name'/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_model_tree">
+      <field name="name">Models</field>
+      <field name="model">res.model</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="code"/>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+
+    &lt;!&ndash; actions opening views on models &ndash;&gt;
+    <record model="ir.actions.act_window" id="action_res_model">
+      <field name="name">Models</field>
+      <field name="res_model">res.model</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name='view_id' ref='view_model_tree'/>
+    </record>
+
+    &lt;!&ndash; actions &ndash;&gt;
+    <menuitem name="Models" id="menu_res_model" parent="stock.menu_stock_configuration" action="action_res_model" sequence="17"/>
+
+
+    &lt;!&ndash; Years View &ndash;&gt;
+    <record model="ir.ui.view" id="view_year_form">
+      <field name="name">Years</field>
+      <field name="model">res.year</field>
+      <field name="arch" type="xml">
+            <form string="Year Form">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='code'/>
+                            <field name='name'/>
+                            <field name='start_date'/>
+                            <field name='end_date'/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_year_tree">
+      <field name="name">Years</field>
+      <field name="model">res.year</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="code"/>
+          <field name="name"/>
+          <field name='start_date'/>
+          <field name='end_date'/>
+        </tree>
+      </field>
+    </record>
+
+
+    &lt;!&ndash; actions opening views on models &ndash;&gt;
+    <record model="ir.actions.act_window" id="action_res_year">
+      <field name="name">Years</field>
+      <field name="res_model">res.year</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name='view_id' ref='view_year_tree'/>
+    </record>
+
+    &lt;!&ndash; actions &ndash;&gt;
+    <menuitem name="Years" id="menu_res_year" parent="stock.menu_stock_configuration" action="action_res_year" sequence="18"/>
+
+        <record id="res_partner_region_inherit" model="ir.ui.view">
+            <field name="name">res_partner_region_inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='country_id']" position="before">
+		    <field name="city_id" placeholder="City"/>
+                    <field name="region_id" placeholder="Region"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="production_lot_form_inherit" model="ir.ui.view">
+            <field name="name">production_lot_form_inherit</field>
+            <field name="model">stock.production.lot</field>
+            <field name="inherit_id" ref="stock.view_production_lot_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='ref']" position="after">
+		    <field name="color_id"/>
+                    <field name="model_id"/>
+                    <field name="year_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="transfer_detail_form_inherit" model="ir.ui.view">
+            <field name="name">transfer_detail_form_inherit</field>
+            <field name="model">stock.transfer_details</field>
+            <field name="inherit_id" ref="stock.view_stock_enter_transfer_details"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//tree/field[@name='lot_id']" position="after">
+		    <field name="ref" groups="stock.group_stock_manager"/>
+		    <field name="color_id" groups="stock.group_stock_manager"/>
+                    <field name="model_id" groups="stock.group_stock_manager"/>
+                    <field name="year_id" groups="stock.group_stock_manager"/>
+                </xpath>
+            </field>
+        </record>-->
+
+    </data>
+</openerp>

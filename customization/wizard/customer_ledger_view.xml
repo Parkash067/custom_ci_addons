@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="view_customer_ledger" model="ir.ui.view">
+            <field name="name">customer_ledger</field>
+            <field name="model">customer.ledger</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Customer Ledger">
+				<header>
+                 	<button icon="gtk-cancel" special="cancel" string="Cancel"/>
+                 	<button icon="gtk-ok" name="start_report" string="Print" type="object"/>
+                 </header>
+                 <sheet string="Customer Ledger">
+                 	<group> 
+                 		<group>
+                 			<field name="date_from"/>
+<!--                 			<field name="select"/>		-->
+                    	</group>
+                    	<group>
+                    		<field name="date_to"/>
+<!--                    		<field name="state"/>		-->
+                    	</group>
+                    	<group>
+                    		<field name="partner_id"/>
+                    	</group>
+                    </group>
+                 </sheet>	                
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_customer_ledger">
+            <field name="name">Receivable Ledger Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">customer.ledger</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_customer_ledger"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem icon="STOCK_PRINT" action="action_customer_ledger" id="menu_customer_ledger_account" 
+        	parent="account.menu_finance_reporting"/>
+<!--		
+		<menuitem icon="STOCK_PRINT" action="action_customer_ledger" id="menu_customer_ledger_sale" 
+        	parent="base.next_id_64"/>
+-->		
+    </data>
+</openerp>

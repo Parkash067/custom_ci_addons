@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_aging_report_supplier" model="ir.ui.view">
+            <field name="name">Supplier Aging Report</field>
+            <field name="model">aging.report.supplier</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Supplier Aging Report">
+                <header>
+                 	<button icon="gtk-cancel" special="cancel" string="Cancel"/>
+                 	<button icon="gtk-ok" name="start_report" string="Print" type="object"/>
+                 </header>
+                    <group colspan="4" height="400">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="partner_id"/>
+                        <field name="region"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_aging_report_supplier">
+            <field name="name">Supplier Aging Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">aging.report.supplier</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_aging_report_supplier"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem action="action_aging_report_supplier" id="menu_aging_report_supplier" parent="account.menu_finance_reporting"/>
+
+    </data>
+</openerp>

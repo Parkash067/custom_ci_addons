@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+
+   <fontFamily name="Ubuntu">
+       <normal><![CDATA[fonts/Ubuntu-R.ttf]]></normal>
+       <bold><![CDATA[fonts/UbuntuMono-B.ttf]]></bold>
+       <boldItalic><![CDATA[fonts/Ubuntu-BI.ttf]]></boldItalic>
+       <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+   </fontFamily>
+
+
+</fontFamilies>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+       <template id="delivery_order_print">
+           <t t-call='report.html_container'>
+               <t t-foreach="docs" t-as="do">
+                   <t>
+                      <div class="page">
+                          <div class="row">
+                               <!--<u><h3 t-esc="'%s' %res_company.name" style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;-->
+                                         <!--margin-right:auto;text-align:center;"/></u>-->
+                              <!--<div style="max-width:100%;height:auto;width:80%;margin-left:auto;-->
+                                         <!--margin-right:auto;text-align:center;">-->
+                                  <!--<u><span t-esc="'%s' %res_company.street" style="font-size:14px;"/>,-->
+                                  <!--<span t-esc="'%s' %res_company.city"  style="font-size:14px;"/>,-->
+                                  <!--<span style="font-size:14px;">Tel:</span><span t-esc="'%s' %res_company.phone" style="font-size:14px;"/></u><br/><br/>-->
+                                  <!--<span style="font-size:14px;"><strong><u>DELIVERY ORDER / GATE PASS</u></strong></span>-->
+                              <!--</div>-->
+                              <!--<table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">-->
+                                  <!--<tr class="abc">-->
+                                      <!--<td><strong>Dealer</strong></td>-->
+                                      <!--<td colspan="5"><strong>bac abca bac abc acb Dealer</strong></td>-->
+                                      <!--<td><strong>Dealer</strong></td>-->
+                                      <!--<td><strong>Dealer</strong></td>-->
+
+                                  <!--</tr>-->
+                              <!--</table>-->
+                          </div>
+                      </div>
+                   </t>
+               </t>
+           </t>
+       </template>
+    </data>
+</openerp>

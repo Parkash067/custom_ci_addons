@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+         <record id="production_stages" model="ir.actions.act_window">
+	        <field name="name">Production Stages</field>
+            <field name="res_model">custom.production.stages</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+        <menuitem
+            name="Production Stages"
+            action="production_stages"
+            id="menu_production_stages"
+            sequence="100"
+            parent="mrp.menu_mrp_configuration"
+            >
+        </menuitem>
+
+        <record id="overall_progress" model="ir.actions.act_window">
+	        <field name="name">Overall Progress</field>
+            <field name="res_model">mrp.production</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+        <menuitem
+            name="Overall Progress"
+            action="overall_progress"
+            id="menu_overall_progress"
+            sequence="100"
+            parent="mrp.menu_mrp_manufacturing"
+            >
+        </menuitem>
+
+         <record model="ir.ui.view" id="overall_progress_kanban">
+            <field name="name">Overall Progress Kanban</field>
+            <field name="model">mrp.production</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by='stage' quick_create="0">
+                    <!-- write fields here to be used in kanban box-->
+					<field name='name'/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_semantic_html_override">
+                                <!--<a type="open">-->
+									<!--&lt;!&ndash; set image here&ndash;&gt;-->
+                                        <!--<img t-att-src="kanban_image('new.visits', 'image', record.id.value)" class="oe_kanban_image"/>-->
+                                <!--</a>-->
+                                <a type="open">
+                                <div class="oe_kanban_details">
+                                        <strong><field name='product_id'/></strong><br/>
+                                        <strong><field name='product_qty'/></strong><br/>
+                                        <em><field name='date_planned'/></em>
+                                </div>
+                                </a>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+         <record model="ir.ui.view" id="custom_mrp_form">
+             <field name="name">Custom MP</field>
+             <field name="model">mrp.production</field>
+             <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+             <field name="arch" type="xml">
+                 <xpath expr="//field[@name='origin']" position="after">
+                     <field name="stage" readonly="1"/>
+                 </xpath>
+                 <!--invisible="context.get('location')==False"-->
+             </field>
+         </record>
+
+    </data>
+</openerp>
