@@ -51,19 +51,20 @@ class custom_stock_transfer_details(osv.TransientModel):
                     'owner_id': prod.owner_id.id,
                     'engine_no': prod.engine_number
                 }
-                stock_moves = {
-                    'engine_number': prod.engine_number,
-                    'chassis_number': prod.chassis_number,
-                    'color': prod.color,
-                    'model': prod.model,
-                    'year': prod.model,
-                    'picking_id': self.picking_id.id,
-                    'partner_id': self.picking_id.partner_id.id,
-                    'product_id': prod.product_id.id,
-                    'product_qty': prod.quantity,
-                    'date': prod.date if prod.date else datetime.now(),
-                }
-                stock_move_id = self.env['custom.stock.move'].create(stock_moves)
+                if self.picking_id.partner_id.customer:
+                    stock_moves = {
+                        'engine_number': prod.engine_number,
+                        'chassis_number': prod.chassis_number,
+                        'color': prod.color,
+                        'model': prod.model,
+                        'year': prod.model,
+                        'picking_id': self.picking_id.id,
+                        'partner_id': self.picking_id.partner_id.id,
+                        'product_id': prod.product_id.id,
+                        'product_qty': prod.quantity,
+                        'date': prod.date if prod.date else datetime.now(),
+                    }
+                    stock_move_id = self.env['custom.stock.move'].create(stock_moves)
                 if prod.packop_id:
                     prod.packop_id.with_context(no_recompute=True).write(pack_datas)
                     processed_ids.append(prod.packop_id.id)
