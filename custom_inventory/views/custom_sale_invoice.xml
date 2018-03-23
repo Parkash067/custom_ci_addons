@@ -7,21 +7,34 @@
                    <t>
                       <div class="page">
                           <div class="row">
-                              <h1 t-esc="'%s' %res_company.name" style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
-                                         margin-right:auto;text-align:center;"/>
-                              <div style="max-width:100%;height:auto;width:80%;margin-left:auto;
+                              <t t-if="account_invoice.dealer_id.name == 'Allied Business Corporation'">
+                                  <h1 style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
                                          margin-right:auto;text-align:center;">
-                                  <span style="font-size:18px;font-weight:bold;">Assembler Cum Manufacturer of Union Star Motorcycle</span><br/>
-                                  <span t-esc="'%s' %res_company.street" style="font-size:18px;font-weight:bold;"/>,
-                                  <span t-esc="'%s' %res_company.city"  style="font-size:18px;font-weight:bold;"/><br/>
-                                  <span style="font-size:18px;"><strong>Tel: </strong></span><span t-esc="'%s' %res_company.phone" style="font-size:18px;font-weight:bold;"/>
-                              </div>
+                                      <span>Allied</span><span style="margin-left:5px;">Business</span><span style="margin-left:5px;">Corporation</span>
+                                  </h1>
+                                  <div style="max-width:100%;height:auto;width:80%;margin-left:auto;
+                                         margin-right:auto;text-align:center;">
+                                      <span style="font-size:18px;font-weight:bold;text-decoration:5px;">8- Secretariat View, Al Karam Building, Frere Road, Saddar, Karachi</span><br/>
+                                  </div>
+                              </t>
+                              <t t-if="account_invoice.dealer_id.name == False">
+                                   <h1 t-esc="'%s' %res_company.name" style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
+                                         margin-right:auto;text-align:center;"/>
+                                  <div style="max-width:100%;height:auto;width:80%;margin-left:auto;
+                                         margin-right:auto;text-align:center;">
+                                      <span style="font-size:18px;font-weight:bold;">Assembler Cum Manufacturer of Union Star Motorcycle</span><br/>
+                                      <span t-esc="'%s' %res_company.street" style="font-size:18px;font-weight:bold;"/>,
+                                      <span t-esc="'%s' %res_company.city"  style="font-size:18px;font-weight:bold;"/><br/>
+                                      <span style="font-size:18px;"><strong>Tel: </strong></span><span t-esc="'%s' %res_company.phone" style="font-size:18px;font-weight:bold;"/>
+                                  </div>
+                              </t>
                               <h2 style="border:1px solid black;border-radius:5px;padding:10px;
                                          max-width:100%;height:auto;width:60%;margin-left:auto;
                                          margin-right:auto;text-align:center;background:lightgrey;">
                                   Sales Tax Invoice
                               </h2>
-                              <h3 align="center">Sales Tax Registration No.: 17-00-8711-009-55</h3><hr style="border-top:1px solid black;"/>
+                              <t t-if="account_invoice.partner_id=='Allied Business Corporation'"><h3 align="center">Sales Tax Registration No.: 17-00-8711-009-55</h3><hr style="border-top:1px solid black;"/></t>
+                              <t t-if="account_invoice.partner_id!='Allied Business Corporation'"><h3 align="center">Sales Tax Registration No.: 17-12-8708-007-73</h3><hr style="border-top:1px solid black;"/></t>
                               <div style="font-size:18px">
                                   <div>
                                        <div style="display:inline-block;"><strong style="font-size:18px">Invoice No.</strong></div>
@@ -52,6 +65,91 @@
                                    </div>
                               </div>
                               <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                              <t t-if="account_invoice.dealer_id.name == 'Allied Business Corporation'">
+                                  <div style="font-size:16px; border:1px solid black; border-radius:10px;width:1000px;height:375px;">
+                                      <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
+                                          <thead style="border-bottom:1px solid black">
+                                              <tr>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Qty.</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Description</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Unit Price</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Total Exclu. Taxes</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Sales Tax Rate</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Sales Tax 17%</td>
+                                                  <td class="text-right">Total Inclu. Taxes</td>
+                                              </tr>
+                                          </thead>
+                                          <tbody class="invoice_tbody">
+                                              <tr t-foreach="account_invoice.invoice_line" t-as="l">
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="round(l.quantity)"/>
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="l.products"/><br/><br/>Engine# <span t-esc="l.engine_number"/><br/><br/>Chassis# <span t-esc="l.chassis_number"/><br/><br/><span>HP 70 CC</span>
+                                                      <br/><br/><br/><br/><br/><br/><br/><br/>
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.price_unit))" />
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.price_unit)*int(l.quantity))" />
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      17
+                                                  </td>
+                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.sales_tax))" />
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <span t-esc="'{0:,.2f}'.format(int(l.sales_tax+l.price_subtotal))"/>
+                                                  </td>
+                                              </tr>
+                                          </tbody>
+                                      </table>
+                                  </div><br/>
+                                  <div class="row"><br/>
+                                      <div class="col-xs-4 pull-right">
+                                          <table class="table table-condensed" style="font-size:16px">
+                                              <t>
+                                                  <tr>
+                                                      <td style="border-top:1px solid black !important;">
+                                                          <strong>TOTAL</strong>
+                                                      </td>
+                                                      <td class="text-right" style="border-top:1px solid black !important;">
+                                                          <strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_total))"/></strong>
+                                                      </td>
+                                                  </tr>
+                                              </t>
+                                          </table>
+                                      </div>
+                                  </div>
+                                  <div class="row"><br/>
+                                      <div class="col-xs-4 pull-left">
+                                          <table class="table table-condensed" style="font-size:16px">
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;">
+                                                      <strong>Exclu. Net Tax Value</strong>
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <strong><span t-esc="'{0:,.2f}'.format(int(round(account_invoice.amount_untaxed)))"/></strong>
+                                                  </td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;"><strong>Sales Tax 17%</strong></td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;"><strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_tax))"/></strong></td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="border-top:1px solid black !important;">
+                                                      <strong>Total Value inclu. Tax</strong>
+                                                  </td>
+                                                  <td class="text-right" style="border-top:1px solid black !important;">
+                                                      <strong><span t-esc="'{0:,.2f}'.format(int(account_invoice.amount_total))"/></strong>
+                                                  </td>
+                                              </tr>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </t>
                               <t t-if="account_invoice.ntn==False and account_invoice.partner_id!='Allied Business Corporation'">
                                   <div style="font-size:16px; border:1px solid black; border-radius:10px;width:1000px;height:388px;">
                                       <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
@@ -149,7 +247,7 @@
                                       </div>
                                   </div>
                               </t>
-                              <t t-if="account_invoice.ntn!=False and account_invoice.partner_id!='Allied Business Corporation'">
+                              <t t-if="account_invoice.ntn!=False and account_invoice.partner_id!='Allied Business Corporation' and account_invoice.dealer_id.name!='Allied Business Corporation'">
                                   <div style="font-size:16px; border:1px solid black; border-radius:10px;width:1000px;height:395px;">
                                       <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
                                           <thead style="border-bottom:1px solid black">
@@ -234,7 +332,7 @@
                                       </div>
                                   </div>
                               </t>
-                              <t t-if="account_invoice.partner_id=='Allied Business Corporation'">
+                              <t t-if="account_invoice.partner_id=='Allied Business Corporation' and account_invoice.dealer_id.name==False ">
                                   <div style="font-size:16px; border:1px solid black; border-radius:10px;width:1000px;height:288px;">
                                       <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
                                           <thead style="border-bottom:1px solid black">

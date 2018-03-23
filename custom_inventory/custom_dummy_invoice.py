@@ -10,6 +10,7 @@ class custom_dummy_invoice(osv.osv):
     _name = "custom.dummy.invoice"
     _rec_name = "partner_id"
     _columns = {
+        'dealer_id': fields.many2one('res.partner', 'Dealer', store=True),
         'sara_inv_serial': fields.char('Invoice #', store=True),
         'abc_inv_serial': fields.char('Invoice #', store=True),
         'partner_id': fields.char('Customer', store=True,required=True),
