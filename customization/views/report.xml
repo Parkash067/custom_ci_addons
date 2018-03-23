@@ -11,16 +11,16 @@
 		rml="customization/report/delivery_order.jrxml"/>
 
 -->
-	<record id="report_delivery_order" model="ir.actions.report.xml">
-		<field name="name">Delivery Order</field>
-		<field name="type">ir.actions.report.xml</field>
-		<field name="model">stock.picking</field>
-		<field name="report_name">delivery_order</field>
-		<field name="report_rml">customization/report/delivery_order.jrxml</field>
-		<field name="report_type">pdf</field>
-		<field name="jasper_report">True</field>
-		<field name="jasper_output">pdf</field>
-	</record>
+	<!--<record id="report_delivery_order" model="ir.actions.report.xml">-->
+		<!--<field name="name">Delivery Order</field>-->
+		<!--<field name="type">ir.actions.report.xml</field>-->
+		<!--<field name="model">stock.picking</field>-->
+		<!--<field name="report_name">delivery_order</field>-->
+		<!--<field name="report_rml">customization/report/delivery_order.jrxml</field>-->
+		<!--<field name="report_type">pdf</field>-->
+		<!--<field name="jasper_report">True</field>-->
+		<!--<field name="jasper_output">pdf</field>-->
+	<!--</record>-->
 <!--
 	<report id="report_delivery_order" model="stock.picking" name="report.deliverey.order" string="Delivery Order" 
 			rml="customization/report/delivery_order.jrxml"/>

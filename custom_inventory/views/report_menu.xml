@@ -10,6 +10,15 @@
             name="custom_inventory.certificate_print"
         />
 
+         <report
+            id="report_do"
+            string="Gate Pass"
+            model="stock.picking"
+            report_type="qweb-pdf"
+            file="custom_inventory.do_print"
+            name="custom_inventory.do_print"
+        />
+
         <report
             id="sale_custom_invoice_pdf"
             string="Print Invoice"

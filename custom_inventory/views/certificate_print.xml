@@ -7,21 +7,21 @@
                    <t>
                        <t t-if="(certificate.counter!=0 and certificate.status=='Approved' and certificate.certificate_lock==False) or (certificate.counter==0 and certificate.status=='draft' and certificate.certificate_lock==False)">
                             <div class="page">
-                               <span t-esc="certificate.certificate_serial" style="float:right;margin-top:100px;margin-right:60px;"/><br/>
-                               <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', certificate.generate_qr_code(), 100, 100)" style="float:right;margin-top:100px;margin-right:-20px;"/>
+                               <span t-esc="certificate.certificate_serial" style="float:right;margin-top:65px;margin-right:70px;"/><br/>
+                               <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', certificate.generate_qr_code(), 100, 100)" style="float:right;margin-top:110px;margin-right:-40px;"/>
                                 <t t-if="certificate.check_issuance()==1">
                                     <div style="width:10px; height:10px; background:black; border-radius:100px;margin-top:100px;margin-left:50px;float:left">
 
                                     </div>
-                                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                                    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
                                     <h4>
-                                        <strong><span style="margin-left:600px">US 70CC</span></strong>
+                                        <strong><span style="margin-left:500px;font-size:12px;">US 70CC</span></strong>
                                     </h4>
-                                    <h4><strong><span t-esc="certificate.engine_number" style="margin-left:200px"/>
-                                   <span t-esc="certificate.chassis_number" style="margin-left:150px"/></strong></h4><br/>
+                                    <h4 style="margin-top:-7px;"><strong><span t-esc="certificate.engine_number" style="margin-left:160px"/>
+                                   <span t-esc="certificate.chassis_number" style="margin-left:100px"/></strong></h4><br/>
                                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                                    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                                   <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', certificate.generate_qr_code(), 100, 100)" style="float:left;margin-left:130px;height:70px;width:70px;"/>
+                                   <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', certificate.generate_qr_code(), 100, 100)" style="float:left;margin-left:115px;height:60px;width:60px;"/>
                                    <span t-esc="certificate.id" style="float:right;margin-right:60px;"/><br/><br/><br/><br/>
                                    <span t-esc="certificate.partner_id.name" style="float:left;font-size:16px;font-weight:bold;margin-left:110px;"/>
                                    <span t-esc="certificate.partner_id.city" style="float:left;font-size:16px;font-weight:bold;margin-left:300px;"/><br/><br/>
@@ -37,7 +37,7 @@
                                    <h4><strong><span t-esc="certificate.engine_number" style="margin-left:200px"/>
                                    <span t-esc="certificate.chassis_number" style="margin-left:150px"/></strong></h4><br/>
                                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                                   <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                                   <br/><br/><br/><br/><br/><br/><br/>
                                    <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', certificate.generate_qr_code(), 100, 100)" style="float:left;margin-left:130px;height:70px;width:70px;"/>
                                    <span t-esc="certificate.certificate_serial" style="float:right;margin-right:60px;"/><br/><br/><br/><br/>
                                    <span t-esc="certificate.partner_id.name" style="float:left;font-size:16px;font-weight:bold;margin-left:110px;"/>

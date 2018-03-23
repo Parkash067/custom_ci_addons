@@ -44,6 +44,7 @@ Dashboard / Reports for Inventory Management will include:
         'views/certificate_print.xml',
         'views/delivery_order_print.xml',
         'views/custom_sale_invoice.xml',
+        'views/do_print.xml',
         'views/report_menu.xml',
         'views/certificate_view.xml',
         'views/custom_dummy_invoice_view.xml',
