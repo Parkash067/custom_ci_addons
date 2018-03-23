@@ -28,13 +28,5 @@
             name="custom_inventory.custom_sale_invoice"
         />
 
-        <report
-            id="custom_do_pdf"
-            string="Delivery Order"
-            model="stock.picking"
-            report_type="qweb-html"
-            file="custom_inventory.delivery_order_print"
-            name="custom_inventory.delivery_order_print"
-        />
     </data>
 </openerp>
