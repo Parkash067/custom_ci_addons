@@ -90,5 +90,24 @@
                 </tree>
             </field>
         </record>
+
+        <record id="custom_supplier_return_view" model="ir.actions.act_window">
+	        <field name="name">Supplier Returns</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('type','=','in_refund')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+        <menuitem
+            name="Supplier Returns"
+            action="custom_supplier_return_view"
+            id="menu_custom_supplier_return_view"
+            sequence="40"
+            parent="custom_claim_top_side"
+        >
+        </menuitem>
     </data>
 </openerp>
