@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="wiz_report">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="report.internal_layout">
+                <div class="page">
+                    <div class="row">
+                        <h1 align="center">Collection Report</h1><br/>
+                        <h3>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h3>
+                        <table class="table table-condensed" style="font-size:12px;">
+                        <thead>
+                            <tr>
+                                <th>Serial No.</th>
+                                <th>Entry Date</th>
+                                <th>Entry/Voucher No.</th>
+                                <th>Debit Account Name</th>
+                                <th>Credit Account Name</th>
+                                <th>Entry Amount</th>
+                                <th class="text-right">Entry Particulars</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="doc.collection_report()" t-as="l">
+                                 <td>
+                                     <span t-esc="l_index+1"/>
+                                 </td>
+                                 <td >
+                                     <span t-esc="l['date']"/>
+                                 </td>
+                                 <td>
+                                     <span t-esc="l['entry']"/>
+                                 </td>
+                                 <td>
+                                     <span t-esc="l['amount']"/>
+                                 </td>
+                                <td>
+                                     <span t-esc="l['account_head']"/>
+                                 </td>
+                                <td>
+                                     <span t-esc="l['customer']"/>
+                                 </td>
+                                <td class="text-right">
+                                     <span t-esc="l['particulars']"/>
+                                 </td>
+                             </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>

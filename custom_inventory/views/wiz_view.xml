@@ -1,0 +1,43 @@
+<openerp>
+    <data>
+       <!-- ================================================== Begin Form views of Report Wizard ================================================ -->
+        <record id="wiz_report_form" model="ir.ui.view">
+            <field name="name">view.form.wiz.report</field>
+            <field name="model">wiz.reports</field>
+            <field name="arch" type="xml">
+                <form string="Report" version="8.0">
+                    <group string="Generic Wizard">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="company_id"/>
+                    </group>
+                    <footer>
+                        <button name="print_report" type="object" string="Print" class="oe_highlight"/>
+                        OR
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <!-- ================================================== End Form views of Report Wizard ================================================ -->
+        <record id="action_wiz_report_form" model="ir.actions.act_window">
+            <field name="name">Reports</field>
+            <field name="res_model">wiz.reports</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Reports" id="reports_side_top_menu" parent="base.menu_reporting" sequence="2"/>
+         <menuitem
+            name="Generic Report"
+            action="action_wiz_report_form"
+            id="menu_action_wiz_report_form"
+            sequence="4"
+            parent="reports_side_top_menu">
+         </menuitem>
+    </data>
+</openerp>
+

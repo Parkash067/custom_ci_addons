@@ -28,5 +28,15 @@
             name="custom_inventory.custom_sale_invoice"
         />
 
+         <report
+            id="action_wiz_report"
+            model="wiz.reports"
+            string="Report"
+            report_type="qweb-pdf"
+            name="custom_inventory.wiz_report"
+            file="custom_inventory.wiz_report"
+            menu="False"
+        />
+
     </data>
 </openerp>

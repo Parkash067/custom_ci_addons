@@ -45,6 +45,8 @@ Dashboard / Reports for Inventory Management will include:
         'views/delivery_order_print.xml',
         'views/custom_sale_invoice.xml',
         'views/do_print.xml',
+        'views/wiz_report.xml',
+        'views/wiz_view.xml',
         'views/report_menu.xml',
         'views/certificate_view.xml',
         'views/custom_dummy_invoice_view.xml',
@@ -53,7 +55,7 @@ Dashboard / Reports for Inventory Management will include:
         'views/debit_note_view.xml',
         'views/serials.xml',
         'views/debit_note_sequence.xml',
-        'views/page_setup.xml'
+        'views/page_setup.xml',
         ],
     'installable': True,
     'application': True,
