@@ -9,39 +9,39 @@
                     <div class="row">
                         <h1 align="center">Collection Report</h1><br/>
                         <h6>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h6>
-                        <table class="table table-condensed" style="font-size:12px;">
+                        <table class="table table-condensed" style="font-size:12px">
                         <thead>
-                            <tr>
-                                <td>Serial No.</td>
-                                <td>Entry Date</td>
-                                <td>Entry/Voucher No.</td>
-                                <td>Debit Account Name</td>
-                                <td>Credit Account Name</td>
-                                <td>Entry Amount</td>
-                                <td class="text-right">Entry Particulars</td>
+                            <tr style="background:light-grey;">
+                                <td style="border: 1px solid black; padding:10px; text-align:center; font-weight:bolder;">Serial No.</td>
+                                <td style="border: 1px solid black; padding:10px; text-align:center; font-weight:bolder;">Entry Date</td>
+                                <td style="border: 1px solid black; padding:10px; text-align:center; font-weight:bolder;">Entry/Voucher No.</td>
+                                <td style="border: 1px solid black; padding:10px; text-align:center; font-weight:bolder;">Debit Account Name</td>
+                                <td style="border: 1px solid black; padding:10px; text-align:center; font-weight:bolder;">Credit Account Name</td>
+                                <td style="border: 1px solid black; padding:10px; text-align:center; font-weight:bolder;">Entry Amount</td>
+                                <td style="border: 1px solid black; padding:10px; text-align:center; font-weight:bolder;">Entry Particulars</td>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="invoice_tbody">
                             <tr t-foreach="doc.collection_report()" t-as="l">
-                                 <td>
+                                 <td style="border: 1px solid black; padding:10px; text-align:center;">
                                      <span t-esc="l_index+1"/>
                                  </td>
-                                 <td >
+                                 <td style="border: 1px solid black; padding:10px; text-align:center;">
                                      <span t-esc="l['date']"/>
                                  </td>
-                                 <td>
+                                 <td style="border: 1px solid black; padding:10px; text-align:center;">
                                      <span t-esc="l['entry']"/>
                                  </td>
-                                 <td>
+                                 <td style="border: 1px solid black; padding:10px; text-align:center;">
                                      <span t-esc="l['amount']"/>
                                  </td>
-                                <td>
+                                <td style="border: 1px solid black; padding:10px; text-align:center;">
                                      <span t-esc="l['account_head']"/>
                                  </td>
-                                <td>
+                                <td style="border: 1px solid black; padding:10px; text-align:center;">
                                      <span t-esc="l['customer']"/>
                                  </td>
-                                <td class="text-right">
+                                <td style="border: 1px solid black; padding:10px; text-align:center;">
                                      <span t-esc="l['particulars']"/>
                                  </td>
                              </tr>
