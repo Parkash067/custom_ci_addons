@@ -7,6 +7,7 @@ class custom_debit_note(osv.osv):
     _name = 'custom.debit.note'
     _rec_name = 'name'
     _columns = {
+        'view_invoice_id': fields.integer('View ID', store=True),
         'view_id': fields.integer('View ID', store=True),
         'name': fields.char('Name', store=True),
         'partner_id': fields.many2one('res.partner','Supplier', store=True, duplicate=True, domain="[('supplier','=',True)]"),
@@ -95,6 +96,24 @@ class custom_debit_note(osv.osv):
             'type': 'ir.actions.act_window',
         }
 
+    def view_invoice(self,cr, uid, ids, context=None):
+        _self = self.browse(cr, uid, ids[0], context=context)
+        ir_model_data = self.pool.get('ir.model.data')
+        form_res = ir_model_data.get_object_reference(cr, uid, 'account', 'invoice_supplier_form')
+        form_id = form_res and form_res[1] or False
+        tree_res = ir_model_data.get_object_reference(cr, uid, 'account', 'invoice_tree')
+        tree_id = tree_res and tree_res[1] or False
+        return {
+            'name': _('Supplier Returns'),
+            'view_type': 'form',
+            'view_mode': 'form,tree',
+            'res_model': 'account.invoice',
+            'res_id': _self.view_invoice_id,
+            'view_id': False,
+            'views': [(form_id, 'form'), (tree_id, 'tree')],
+            'type': 'ir.actions.act_window',
+        }
+
     def refund_invoice(self, cr, uid, ids, context=None):
         account_journal_obj = self.pool.get('account.journal').search(cr, uid, [('name', '=', 'Purchase Refund Journal')])
         account_invoice_obj = self.pool.get('account.invoice')
@@ -109,6 +128,7 @@ class custom_debit_note(osv.osv):
             'type': 'in_refund'
         }
         inv_vals_id = account_invoice_obj.create(cr, uid, inv_vals, context=context)
+        _self.view_invoice_id = inv_vals_id
         for line in _self.debit_note_line:
             inv_val_lines = {
                 'invoice_id': inv_vals_id,
@@ -119,6 +139,22 @@ class custom_debit_note(osv.osv):
                 'price_unit':line.price_unit,
             }
             account_invoice_line_obj.create(cr,uid, inv_val_lines,context=context)
+        ir_model_data = self.pool.get('ir.model.data')
+        form_res = ir_model_data.get_object_reference(cr, uid, 'account', 'invoice_supplier_form')
+        form_id = form_res and form_res[1] or False
+        tree_res = ir_model_data.get_object_reference(cr, uid, 'account', 'invoice_tree')
+        tree_id = tree_res and tree_res[1] or False
+        _self.write({'status': 'refund_invoice'})
+        return {
+            'name': _('Supplier Returns'),
+            'view_type': 'form',
+            'view_mode': 'form,tree',
+            'res_model': 'account.invoice',
+            'res_id': inv_vals_id,
+            'view_id': False,
+            'views': [(form_id, 'form'), (tree_id, 'tree')],
+            'type': 'ir.actions.act_window',
+        }
 
 
     @api.one

@@ -27,7 +27,7 @@
                 <form string="Invoice">
                       <header>
                         <button name="deduct_inventory" type="object" string="Deduct Inventory" class="oe_highlight"  attrs="{'invisible': [('status','!=','draft')]}" />
-                        <button name="refund_invoice" type="object" string="Refund Invoice" class="oe_highlight" />
+                        <button name="refund_invoice" type="object" string="Refund Invoice" class="oe_highlight" attrs="{'invisible': ['|',('status','=','draft'),('status','=','refund_invoice')]}" />
                         <button name="view_order" type="object" string="View Order" class="oe_highlight"/>
                         <button name="view_invoice" type="object" string="View Invoice" class="oe_highlight"/>
                         <field name="status" widget="statusbar"  statusbar_colors='{"draft":"blue","inventory_deducted":"blue","refund_invoice":"blue"}'/>
