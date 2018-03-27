@@ -10,6 +10,14 @@ class custom_dummy_invoice(osv.osv):
     _name = "custom.dummy.invoice"
     _rec_name = "partner_id"
     _columns = {
+        'sop': fields.char('SOP', store=True),
+        'sale_type': fields.char('Sale Type', store=True),
+        'extra_tax': fields.float('Extra Tax', store=True),
+        'rate': fields.float('Rate', store=True),
+        'description': fields.char('Description', store=True),
+        'hs_code': fields.char('HS Code', store=True),
+        'quantity': fields.float('Quantity', store=True),
+        'uom': fields.char('UOM', store=True),
         'dealer_id': fields.many2one('res.partner', 'Dealer', store=True),
         'sara_inv_serial': fields.char('Invoice #', store=True),
         'abc_inv_serial': fields.char('Invoice #', store=True),
@@ -69,14 +77,14 @@ class custom_dummy_invoice_lines(osv.osv):
         'sara_inv_number': fields.related('name', 'sara_inv_serial', type='char', string='Inv. No.', store=True),
         'date': fields.related('name', 'date_invoice', type='date', string='Inv. Date', store=True),
         'excl_val': fields.related('name', 'amount_untaxed', type='float', string='Excl. Value', store=True),
-        'incl_val': fields.related('name', 'amount_untaxed', type='float', string='Excl. Value', store=True),
+        'incl_val': fields.related('name', 'amount_untaxed', type='float', string='Incl. Value', store=True),
         'products': fields.char('Product', store=True),
         'quantity': fields.float('Quantity', store=True,default=0.0),
         'price_unit': fields.float('Unit Price', store=True,default=0.0),
         'sales_tax': fields.float('Sales Tax 17%', store=True,default=0.0, compute='cal_wht_further_tax'),
         'wht': fields.float('W.H.T', store=True, default=0.0, compute='cal_wht_further_tax'),
         'further_tax': fields.float('Further Tax 2%', store=True, compute='cal_wht_further_tax'),
-        'price_subtotal': fields.float('Amount', store=True, readonly=True,default=0.0, compute='basic_amount'),
+        'price_subtotal': fields.float('Incl. Value', store=True, readonly=True,default=0.0, compute='basic_amount'),
         'chassis_number': fields.char('Chassis No.'),
         'engine_number': fields.char('Engine No.'),
     }

@@ -12,6 +12,7 @@ class res_partner(osv.osv):
 
     taxation = fields.Selection([('pay','Tax Payer'),('n-pay','Non Tax Payer')], default='n-pay', String='Tax Condition', required=True)
     ntn = fields.Char(string="NTN", domain=[('taxation','=','n-pay')])
+    nic = fields.Char(string="NIC")
     strn = fields.Char(string="STRN")
     gst = fields.Char(string="GST")
     city_id = fields.Many2one('res.city', string="City", required=True)

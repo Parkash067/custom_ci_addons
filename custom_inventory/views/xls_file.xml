@@ -1,0 +1,55 @@
+<openerp>
+    <data>
+       <!-- ================================================== Begin Form views of Report Wizard ================================================ -->
+        <record id="view_xls_file_form_view" model="ir.ui.view">
+            <field name="name">mrp.report.file</field>
+            <field name="model">demo.xls.report.file</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="form" version="8.0">
+                  <group col="4" colspan="4">
+                      <label string="Save the File with '.xls' extension" colspan="4"/>
+                      <field name="file_name" invisible="1"/>
+                      <field name="file" readonly="1" filename="file_name" nolabel="1"/>
+                  </group>
+                    <footer>
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="xls_report_view" model="ir.ui.view">
+            <field name="name">xls.report.view</field>
+            <field name="model">xls.report</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="form" version="8.0">
+                    <field name="type"/>
+                    <group string="Generic Wizard">
+                        <field name="partner_id" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging')],'required':['|',('type','=','Collection Report'),('type','=','Individual Aging')]}"/>
+                        <field name="date_from" />
+                        <field name="date_to"/>
+                        <field name="company_id" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging')],'required':['|',('type','=','Collection Report'),('type','=','Individual Aging')]}"/>
+                    </group>
+                    <footer>
+                        <button name="print_report" type="object" string="Generate PDF" class="oe_highlight" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging')]}"/>
+                        <button name="report_xls" string="Generate XLS" type="object" class="oe_highlight" attrs="{'invisible':['|','|',('type','=','/'),('type','=','Collection Report'),('type','=','Individual Aging')]}"/>
+                    or
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="xls_report_action" model="ir.actions.act_window">
+            <field name="name">Report</field>
+            <field name="res_model">xls.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</openerp>
+

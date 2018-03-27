@@ -10,6 +10,7 @@
 
                 <xpath expr="//field[@name='website']" position="after">
 		    <field name="taxation"/>
+                    <field name="nic"/>
                     <field name="ntn" attrs="{'required':[('taxation','=','pay')]}"/>
                     <field name="strn" attrs="{'required':[('taxation','=','pay')]}"/>
                     <field name="gst"/>

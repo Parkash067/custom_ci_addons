@@ -6,11 +6,14 @@
             <field name="model">wiz.reports</field>
             <field name="arch" type="xml">
                 <form string="Report" version="8.0">
+                    <field name="type"/>
                     <group string="Generic Wizard">
                         <field name="date_from"/>
                         <field name="date_to"/>
                     </group>
                     <group>
+                        <field name="partner_id"/>
+                        <field name="multiple_customers"/>
                         <field name="company_id"/>
                     </group>
                     <footer>
@@ -31,11 +34,19 @@
         </record>
 
         <menuitem name="Reports" id="reports_side_top_menu" parent="base.menu_reporting" sequence="2"/>
+         <!--<menuitem-->
+            <!--name="Generic Report"-->
+            <!--action="action_wiz_report_form"-->
+            <!--id="menu_action_wiz_report_form"-->
+            <!--sequence="4"-->
+            <!--parent="reports_side_top_menu">-->
+         <!--</menuitem>-->
+
          <menuitem
             name="Generic Report"
-            action="action_wiz_report_form"
-            id="menu_action_wiz_report_form"
-            sequence="4"
+            action="xls_report_action"
+            id="menu_xls_report_action"
+            sequence="5"
             parent="reports_side_top_menu">
          </menuitem>
     </data>
