@@ -127,9 +127,9 @@ class xls_report(osv.osv):
     def sales_register_report(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
         cr.execute(
-            "select sales_register.ntn,sales_register.nic,sales_register.name,sales_register.products,sales_register.engine_number,sales_register.chassis_number,"
+            "select sales_register.ntn,sales_register.nic,custom_dummy_invoice.partner_id,custom_dummy_invoice.amount_total,sales_register.products,sales_register.engine_number,sales_register.chassis_number,"
             "sales_register.sara_inv_number,sales_register.date,sales_register.excl_val,sales_register.further_tax,sales_register.sales_tax,"
-            "sales_register.price_subtotal from custom_dummy_invoice_line as sales_register where sales_register.date between'" + str(
+            "sales_register.price_subtotal from custom_dummy_invoice_line as sales_register inner join custom_dummy_invoice on sales_register.name = custom_dummy_invoice.id where sales_register.date between'" + str(
                 obj.date_from) + "'" + " and '" + str(
                 obj.date_to) + "'" + "order by sales_register.date")
         data = cr.dictfetchall()
@@ -189,7 +189,7 @@ class xls_report(osv.osv):
                         ws.write(i+1, 0, i+1, new_style7)
                         ws.write(i+1, 1, data[i]['ntn'], new_style7)
                         ws.write(i+1, 2, data[i]['nic'], new_style7)
-                        ws.write(i+1, 3, data[i]['name'], new_style7)
+                        ws.write(i+1, 3, data[i]['partner_id'], new_style7)
                         ws.write(i+1, 4, data[i]['products'], new_style7)
                         ws.write(i+1, 5, data[i]['engine_number'], new_style7)
                         ws.write(i+1, 6, data[i]['chassis_number'], new_style7)
@@ -198,7 +198,7 @@ class xls_report(osv.osv):
                         ws.write(i+1, 9, data[i]['excl_val'], new_style7)
                         ws.write(i+1, 10, data[i]['further_tax'], new_style7)
                         ws.write(i+1, 11, data[i]['sales_tax'], new_style7)
-                        ws.write(i+1, 12, data[i]['price_subtotal'], new_style7)
+                        ws.write(i+1, 12, data[i]['amount_total'], new_style7)
 
             elif obj.type == 'Purchase Register':
                 for i in range(len(purchase_register)):
