@@ -2,6 +2,9 @@
 import openerp.addons.decimal_precision as dp
 from openerp.osv import fields, osv
 from openerp import api,_
+import base64
+import cStringIO
+import qrcode
 
 
 class custom_stock_picking(osv.osv):
@@ -51,6 +54,7 @@ class custom_stock_move(osv.osv):
         'year': fields.char('Year',store=True),
         'issuance_date': fields.date('Issuance Date', store=True),
         'reason': fields.text('Reason',store=True),
+        'qr_code': fields.binary('QR Code', store=True)
     }
 
     _defaults = {
@@ -85,9 +89,29 @@ class custom_stock_move(osv.osv):
         self.write({'counter': counter, 'certificate_lock': True, 'issuance_date': fields.datetime.now()})
 
     def generate_qr_code(self):
-        # return "Product Name : " + str(self.product_id.name)
-        return "Engine Number : "+str(self.engine_number) + "\n" + "Chasis Number : " + str(self.chassis_number) + "\n" + "Model : " + self.model + "\n"+ "Brand : " + 'Union Start' + "\n" +"HP : " + '70' + "\n" +" 'MANUFACTURED BY SARA AUTOMOBILE INDUSTERIES'"
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=2,
+            border=4,
 
+        )
+        qr.add_data('Engine Number : ' + self.engine_number + '\n' +
+                    'Chasis Number : ' + self.chassis_number + '\n' +
+                    'Model : ' + self.model + '\n' +
+                    'Brand : ' + self.product_id.name + '\n' +
+                    'HP : ' + self.product_id.default_code + '\n'
+                    + 'MANUFACTURED BY SARA AUTOMOBILE INDUSTERIES')
+        qr.make(fit=True)
+        img = qr.make_image()
+        buffer = cStringIO.StringIO()
+        img.save(buffer, format("PNG"))
+        img_str = base64.b64encode(buffer.getvalue())
+        img_qr = base64.decodestring(img_str)
+        self.write({'qr_code': img_str})
+        return ''
+        # return "Product Name : " + str(self.product_id.name)
+        #return "Engine Number : "+str(self.engine_number) + "\n" + "Chasis Number : " + str(self.chassis_number) + "\n" + "Model : " + self.model + "\n"+ "Brand : " + 'Union Start' + "\n" +"HP : " + '70' + "\n" +" 'MANUFACTURED BY SARA AUTOMOBILE INDUSTERIES'"
     def issuance(self):
         self.certificate_issuance = 1
         return ''
