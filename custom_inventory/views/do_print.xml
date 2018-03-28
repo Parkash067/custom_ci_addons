@@ -16,61 +16,35 @@
                                    <span style="text-decoration:underline; font-size:18px;">Plot No B-6 Scheme 33, Super Highway S.I.T.E Karachi, Tel:02132736673</span>
                                    <h3 style="text-decoration:underline;">Delivery Order / Gate Pass</h3>
                               </div>
-                               <div style="width:100%; font-size:16px">
-                                   <div style="max-width:100%;width:70%;height:106px;display:inline-block;border:1px solid black;float:left;">
-                                       <div style="max-width:100%;width:20%;height:35px;display:inline-block;border-bottom:1px solid black;border-right:1px solid black;float:left;">
-                                           <span style="text-align:center;vertical-align:middle;line-height:30px;margin-left:7px;"><strong>Dealer</strong></span>
-                                       </div>
-                                       <div style="max-width:100%;width:42%;height:35px;display:inline-block;border-bottom:1px solid black;border-right:1px solid black;float:left;">
-                                           <span t-esc="do.partner_id.name" style="text-align:center;vertical-align:middle;line-height:30px;margin-left:7px;"/>
-                                       </div>
-                                       <div style="max-width:100%;width:13%;height:35px;display:inline-block;border-bottom:1px solid black;border-right:1px solid black;float:left;">
-                                           <span style="text-align:center;vertical-align:middle;line-height:30px;margin-left:7px;"><strong>Dlvr NIC:</strong></span>
-                                       </div>
-                                       <div style="max-width:100%;width:25.2%;height:35px;display:inline-block;border-bottom:1px solid black;float:left;">
-
-                                       </div>
-
-                                       <div style="max-width:100%;width:20%;height:35px;display:inline-block;border-bottom:1px solid black;border-right:1px solid black;float:left;">
-                                           <span style="text-align:center;vertical-align:middle;line-height:30px;margin-left:7px;"><strong>Contact Info</strong></span>
-                                       </div>
-                                       <div style="max-width:100%;width:80%;height:35px;display:inline-block;border-bottom:1px solid black;float:left;">
-
-                                       </div>
-
-                                       <div style="max-width:100%;width:20%;height:35px;display:inline-block;border-right:1px solid black;float:left;">
-                                           <span style="text-align:center;vertical-align:middle;line-height:30px;margin-left:7px;"><strong>Address</strong></span>
-                                       </div>
-                                       <div style="max-width:100%;width:80%;height:35px;display:inline-block;float:left;">
-
-                                       </div>
-                                   </div>
-                                   <div style="max-width:100%;width:30%;height:106px;display:inline-block;border-right:1px solid black;border-top:1px solid black;border-bottom:1px solid black;float:left">
-                                       <div style="max-width:100%;width:37%;height:35px;display:inline-block;border-bottom:1px solid black;border-right:1px solid black;float:left;">
-                                           <span style="text-align:center;vertical-align:middle;line-height:30px;margin-left:7px;"><strong>Date</strong></span>
-                                       </div>
-                                       <div style="max-width:100%;width:63%;height:35px;display:inline-block;border-bottom:1px solid black;float:left;">
-                                           <span t-esc="do.date" style="text-align:center;vertical-align:middle;line-height:30px;margin-left:7px;"/>
-                                       </div>
-
-                                       <div style="max-width:100%;width:37%;height:35px;display:inline-block;border-bottom:1px solid black;border-right:1px solid black;float:left;">
-                                           <span style="text-align:center;vertical-align:middle;line-height:30px;margin-left:7px;"><strong>D.O/GP No:</strong></span>
-                                       </div>
-                                       <div style="max-width:100%;width:63%;height:35px;display:inline-block;border-bottom:1px solid black;float:left;">
-                                           <span t-esc="do.name" style="text-align:center;vertical-align:middle;line-height:30px;margin-left:17px;"/>
-                                       </div>
-                                        <div style="max-width:100%;width:37%;height:35px;display:inline-block;border-right:1px solid black;float:left;">
-                                           <span style="text-align:center;vertical-align:middle;line-height:30px;margin-left:7px;"><strong>Quantity</strong></span>
-                                       </div>
-                                       <div style="max-width:100%;width:63%;height:35px;display:inline-block;float:left;">
-                                           <span t-esc="quantity_count" style="text-align:center;vertical-align:middle;line-height:30px;margin-left:7px;"/>
-                                       </div>
-
-                                   </div>
+                               <div style="margin-top:30px;">
+                                   <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
+                                          <thead style="border:1px solid black; font-size:16px;">
+                                             <tr>
+                                                 <td style="width:140px; border-right:1px solid black; padding:7px; !important;"><strong>Dealer</strong></td>
+                                                 <td style="width:290px; border-right:1px solid black; padding:7px; !important;"><span t-esc="do.partner_id.name" /></td>
+                                                 <td style="width:90px;  border-right:1px solid black; padding:7px; !important;"><strong>Dlvr NIC:</strong></td>
+                                                 <td style="width:177px; border-right:1px solid black; padding:7px; !important;"><span t-esc="do.partner_id.nic"/> </td>
+                                                 <td style="width:110px; border-right:1px solid black; padding:7px; !important;"><strong>Date:</strong> </td>
+                                                 <td style="border-right:1px solid black; padding:7px; !important;"><span t-esc="do.date"/> </td>
+                                             </tr>
+                                             <tr>
+                                                 <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><strong>Contact Info</strong></td>
+                                                 <td colspan="3" style="width:557px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"> </td>
+                                                 <td style="width:110px; border-right:1px solid black;border-top:1px solid black; padding:7px; !important;"><strong>D.O/GP No:</strong> </td>
+                                                 <td style="border-right:1px solid black; padding:7px;border-top:1px solid black; !important;"><span t-esc="do.name"/></td>
+                                             </tr>
+                                              <tr>
+                                                 <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><strong>Address</strong></td>
+                                                 <td colspan="3" style="width:557px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><span t-esc="do.partner_id.street"/>,<span t-esc="do.partner_id.city"/> </td>
+                                                 <td style="width:110px; border-right:1px solid black;border-top:1px solid black; padding:7px; !important;"><strong>Quantity:</strong> </td>
+                                                 <td style="border-right:1px solid black; padding:7px;border-top:1px solid black; !important;"><span t-esc="quantity_count"/></td>
+                                             </tr>
+                                          </thead>
+                                      </table>
+                                   <br/>
                                </div>
-                               <br/><br/>
                                <t t-if="do.picking_type_id.name=='Delivery Orders'">
-                               <div style="margin-top:100px;">
+                               <div style="margin-top:10px;">
                                    <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
                                           <thead style="border:1px solid black; font-size:18px;">
                                               <tr>
@@ -106,7 +80,7 @@
                                </div>
                                </t>
                                 <t t-if="do.picking_type_id.name=='Receipts'">
-                               <div style="margin-top:100px;">
+                               <div style="margin-top:10px;">
                                    <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
                                           <thead style="border:1px solid black; font-size:18px;">
                                               <tr>
@@ -249,25 +223,29 @@
                            </div>
                            <br/><br/><br/><br/><br/>
                            <div class="row">
-                               <div style="max-width:100%;width:100%;">
-                                   <div style="display:inline-block;border-top:1px solid black; float:left; margin-left:10px;width:20%;">
-                                       <div style="float:left; margin-left:40px;"><strong>Prepared By:</strong></div>
-                                   </div>
-                                   <div style="display:inline-block;margin-left:180px;border-top:1px solid black;float:left;width:20%;">
-                                       <div style="float:left; margin-left:30px;"><strong>Authorized Signature</strong></div>
-                                   </div>
-                                   <div style="display:inline-block;margin-right:10px;border-top:1px solid black;float:right;width:20%;">
-                                       <div style="float:right; margin-right:45px;"><strong>Received By:</strong></div>
-                                   </div><br/><br/><br/><br/><br/><br/>
-                                   <div style="display:inline-block;border-top:1px solid black; float:left; margin-left:5px;width:20%;">
-                                       <div style="float:left; margin-left:35px;"><strong>For Sara Mobile Ind.</strong></div>
-                                   </div>
-                                   <div style="display:inline-block;margin-left:180px;border-top:1px solid black;float:left;width:20%;">
-                                       <div style="float:left; margin-left:40px;"><strong>Manager Admin</strong></div>
-                                   </div>
-                                   <div style="display:inline-block;margin-right:10px;border-top:1px solid black;float:right;width:20%;">
-                                       <div style="float:right; margin-right:45px;"><strong>Received By:</strong></div>
-                                   </div>
+                                <div style="margin-top:30px;">
+                                   <table style="font-size:16px; width:999px;border-collapse:separate;border-spacing:50px 0;">
+                                          <thead>
+                                             <tr>
+                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px"><strong>Prepared By:</strong></td>
+                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px" ><strong>Authorized Signature:</strong></td>
+                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px"><strong>Received By:</strong></td>
+                                             </tr>
+                                          </thead>
+                                      </table>
+                                   <br/>
+                               </div>
+                              <div style="margin-top:70px;">
+                                   <table style="font-size:16px; width:999px;border-collapse:separate;border-spacing:50px 0;">
+                                          <thead>
+                                             <tr>
+                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px"><strong>For Sara Automobile Ind.</strong></td>
+                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px" ><strong>Manager Admin:</strong></td>
+                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px"><strong>Received By:</strong></td>
+                                             </tr>
+                                          </thead>
+                                      </table>
+                                   <br/>
                                </div>
                            </div>
                        </div>
