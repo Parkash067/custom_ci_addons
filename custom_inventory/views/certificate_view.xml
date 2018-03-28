@@ -45,6 +45,7 @@
             <field name="model">custom.stock.move</field>
             <field name="arch" type="xml">
                 <tree string="Certificate Tree"  version="8.0" editable="top" default_order="client_name desc">
+                    <field name="certificate_serial"/>
                     <field name="engine_number" readonly="1"/>
                     <field name="chassis_number" readonly="1"/>
                     <field name="picking_id" string="DO" readonly="1"/>

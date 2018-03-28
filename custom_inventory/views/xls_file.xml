@@ -28,7 +28,7 @@
                 <form string="form" version="8.0">
                     <field name="type"/>
                     <group string="Generic Wizard">
-                        <field name="partner_id" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging')],'required':['|',('type','=','Collection Report'),('type','=','Individual Aging')]}"/>
+                        <field name="partner_id" attrs="{'invisible':['|',('type','=','/'),('type','=','Collection Report'),('type','!=','Individual Aging')],'required':['|',('type','=','Individual Aging')]}"/>
                         <field name="date_from" />
                         <field name="date_to"/>
                         <field name="company_id" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging')],'required':['|',('type','=','Collection Report'),('type','=','Individual Aging')]}"/>

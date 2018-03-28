@@ -4,6 +4,7 @@ from datetime import date, timedelta,datetime
 import xlwt
 import StringIO
 import base64
+from datetime import datetime
 
 sales_register = ['Sr.No.', 'NTN', 'NIC', 'Buyer\'s Name', 'Description', 'Engine Number', 'Chassis Number',
                   'Inv No.', 'Inv Date', 'Excl Value', 'Futher Tax', 'S.T.Value', 'Incl.Value']
@@ -98,24 +99,34 @@ class xls_report(osv.osv):
                 res.append(self.report_data(data,id.name))
         return res
 
+    def cal_aging_brackets(self,data):
+        _list = []
+        date_format = "%Y-%m-%d"
+        for rec in data:
+            a = datetime.strptime(rec['date_invoice'], date_format)
+            b = datetime.strptime(datetime.now().strftime('%Y-%m-%d'), date_format)
+            delta = b - a
+            rec['days'] = delta.days
+            _list.append(rec)
+        return _list
+
     def individual_aging_report(self):
-        data = []
-        if self.multiple_customers == False:
-            self.env.cr.execute(
+        self.env.cr.execute(
                 "select account_invoice.number,account_invoice.partner_id,account_invoice.date_invoice,account_invoice.amount_total from account_invoice where account_invoice.date_invoice between'" + str(
                     self.date_from) + "'" + " and '" + str(
                     self.date_to) + "'" + "and state='open'" + "and account_invoice.company_id=" + str(
                     self.company_id.id) + "order by account_invoice.date_invoice")
-            data = self.env.cr.dictfetchall()
-        return data
+        data = self.env.cr.dictfetchall()
+        res = self.cal_aging_brackets(data)
+        return res
 
     def print_report(self, cr, uid, ids, data, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
         if obj.type == 'Collection Report':
             return {
                 'type': 'ir.actions.report.xml',
-                'name': 'custom_inventory.wiz_collection_report',
-                'report_name': 'custom_inventory.wiz_collection_report'
+                'name': 'custom_inventory.collection_report',
+                'report_name': 'custom_inventory.collection_report'
             }
         elif obj.type == 'Individual Aging':
             return {

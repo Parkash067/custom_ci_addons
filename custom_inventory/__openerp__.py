@@ -47,7 +47,7 @@ Dashboard / Reports for Inventory Management will include:
         'views/do_print.xml',
         'views/xls_file.xml',
         'views/wiz_view.xml',
-        'views/wiz_collection_report.xml',
+        'views/collection_report.xml',
         'views/wiz_individual_aging_report.xml',
         'views/report_menu.xml',
         'views/certificate_view.xml',

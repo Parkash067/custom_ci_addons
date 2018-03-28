@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 <data>
-<template id="wiz_collection_report">
+<template id="collection_report">
     <t t-call="report.html_container">
         <t t-foreach="docs" t-as="doc">
             <t t-call="report.internal_layout">
@@ -12,14 +12,14 @@
                             <h6>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h6>
                             <table class="table table-condensed" style="font-size:10px">
                                 <thead>
-                                    <tr style="background:royalblue;">
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; color:white;">Serial No.</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; color:white;">Entry Date</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; color:white;">Entry/Voucher No.</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; color:white;">Debit Account Name</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; color:white;">Credit Account Name</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; color:white;">Entry Amount</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; color:white;">Entry Particulars</td>
+                                    <tr style="background:#ccc;">
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Serial No.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Entry Date</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Entry/Voucher No.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Debit Account Name</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Credit Account Name</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Entry Amount</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Entry Particulars</td>
                                     </tr>
                                 </thead>
                                 <tbody class="invoice_tbody">
@@ -33,14 +33,14 @@
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['entry']"/>
                                         </td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['amount']"/>
-                                        </td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['account_head']"/>
                                         </td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['customer']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['amount']"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['particulars']"/>

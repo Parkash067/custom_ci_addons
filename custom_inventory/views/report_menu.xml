@@ -29,18 +29,18 @@
         />
 
          <report
-            id="action_wiz_collection_report"
-            model="wiz.reports"
+            id="action_collection_report"
+            model="xls.report"
             string="Report"
             report_type="qweb-pdf"
-            name="custom_inventory.wiz_collection_report"
-            file="custom_inventory.wiz_collection_report"
+            name="custom_inventory.collection_report"
+            file="custom_inventory.collection_report"
             menu="False"
         />
 
         <report
             id="action_wiz_individual_aging_report"
-            model="wiz.reports"
+            model="xls.report"
             string="Report"
             report_type="qweb-pdf"
             name="custom_inventory.wiz_individual_aging_report"
