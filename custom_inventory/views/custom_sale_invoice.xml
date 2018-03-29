@@ -7,7 +7,29 @@
                    <t>
                       <div class="page">
                           <div class="row">
-                              <t t-if="account_invoice.dealer_id.name == 'Allied Business Corporation'">
+                              <t t-if="account_invoice.header == 'Sara Automobiles'">
+                                   <h1 t-esc="'%s' %res_company.name" style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
+                                         margin-right:auto;text-align:center;"/>
+                                  <div style="max-width:100%;height:auto;width:80%;margin-left:auto;
+                                         margin-right:auto;text-align:center;">
+                                      <span style="font-size:18px;font-weight:bold;">Assembler Cum Manufacturer of Union Star Motorcycle</span><br/>
+                                      <span t-esc="'%s' %res_company.street" style="font-size:18px;font-weight:bold;"/>,
+                                      <span t-esc="'%s' %res_company.city"  style="font-size:18px;font-weight:bold;"/><br/>
+                                      <span style="font-size:18px;"><strong>Tel: </strong></span><span t-esc="'%s' %res_company.phone" style="font-size:18px;font-weight:bold;"/>
+                                  </div>
+                              </t>
+                              <t t-if="account_invoice.header == 'Allied Business Corporation'">
+                                  <h1 style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
+                                         margin-right:auto;text-align:center;">
+                                      <span>Allied</span><span style="margin-left:5px;">Business</span><span style="margin-left:5px;">Corporation</span>
+                                  </h1>
+                                  <div style="max-width:100%;height:auto;width:80%;margin-left:auto;
+                                         margin-right:auto;text-align:center;">
+                                      <span style="font-size:18px;font-weight:bold;text-decoration:5px;">8- Secretariat View, Al Karam Building, Frere Road, Saddar, Karachi</span><br/>
+                                  </div>
+                              </t>
+                              <t t-if="account_invoice.header==False">
+                                   <t t-if="account_invoice.dealer_id.name == 'Allied Business Corporation'">
                                   <h1 style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
                                          margin-right:auto;text-align:center;">
                                       <span>Allied</span><span style="margin-left:5px;">Business</span><span style="margin-left:5px;">Corporation</span>
@@ -28,6 +50,8 @@
                                       <span style="font-size:18px;"><strong>Tel: </strong></span><span t-esc="'%s' %res_company.phone" style="font-size:18px;font-weight:bold;"/>
                                   </div>
                               </t>
+                              </t>
+
                               <h2 style="border:1px solid black;border-radius:5px;padding:10px;
                                          max-width:100%;height:auto;width:60%;margin-left:auto;
                                          margin-right:auto;text-align:center;background:lightgrey;">

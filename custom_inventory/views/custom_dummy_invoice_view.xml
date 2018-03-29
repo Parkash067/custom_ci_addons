@@ -33,6 +33,7 @@
                             <field string="Customer" name="partner_id"/>
                             <field name="nic"/>
                             <field name="ntn"/>
+                            <field name="header"/>
                         </group>
                         <group>
                             <field name="date_invoice" />
