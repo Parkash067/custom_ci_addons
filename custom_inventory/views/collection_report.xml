@@ -23,7 +23,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="invoice_tbody">
-                                    <tr t-foreach="doc.collection_report()" t-as="l">
+                                    <tr t-foreach="doc.collection_report(False)" t-as="l">
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l_index+1"/>
                                         </td>

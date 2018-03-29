@@ -130,7 +130,7 @@ class xls_report(osv.osv):
                 "select account_invoice.number,account_invoice.partner_id,account_invoice.date_invoice,account_invoice.amount_total from account_invoice where account_invoice.date_invoice between'" + str(
                     self.date_from) + "'" + " and '" + str(
                     self.date_to) + "'" + "and state='open'" + "and account_invoice.company_id=" + str(
-                    self.company_id.id) + "order by account_invoice.date_invoice")
+                    self.company_id.id) + "and account_invoice.partner_id="+str(self.partner_id.id)+"and type='out_invoice'order by account_invoice.date_invoice")
         data = self.env.cr.dictfetchall()
         res = self.cal_aging_brackets(data)
         return res
@@ -150,6 +150,7 @@ class xls_report(osv.osv):
                 else:
                     rec['collection'] = amount
                     res.append(rec)
+
         elif self.company_id.name == 'Allied Business Corportion':
             self.env.cr.execute(
             "SELECT rp.id,rp.name,sum(aml.debit)-sum(aml.credit) as opening FROM account_move_line as aml inner join res_partner as rp on aml.partner_id = rp.id inner join account_move as am on aml.move_id = am.id where (account_id=8 or account_id=13) and rp.customer=True and am.state ='posted' and aml.date<='"+self.date_from+"'"+"and am.company_id="+str(self.company_id.id)+"group by rp.name, rp.id")
