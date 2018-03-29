@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="wiz_mw_progress_report">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="report.internal_layout">
+                <div class="page">
+                    <div class="row">
+                        <t t-if="doc.type=='Monthly or Weekly Progress'">
+                            <h1 align="center">Progress Report</h1><br/>
+                            <h3>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h3>
+                            <table class="table table-condensed" style="font-size:10px width:100%">
+                                <thead>
+                                    <tr style="background:#ccc;">
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">Sr. No.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">Account Name.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">Eb-Bfr-Dates</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">Clct-Bw-Date</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">Opening Balance</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">Sale-Bw-Date</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">SRTN-Bw-Date</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">Ending-Bal</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">Balance Due</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">Bal-Over Due</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="doc.mw_progress_report()" t-as="l">
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l_index+1"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['name']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['opening']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['collection']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['opening']-l['collection']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['sale_amount']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span>0</span>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                             <span t-esc="l['opening']-l['collection']+l['sale_amount']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['opening']-l['collection']+l['sale_amount']"/>
+                                         </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['opening']-l['collection']+l['sale_amount']"/>
+                                         </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>

@@ -2,7 +2,7 @@
 <openerp>
     <data>
          <record id="dbn_serial" model="ir.sequence.type">
-            <field name="name">DBN</field>
+            <field name="name">N</field>
             <field name="code">debit_note.serial</field>
          </record>
         <record id="dbn_serial_" model="ir.sequence">

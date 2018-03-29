@@ -49,7 +49,8 @@ class xls_report(osv.osv):
                                   ('Annex C', 'Annex C'),
                                   ('Collection Report', 'Collection Report'),
                                   ('Individual Aging', 'Individual Aging'),
-                                  ('/','/')], 'Report Type', required=True),
+                                  ('Monthly or Weekly Progress', 'Monthly or Weekly Progress'),
+                                  ('/', '/')], 'Report Type', required=True),
         'date_from': fields.date('From', required=True),
         'date_to': fields.date('To', required=True),
         'company_id': fields.many2one('res.company', 'Company'),
@@ -89,15 +90,29 @@ class xls_report(osv.osv):
             }
         return res
 
-    def collection_report(self):
+    def collection_report(self,mw_id):
+        collection_amount = 0.0
         res = []
-        account_ids = self.env['account.account'].search([['type', '=', 'liquidity'],['company_id', '=', self.company_id.id]])
-        for id in account_ids:
-            self.env.cr.execute("select account_move_line.ref,account_move_line.partner_id,account_move_line.debit,account_move_line.date,account_move_line.account_id,account_move_line.name from account_move_line where account_move_line.account_id="+str(id.id)+" and "+"account_move_line.date between'"+str(self.date_from)+"'"+" and '"+str(self.date_to)+"'")
-            data = self.env.cr.dictfetchall()
-            if len(data)>0:
-                res.append(self.report_data(data,id.name))
-        return res
+        account_ids = self.env['account.account'].search(
+            [['type', '=', 'liquidity'], ['company_id', '=', self.company_id.id]])
+        if mw_id:
+            for id in account_ids:
+                self.env.cr.execute(
+                    "select account_move_line.ref,account_move_line.partner_id,account_move_line.debit,account_move_line.date,account_move_line.account_id,account_move_line.name from account_move_line where account_move_line.partner_id="+str(mw_id)+"and account_move_line.account_id=" + str(
+                        id.id) + " and " + "account_move_line.date between'" + str(
+                        self.date_from) + "'" + " and '" + str(self.date_to) + "'")
+                data = self.env.cr.dictfetchall()
+                if len(data) > 0:
+                    for rec in data:
+                        collection_amount += rec['debit']
+                    return collection_amount
+        else:
+            for id in account_ids:
+                self.env.cr.execute("select account_move_line.ref,account_move_line.partner_id,account_move_line.debit,account_move_line.date,account_move_line.account_id,account_move_line.name from account_move_line where account_move_line.account_id="+str(id.id)+" and "+"account_move_line.date between'"+str(self.date_from)+"'"+" and '"+str(self.date_to)+"'")
+                data = self.env.cr.dictfetchall()
+                if len(data)>0:
+                    res.append(self.report_data(data,id.name))
+            return res
 
     def cal_aging_brackets(self,data):
         _list = []
@@ -120,6 +135,46 @@ class xls_report(osv.osv):
         res = self.cal_aging_brackets(data)
         return res
 
+    def mw_progress_report(self):
+        result = []
+        res = []
+        if self.company_id.name == 'Sara Automobiles':
+            self.env.cr.execute(
+            "SELECT rp.id,rp.name,sum(aml.debit)-sum(aml.credit) as opening FROM account_move_line as aml inner join res_partner as rp on aml.partner_id = rp.id inner join account_move as am on aml.move_id = am.id where (account_id=8 or account_id=13) and rp.customer=True and am.state ='posted' and aml.date<='"+self.date_from+"'"+"and am.company_id="+str(self.company_id.id)+"group by rp.name, rp.id")
+            data = self.env.cr.dictfetchall()
+            for rec in data:
+                amount = self.collection_report(rec['id'])
+                if amount == None:
+                    rec['collection'] = 0
+                    res.append(rec)
+                else:
+                    rec['collection'] = amount
+                    res.append(rec)
+        elif self.company_id.name == 'Allied Business Corportion':
+            self.env.cr.execute(
+            "SELECT rp.id,rp.name,sum(aml.debit)-sum(aml.credit) as opening FROM account_move_line as aml inner join res_partner as rp on aml.partner_id = rp.id inner join account_move as am on aml.move_id = am.id where (account_id=8 or account_id=13) and rp.customer=True and am.state ='posted' and aml.date<='"+self.date_from+"'"+"and am.company_id="+str(self.company_id.id)+"group by rp.name, rp.id")
+            data = self.env.cr.dictfetchall()
+            for rec in data:
+                amount = self.collection_report(rec['id'])
+                if amount == None:
+                    rec['collection'] = 0
+                    res.append(rec)
+                else:
+                    rec['collection'] = amount
+                    res.append(rec)
+        for rec in res:
+            self.env.cr.execute("select sum(amount_total) as amount_total from sale_order where sale_order.date_order between'"+self.date_from+"'"+"and'"+self.date_to+"'"+"and partner_id="+str(rec['id'])+"group by sale_order.partner_id")
+            data = self.env.cr.dictfetchall()
+            if len(data)>0:
+                rec['sale_amount'] = data[0]['amount_total']
+                result.append(rec)
+            else:
+                rec['sale_amount'] = 0
+                result.append(rec)
+        return result
+
+
+
     def print_report(self, cr, uid, ids, data, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
         if obj.type == 'Collection Report':
@@ -134,6 +189,13 @@ class xls_report(osv.osv):
                 'name': 'custom_inventory.wiz_individual_aging_report',
                 'report_name': 'custom_inventory.wiz_individual_aging_report'
             }
+        elif obj.type == 'Monthly or Weekly Progress':
+            return {
+                'type': 'ir.actions.report.xml',
+                'name': 'custom_inventory.wiz_mw_progress_report',
+                'report_name': 'custom_inventory.wiz_mw_progress_report'
+            }
+
 
     def sales_register_report(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)

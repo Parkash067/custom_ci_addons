@@ -28,14 +28,14 @@
                 <form string="form" version="8.0">
                     <field name="type"/>
                     <group string="Generic Wizard">
-                        <field name="partner_id" attrs="{'invisible':['|',('type','=','/'),('type','=','Collection Report'),('type','!=','Individual Aging')],'required':['|',('type','=','Individual Aging')]}"/>
+                        <field name="partner_id" attrs="{'invisible':['|',('type','=','/'),('type','!=','Individual Aging')],'required':['|',('type','=','Individual Aging')]}"/>
                         <field name="date_from" />
                         <field name="date_to"/>
-                        <field name="company_id" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging')],'required':['|',('type','=','Collection Report'),('type','=','Individual Aging')]}"/>
+                        <field name="company_id" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging'),('type','!=','Monthly or Weekly Progress')],'required':['|','|','|',('type','=','/'),('type','=','Collection Report'),('type','=','Individual Aging'),('type','=','Monthly or Weekly Progress')]}"/>
                     </group>
                     <footer>
-                        <button name="print_report" type="object" string="Generate PDF" class="oe_highlight" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging')]}"/>
-                        <button name="report_xls" string="Generate XLS" type="object" class="oe_highlight" attrs="{'invisible':['|','|',('type','=','/'),('type','=','Collection Report'),('type','=','Individual Aging')]}"/>
+                        <button name="print_report" type="object" string="Generate PDF" class="oe_highlight" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging'),('type','!=','Monthly or Weekly Progress')]}"/>
+                        <button name="report_xls" string="Generate XLS" type="object" class="oe_highlight" attrs="{'invisible':['|','|','|',('type','=','/'),('type','=','Collection Report'),('type','=','Individual Aging'),('type','=','Monthly or Weekly Progress')]}"/>
                     or
                         <button special="cancel" string="Cancel" class="oe_link"/>
                     </footer>

@@ -7,10 +7,11 @@ class custom_debit_note(osv.osv):
     _name = 'custom.debit.note'
     _rec_name = 'name'
     _columns = {
+        'type': fields.selection([('Debit Note','Debit Note'),('Credit Note','Credit Note')],store=True,string='Note Type'),
         'view_invoice_id': fields.integer('View ID', store=True),
         'view_id': fields.integer('View ID', store=True),
         'name': fields.char('Name', store=True),
-        'partner_id': fields.many2one('res.partner','Supplier', store=True, duplicate=True, domain="[('supplier','=',True)]"),
+        'partner_id': fields.many2one('res.partner','Supplier', store=True, duplicate=True, domain="['|',('supplier','=',True),('customer','=',True)]"),
         'supplier_invoice': fields.many2one('account.invoice', 'Supplier Invoice', store=True, duplicate=True),
         'date': fields.date('Date', store=True, duplicate=True),
         'debit_note_line': fields.one2many('custom.debit.note.line', 'name', 'Debit Note Lines', store=True),
@@ -21,8 +22,8 @@ class custom_debit_note(osv.osv):
         'amount_total': fields.float('Total', store=True, readonly=True, default=0.0, compute='cal_total_amount'),
         'comment': fields.text('Comment', store=True),
         'status': fields.selection([('draft', 'Draft'),
-                                    ('inventory_deducted', 'Inventory Deducted'),
-                                    ('refund_invoice', 'Refund Invoice')], string='State', store=True),
+                                    ('inventory_adjustment', 'Inventory Adjustment'),
+                                    ('invoice_adjustment', 'Invoice Adjustment')], string='State', store=True),
     }
 
     _defaults = {
@@ -53,13 +54,24 @@ class custom_debit_note(osv.osv):
         }
 
     def deduct_inventory(self, cr, uid, ids, context=None):
-        debit_note_lines = {}
-        stock_wh_obj = self.pool.get('stock.warehouse').search(cr, uid, [('name', '=', 'Sara Automobiles')])
-        stock_location_obj = self.pool.get('stock.location').search(cr, uid, [('name', '=', 'Stock')])
-        stock_location_dest_obj = self.pool.get('stock.location').search(cr, uid, [('name', '=', 'Suppliers')])
-        picking_id = self.pool.get('stock.picking.type').search(cr, uid, [['name', '=', 'Delivery Orders'], ['warehouse_id', '=', stock_wh_obj[0]]])
-
+        stock_location_obj = 0
+        picking_id = 0
+        stock_location_dest_obj = 0
         _self = self.browse(cr, uid, ids[0], context=context)
+        debit_note_lines = {}
+        if _self.type == 'Debit Note':
+            stock_wh_obj = self.pool.get('stock.warehouse').search(cr, uid, [('name', '=', 'Sara Automobiles')])
+            stock_location_obj = self.pool.get('stock.location').search(cr, uid, [('name', '=', 'Stock')])
+            stock_location_dest_obj = self.pool.get('stock.location').search(cr, uid, [('name', '=', 'Suppliers')])
+            picking_id = self.pool.get('stock.picking.type').search(cr, uid, [['name', '=', 'Delivery Orders'], ['warehouse_id', '=', stock_wh_obj[0]]])
+
+        elif _self.type == 'Credit Note':
+            stock_wh_obj = self.pool.get('stock.warehouse').search(cr, uid, [('name', '=', 'Sara Automobiles')])
+            stock_location_obj = self.pool.get('stock.location').search(cr, uid, [('name', '=', 'Customers')])
+            stock_location_dest_obj = self.pool.get('stock.location').search(cr, uid, [('name', '=', 'Stock')])
+            picking_id = self.pool.get('stock.picking.type').search(cr, uid, [['name', '=', 'Receipts'],
+                                                                      ['warehouse_id', '=', stock_wh_obj[0]]])
+
         stock_picking_obj = self.pool.get('stock.picking')
         stock_move_obj = self.pool.get('stock.move')
         debit_note_vals = {
@@ -84,7 +96,7 @@ class custom_debit_note(osv.osv):
         form_id = form_res and form_res[1] or False
         tree_res = ir_model_data.get_object_reference(cr, uid, 'custom_inventory', 'claim_return_tree_view')
         tree_id = tree_res and tree_res[1] or False
-        _self.write({'status':'inventory_deducted'})
+        _self.write({'status':'inventory_adjustment'})
         return {
             'name': _('Debit Note'),
             'view_type': 'form',
@@ -115,19 +127,32 @@ class custom_debit_note(osv.osv):
         }
 
     def refund_invoice(self, cr, uid, ids, context=None):
-        account_journal_obj = self.pool.get('account.journal').search(cr, uid, [('name', '=', 'Purchase Refund Journal')])
+        inv_vals_id = 0
         account_invoice_obj = self.pool.get('account.invoice')
         account_invoice_line_obj = self.pool.get('account.invoice.line')
         _self = self.browse(cr, uid, ids[0], context=context)
         inv_val_lines = {}
-        inv_vals = {
-            'partner_id': _self.partner_id.id,
-            'journal_id': account_journal_obj[0],
-            'company_id': _self.partner_id.company_id.id,
-            'account_id': _self.partner_id.property_account_payable.id,
-            'type': 'in_refund'
-        }
-        inv_vals_id = account_invoice_obj.create(cr, uid, inv_vals, context=context)
+        if _self.type == 'Debit Note':
+            account_journal_obj = self.pool.get('account.journal').search(cr, uid,
+                                                                          [('name', '=', 'Purchase Refund Journal')])
+            inv_vals = {
+                'partner_id': _self.partner_id.id,
+                'journal_id': account_journal_obj[0],
+                'company_id': _self.partner_id.company_id.id,
+                'account_id': _self.partner_id.property_account_payable.id,
+                'type': 'in_refund'
+            }
+            inv_vals_id = account_invoice_obj.create(cr, uid, inv_vals, context=context)
+        elif _self.type == 'Credit Note':
+            account_journal_obj = self.pool.get('account.journal').search(cr, uid,[('name', '=', 'Sales Refund Journal')])
+            inv_vals = {
+                'partner_id': _self.partner_id.id,
+                'journal_id': account_journal_obj[0],
+                'company_id': _self.partner_id.company_id.id,
+                'account_id': _self.partner_id.property_account_receivable.id,
+                'type': 'out_refund'
+            }
+            inv_vals_id = account_invoice_obj.create(cr, uid, inv_vals, context=context)
         _self.view_invoice_id = inv_vals_id
         for line in _self.debit_note_line:
             inv_val_lines = {
@@ -140,21 +165,38 @@ class custom_debit_note(osv.osv):
             }
             account_invoice_line_obj.create(cr,uid, inv_val_lines,context=context)
         ir_model_data = self.pool.get('ir.model.data')
-        form_res = ir_model_data.get_object_reference(cr, uid, 'account', 'invoice_supplier_form')
-        form_id = form_res and form_res[1] or False
-        tree_res = ir_model_data.get_object_reference(cr, uid, 'account', 'invoice_tree')
-        tree_id = tree_res and tree_res[1] or False
-        _self.write({'status': 'refund_invoice'})
-        return {
-            'name': _('Supplier Returns'),
-            'view_type': 'form',
-            'view_mode': 'form,tree',
-            'res_model': 'account.invoice',
-            'res_id': inv_vals_id,
-            'view_id': False,
-            'views': [(form_id, 'form'), (tree_id, 'tree')],
-            'type': 'ir.actions.act_window',
-        }
+        if _self.type == 'Debit Note':
+            form_res = ir_model_data.get_object_reference(cr, uid, 'account', 'invoice_supplier_form')
+            form_id = form_res and form_res[1] or False
+            tree_res = ir_model_data.get_object_reference(cr, uid, 'account', 'invoice_tree')
+            tree_id = tree_res and tree_res[1] or False
+            _self.write({'status': 'invoice_adjustment'})
+            return {
+                'name': _('Supplier Returns'),
+                'view_type': 'form',
+                'view_mode': 'form,tree',
+                'res_model': 'account.invoice',
+                'res_id': inv_vals_id,
+                'view_id': False,
+                'views': [(form_id, 'form'), (tree_id, 'tree')],
+                'type': 'ir.actions.act_window',
+            }
+        else:
+            form_res = ir_model_data.get_object_reference(cr, uid, 'account', 'invoice_form')
+            form_id = form_res and form_res[1] or False
+            tree_res = ir_model_data.get_object_reference(cr, uid, 'account', 'invoice_tree')
+            tree_id = tree_res and tree_res[1] or False
+            _self.write({'status': 'invoice_adjustment'})
+            return {
+                'name': _('Customer Returns'),
+                'view_type': 'form',
+                'view_mode': 'form,tree',
+                'res_model': 'account.invoice',
+                'res_id': inv_vals_id,
+                'view_id': False,
+                'views': [(form_id, 'form'), (tree_id, 'tree')],
+                'type': 'ir.actions.act_window',
+            }
 
 
     @api.one

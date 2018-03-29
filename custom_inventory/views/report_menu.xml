@@ -41,19 +41,20 @@
         <report
             id="action_wiz_individual_aging_report"
             model="xls.report"
-            string="Report"
+            string="Individial Aging Report"
             report_type="qweb-pdf"
             name="custom_inventory.wiz_individual_aging_report"
             file="custom_inventory.wiz_individual_aging_report"
             menu="False"
         />
 
-        <report
-            id="action_wiz_sales_register_report"
-            model="wiz.reports"
-            string="Report"
+
+         <report
+            id="action_wiz_mw_progress_report"
+            model="xls.report"
+            string="Monthly and Weekly Progress"
             report_type="qweb-pdf"
-            name="custom_inventory.wiz_sales_register_report"
+            name="custom_inventory.wiz_mw_progress_report"
             file="custom_inventory.wiz_sales_register_report"
             menu="False"
         />
