@@ -9,7 +9,7 @@
                     <div class="row">
                         <t t-if="doc.type=='Monthly or Weekly Progress'">
                             <h1 align="center">Progress Report</h1><br/>
-                            <h3>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h3>
+                            <h4>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h4>
                             <table class="table table-condensed" style="font-size:10px width:100%">
                                 <thead>
                                     <tr style="background:#ccc;">
@@ -31,7 +31,7 @@
                                             <span t-esc="l_index+1"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['name']"/>
+                                            <span t-esc="l['customer']"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['opening']"/>

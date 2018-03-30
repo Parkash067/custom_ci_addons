@@ -91,16 +91,17 @@ class xls_report(osv.osv):
         return res
 
     def collection_report(self,mw_id):
+        result = []
         collection_amount = 0.0
         res = []
         account_ids = self.env['account.account'].search(
             [['type', '=', 'liquidity'], ['company_id', '=', self.company_id.id]])
-        if mw_id:
+        if mw_id != 'False':
             for id in account_ids:
                 self.env.cr.execute(
-                    "select account_move_line.ref,account_move_line.partner_id,account_move_line.debit,account_move_line.date,account_move_line.account_id,account_move_line.name from account_move_line where account_move_line.partner_id="+str(mw_id)+"and account_move_line.account_id=" + str(
-                        id.id) + " and " + "account_move_line.date between'" + str(
-                        self.date_from) + "'" + " and '" + str(self.date_to) + "'")
+                    "select sum(aml.debit) as collection from account_move as am inner join account_move_line as aml on am.id = aml.move_id inner join res_partner as rp on aml.partner_id = rp.id inner join account_account as aa on aml.account_id = aa.id where am.date between'" + str(
+                        self.date_from) + "'" + "and'" + str(self.date_to) + "'" + "and aml.account_id=" + str(
+                        id.id) + "and aml.debit>0 and am.state='posted' and aml.partner_id ="+str(mw_id)+"group by aml.partner_id")
                 data = self.env.cr.dictfetchall()
                 if len(data) > 0:
                     for rec in data:
@@ -108,11 +109,31 @@ class xls_report(osv.osv):
                     return collection_amount
         else:
             for id in account_ids:
-                self.env.cr.execute("select account_move_line.ref,account_move_line.partner_id,account_move_line.debit,account_move_line.date,account_move_line.account_id,account_move_line.name from account_move_line where account_move_line.account_id="+str(id.id)+" and "+"account_move_line.date between'"+str(self.date_from)+"'"+" and '"+str(self.date_to)+"'")
+                self.env.cr.execute("select aa.name as account_head, am.name as number,am.date,am.ref,aml.debit,rp.name as customer,aml.name as remarks from account_move as am inner join account_move_line as aml on am.id = aml.move_id inner join res_partner as rp on aml.partner_id = rp.id inner join account_account as aa on aml.account_id = aa.id where am.date between'"+str(self.date_from)+"'"+"and'"+str(self.date_to)+"'"+"and aml.account_id="+str(id.id)+"and aml.debit>0 and am.state='posted' order by am.date asc")
                 data = self.env.cr.dictfetchall()
                 if len(data)>0:
-                    res.append(self.report_data(data,id.name))
-            return res
+                    result.append(data)
+        for records in result:
+            for rec in records:
+                res.append(rec)
+        return res
+
+    def collection_report_(self,mw_id):
+        result = []
+        collection_amount = 0.0
+        res = []
+        account_ids = self.env['account.account'].search(
+            [['type', '=', 'liquidity'], ['company_id', '=', self.company_id.id]])
+        if mw_id != 'False':
+            for id in account_ids:
+                self.env.cr.execute(
+                    "select sum(aml.debit) as collection from account_move as am inner join account_move_line as aml on am.id = aml.move_id inner join res_partner as rp on aml.partner_id = rp.id inner join account_account as aa on aml.account_id = aa.id where am.date between'" + str(
+                        self.date_from) + "'" + "and'" + str(self.date_to) + "'" + "and aml.account_id=" + str(
+                        id.id) + "and aml.debit>0 and am.state='posted' and aml.partner_id ="+str(mw_id)+"group by aml.partner_id")
+                data = self.env.cr.dictfetchall()
+                if len(data) > 0:
+                    collection_amount += data[0]['collection']
+                return collection_amount
 
     def cal_aging_brackets(self,data):
         _list = []
@@ -136,43 +157,36 @@ class xls_report(osv.osv):
         return res
 
     def mw_progress_report(self):
+        new = []
+        _res = []
         result = []
-        res = []
-        if self.company_id.name == 'Sara Automobiles':
-            self.env.cr.execute(
-            "SELECT rp.id,rp.name,sum(aml.debit)-sum(aml.credit) as opening FROM account_move_line as aml inner join res_partner as rp on aml.partner_id = rp.id inner join account_move as am on aml.move_id = am.id where (account_id=8 or account_id=13) and rp.customer=True and am.state ='posted' and aml.date<='"+self.date_from+"'"+"and am.company_id="+str(self.company_id.id)+"group by rp.name, rp.id")
+        self.env.cr.execute('select id from res_partner where res_partner.customer=True')
+        customers = self.env.cr.dictfetchall()
+        for customer in customers:
+            if self.company_id.name == 'Sara Automobiles':
+                self.env.cr.execute("select sum(account_move_line.debit) - sum(account_move_line.credit) as opening from account_move_line inner join account_move on account_move_line.move_id = account_move.id where account_move_line.date <= '"+str(self.date_from)+"'"+"and account_move_line.partner_id="+str(customer['id'])+"and account_move.state='posted'and account_move_line.company_id=1 and(account_move_line.account_id=8 or account_move_line.account_id=13)")
+                data = self.env.cr.dictfetchall()
+                if data[0]['opening']!=None:
+                    data[0]['partner_id']=customer['id']
+                    result.append(data)
+        for records in result:
+            for rec in records:
+                collection = self.collection_report_(rec['partner_id'])
+                rec['collection'] = collection
+                _res.append(rec)
+        for rec in _res:
+            self.env.cr.execute("select rp.name as customer,so.partner_id,sum(so.amount_total) as amount_total from sale_order as so inner join res_partner as rp on so.partner_id = rp.id where so.date_order between'"+self.date_from+"'"+"and'"+self.date_to+"'"+"and so.partner_id="+str(rec['partner_id'])+"group by rp.name,so.partner_id")
             data = self.env.cr.dictfetchall()
-            for rec in data:
-                amount = self.collection_report(rec['id'])
-                if amount == None:
-                    rec['collection'] = 0
-                    res.append(rec)
-                else:
-                    rec['collection'] = amount
-                    res.append(rec)
-
-        elif self.company_id.name == 'Allied Business Corportion':
-            self.env.cr.execute(
-            "SELECT rp.id,rp.name,sum(aml.debit)-sum(aml.credit) as opening FROM account_move_line as aml inner join res_partner as rp on aml.partner_id = rp.id inner join account_move as am on aml.move_id = am.id where (account_id=8 or account_id=13) and rp.customer=True and am.state ='posted' and aml.date<='"+self.date_from+"'"+"and am.company_id="+str(self.company_id.id)+"group by rp.name, rp.id")
-            data = self.env.cr.dictfetchall()
-            for rec in data:
-                amount = self.collection_report(rec['id'])
-                if amount == None:
-                    rec['collection'] = 0
-                    res.append(rec)
-                else:
-                    rec['collection'] = amount
-                    res.append(rec)
-        for rec in res:
-            self.env.cr.execute("select sum(amount_total) as amount_total from sale_order where sale_order.date_order between'"+self.date_from+"'"+"and'"+self.date_to+"'"+"and partner_id="+str(rec['id'])+"group by sale_order.partner_id")
-            data = self.env.cr.dictfetchall()
+            customer = self.env['res.partner'].search([['id', '=', rec['partner_id']], ])
             if len(data)>0:
                 rec['sale_amount'] = data[0]['amount_total']
-                result.append(rec)
+                rec['customer'] = customer.name
+                new.append(rec)
             else:
                 rec['sale_amount'] = 0
-                result.append(rec)
-        return result
+                rec['customer'] = customer.name
+                new.append(rec)
+        return new
 
 
 
@@ -233,7 +247,7 @@ class xls_report(osv.osv):
             "select rp.ntn,rp.name,rp.street,rp.city,av.date_invoice,av.amount_tax,av.number,av.amount_total,av.amount_untaxed,avl.quantity,avl.price_unit from account_invoice as av inner join res_partner as rp on av.partner_id = rp.id "
             "inner join account_invoice_line as avl on av.id = avl.invoice_id where av.date_invoice between'" + str(
                 obj.date_from) + "'" + " and '" + str(
-                obj.date_to) + "'" + "order by date_invoice asc")
+                obj.date_to) + "'" + "av.type='in_invoice' order by date_invoice asc")
         data = cr.dictfetchall()
         return data
 

@@ -8,8 +8,9 @@
                 <div class="page">
                     <div class="row">
                         <t t-if="doc.type=='Collection Report'">
+                            <t t-set="count" t-value="1"/>
                             <h1 align="center">Collection Report</h1><br/>
-                            <h6>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h6>
+                            <h4>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h4>
                             <table class="table table-condensed" style="font-size:10px">
                                 <thead>
                                     <tr style="background:#ccc;">
@@ -23,7 +24,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="invoice_tbody">
-                                    <tr t-foreach="doc.collection_report(False)" t-as="l">
+                                      <tr t-foreach="doc.collection_report('False')" t-as="l">
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l_index+1"/>
                                         </td>
@@ -31,7 +32,7 @@
                                             <span t-esc="l['date']"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['entry']"/>
+                                            <span t-esc="l['number']"/>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['account_head']"/>
@@ -40,10 +41,10 @@
                                             <span t-esc="l['customer']"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['amount']"/>
+                                            <span t-esc="l['debit']"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['particulars']"/>
+                                            <span t-esc="l['ref']"/>
                                         </td>
                                     </tr>
                                 </tbody>

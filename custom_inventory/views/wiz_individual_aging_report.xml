@@ -9,25 +9,25 @@
                     <div class="row">
                         <t t-if="doc.type=='Individual Aging'">
                             <h1 align="center">Individual Aging</h1><br/>
-                            <h4 t-esc="doc.partner_id.name"/>
-                            <h6>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h6>
-                            <table class="table table-condensed" style="font-size:10px width:100%">
+                            <h3 t-esc="doc.partner_id.name"/>
+                            <h5>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h5>
+                            <table class="table table-condensed" style="font-size:10px">
                                 <thead>
                                     <tr style="background:#ccc;">
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;">Serial No.</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;">Date</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;">Invoice No.</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;">Amount Balance</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;">1-30</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;">31-45</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;">46-60</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;">61-90</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;">91-120</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;">121-150</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;">150+</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Serial No.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Date</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Invoice No.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Amount Balance</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">1-30</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">31-45</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">46-60</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">61-90</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">91-120</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">121-150</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">150+</td>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="invoice_tbody">
                                     <tr t-foreach="doc.individual_aging_report()" t-as="l">
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l_index+1"/>
@@ -53,11 +53,6 @@
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <t t-if="l['days']&gt;=46 and l['days']&lt;=60">
-                                                <span t-esc="l['amount_total']"/>
-                                            </t>
-                                        </td>
-                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <t t-if="l['days']&gt;=31 and l['days']&lt;=45">
                                                 <span t-esc="l['amount_total']"/>
                                             </t>
                                         </td>
