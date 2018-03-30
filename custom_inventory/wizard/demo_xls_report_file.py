@@ -247,7 +247,7 @@ class xls_report(osv.osv):
             "select rp.ntn,rp.name,rp.street,rp.city,av.date_invoice,av.amount_tax,av.number,av.amount_total,av.amount_untaxed,avl.quantity,avl.price_unit from account_invoice as av inner join res_partner as rp on av.partner_id = rp.id "
             "inner join account_invoice_line as avl on av.id = avl.invoice_id where av.date_invoice between'" + str(
                 obj.date_from) + "'" + " and '" + str(
-                obj.date_to) + "'" + "av.type='in_invoice' order by date_invoice asc")
+                obj.date_to) + "'" + "and av.type='in_invoice' order by date_invoice asc")
         data = cr.dictfetchall()
         return data
 
