@@ -164,10 +164,14 @@ class xls_report(osv.osv):
         customers = self.env.cr.dictfetchall()
         for customer in customers:
             if self.company_id.name == 'Sara Automobiles':
-                self.env.cr.execute("select sum(account_move_line.debit) - sum(account_move_line.credit) as opening from account_move_line inner join account_move on account_move_line.move_id = account_move.id where account_move_line.date <= '"+str(self.date_from)+"'"+"and account_move_line.partner_id="+str(customer['id'])+"and account_move.state='posted'and account_move_line.company_id=1 and(account_move_line.account_id=8 or account_move_line.account_id=13)")
+                self.env.cr.execute("select sum(account_move_line.debit) - sum(account_move_line.credit) as opening from account_move_line inner join account_move on account_move_line.move_id = account_move.id where account_move_line.date < '"+str(self.date_from)+"'"+"and account_move_line.partner_id="+str(customer['id'])+"and account_move.state='posted'and account_move_line.company_id=1 and(account_move_line.account_id=8 or account_move_line.account_id=13)")
                 data = self.env.cr.dictfetchall()
                 if data[0]['opening']!=None:
                     data[0]['partner_id']=customer['id']
+                    result.append(data)
+                else:
+                    data[0]['opening'] = 0
+                    data[0]['partner_id'] = customer['id']
                     result.append(data)
         for records in result:
             for rec in records:
