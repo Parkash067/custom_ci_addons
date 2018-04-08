@@ -20,6 +20,14 @@
                             </tree>
                         </field>
                     </page>
+                    <page string="Delivery Info">
+                        <group string="Delivery Info">
+                            <field name="transporter"/>
+                            <field name="driver"/>
+                            <field name="vehical"/>
+                            <field name="phone"/>
+                        </group>
+                    </page>
                 </xpath>
             </field>
         </record>

@@ -176,7 +176,7 @@
                                                TRANSPORTER:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important; width:250px;">
-
+                                               <span t-esc="do.transporter"/>
                                            </td>
                                        </tr>
                                         <tr>
@@ -184,7 +184,7 @@
                                                DRIVER NAME:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important;">
-
+                                               <span t-esc="do.driver"/>
                                            </td>
                                        </tr>
                                         <tr>
@@ -192,7 +192,7 @@
                                                VEHICLE NUMBER:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important;">
-
+                                               <span t-esc="do.vehical"/>
                                            </td>
                                        </tr>
                                         <tr>
@@ -200,7 +200,7 @@
                                                PHONE NUMBER:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important;">
-
+                                               <span t-esc="do.phone"/>
                                            </td>
                                        </tr>
                                        <tr>

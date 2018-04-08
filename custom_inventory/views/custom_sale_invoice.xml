@@ -28,7 +28,7 @@
                                       <span style="font-size:18px;font-weight:bold;text-decoration:5px;">8- Secretariat View, Al Karam Building, Frere Road, Saddar, Karachi</span><br/>
                                   </div>
                               </t>
-                              <t t-if="account_invoice.header==False">
+                              <t t-if="account_invoice.header == '/'">
                                    <t t-if="account_invoice.dealer_id.name == 'Allied Business Corporation'">
                                   <h1 style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
                                          margin-right:auto;text-align:center;">
@@ -39,7 +39,7 @@
                                       <span style="font-size:18px;font-weight:bold;text-decoration:5px;">8- Secretariat View, Al Karam Building, Frere Road, Saddar, Karachi</span><br/>
                                   </div>
                               </t>
-                              <t t-if="account_invoice.dealer_id.name == False">
+                              <t t-if="account_invoice.dealer_id.name != 'Allied Business Corporation'">
                                    <h1 t-esc="'%s' %res_company.name" style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
                                          margin-right:auto;text-align:center;"/>
                                   <div style="max-width:100%;height:auto;width:80%;margin-left:auto;
@@ -57,8 +57,16 @@
                                          margin-right:auto;text-align:center;background:lightgrey;">
                                   Sales Tax Invoice
                               </h2>
-                              <t t-if="account_invoice.partner_id=='Allied Business Corporation'"><h3 align="center">Sales Tax Registration No.: 17-00-8711-009-55</h3><hr style="border-top:1px solid black;"/></t>
-                              <t t-if="account_invoice.partner_id!='Allied Business Corporation'"><h3 align="center">Sales Tax Registration No.: 17-12-8708-007-73</h3><hr style="border-top:1px solid black;"/></t>
+                              <t t-if="account_invoice.header=='/'">
+                                  <t t-if="account_invoice.partner_id=='Allied Business Corporation'"><h3 align="center">Sales Tax Registration No.: 17-00-8711-009-55</h3><hr style="border-top:1px solid black;"/></t>
+                                  <t t-if="account_invoice.partner_id!='Allied Business Corporation'"><h3 align="center">Sales Tax Registration No.: 17-12-8708-007-73</h3><hr style="border-top:1px solid black;"/></t>
+                              </t>
+                               <t t-if="account_invoice.header=='Allied Business Corporation'">
+                                  <h3 align="center">Sales Tax Registration No.: 17-00-8711-009-55</h3><hr style="border-top:1px solid black;"/>
+                               </t>
+                               <t t-if="account_invoice.header=='Sara Automobiles'">
+                                 <h3 align="center">Sales Tax Registration No.: 17-12-8708-007-73</h3><hr style="border-top:1px solid black;"/>
+                              </t>
                               <div style="font-size:18px">
                                   <div>
                                        <div style="display:inline-block;"><strong style="font-size:18px">Invoice No.</strong></div>
@@ -80,12 +88,24 @@
                                        </div>
                                    </div><br/>
                                    <div>
-                                       <div style="display:inline-block;"><strong style="margin-top:5px;">Sales Tax No.<sub>(IF ANY)</sub>:</strong></div>
-                                       <div style="width:70%; border-bottom:1px solid black; display:inline-block;">
-                                           <t t-if="account_invoice.ntn">
+                                       <t t-if="account_invoice.ntn and account_invoice.nic==False">
+                                           <div style="display:inline-block;"><strong style="margin-top:5px;">Sales Tax No.<sub>(IF ANY)</sub>:</strong></div>
+                                           <div style="width:70%; border-bottom:1px solid black; display:inline-block;">
                                                <span t-field="account_invoice.ntn"/>
-                                           </t>
-                                       </div>
+                                           </div>
+                                       </t>
+                                       <t t-if="account_invoice.ntn==False and account_invoice.nic">
+                                           <div style="display:inline-block;"><strong style="margin-top:5px;">Sales Tax No.<sub>(IF ANY)</sub>:</strong></div>
+                                           <div style="width:70%; border-bottom:1px solid black; display:inline-block;">
+                                               <span t-field="account_invoice.nic"/>
+                                           </div>
+                                       </t>
+                                       <t t-if="account_invoice.ntn and account_invoice.nic">
+                                           <div style="display:inline-block;"><strong style="margin-top:5px;">Sales Tax No.<sub>(IF ANY)</sub>:</strong></div>
+                                           <div style="width:70%; border-bottom:1px solid black; display:inline-block;">
+                                               <span t-field="account_invoice.ntn"/>
+                                           </div>
+                                       </t>
                                    </div>
                               </div>
                               <br/><br/><br/><br/><br/><br/><br/><br/><br/>
@@ -174,8 +194,8 @@
                                       </div>
                                   </div>
                               </t>
-                              <t t-if="account_invoice.ntn==False and account_invoice.partner_id!='Allied Business Corporation'">
-                                  <div style="font-size:16px; border:1px solid black; border-radius:10px;width:1000px;height:388px;">
+                              <t t-if="account_invoice.type=='Unregistered'">
+                                  <div style="font-size:16px; border:1px solid black; border-radius:10px;width:1000px;height:375px;">
                                       <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
                                           <thead style="border-bottom:1px solid black">
                                               <tr>
@@ -271,7 +291,7 @@
                                       </div>
                                   </div>
                               </t>
-                              <t t-if="account_invoice.ntn!=False and account_invoice.partner_id!='Allied Business Corporation' and account_invoice.dealer_id.name!='Allied Business Corporation'">
+                              <t t-if="account_invoice.type=='Registered'">
                                   <div style="font-size:16px; border:1px solid black; border-radius:10px;width:1000px;height:395px;">
                                       <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
                                           <thead style="border-bottom:1px solid black">
@@ -356,7 +376,7 @@
                                       </div>
                                   </div>
                               </t>
-                              <t t-if="account_invoice.partner_id=='Allied Business Corporation' and account_invoice.dealer_id.name==False ">
+                              <t t-if="account_invoice.type=='sara_to_abc'">
                                   <div style="font-size:16px; border:1px solid black; border-radius:10px;width:1000px;height:288px;">
                                       <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
                                           <thead style="border-bottom:1px solid black">
@@ -364,9 +384,8 @@
                                                   <td style="border-right: 1px solid black; padding:10px;">Qty.</td>
                                                   <td style="border-right: 1px solid black; padding:10px;">Description</td>
                                                   <td style="border-right: 1px solid black; padding:10px;">Unit Price</td>
-                                                   <td style="border-right: 1px solid black; padding:10px;">Total Exclu. Taxes</td>
+                                                  <td style="border-right: 1px solid black; padding:10px;">Total Exclu. Taxes</td>
                                                   <td style="border-right: 1px solid black; padding:10px;">Sales Tax 17%</td>
-                                                  <td style="border-right: 1px solid black; padding:10px;">W.H.T</td>
                                                   <td class="right">Total Inclu. Taxes</td>
                                               </tr>
                                           </thead>
@@ -386,9 +405,6 @@
                                                   </td>
                                                   <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
                                                       <span t-esc="'{0:,.2f}'.format(int(l.sales_tax))" />
-                                                  </td>
-                                                  <td style="border-right: 1px solid black; padding:10px; border-top:1px solid black !important;">
-                                                      <span t-esc="'{0:,.2f}'.format(int(l.wht))" />
                                                   </td>
                                                   <td class="text-right" style="border-top:1px solid black !important;">
                                                       <span t-esc="'{0:,.2f}'.format(int(l.wht+l.further_tax+l.sales_tax+l.price_subtotal))"/>
@@ -444,7 +460,6 @@
                                   <div style="width:20%; border-bottom:1px solid black; float:right; margin-right:10px;"/><br/>
                                   <div style="float:right; margin-right:30px;"><strong>Authorized Signature</strong></div>
                               </div>
-
                           </div>
                           <br/><br/>
                       </div>

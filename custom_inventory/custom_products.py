@@ -10,6 +10,10 @@ import qrcode
 class custom_stock_picking(osv.osv):
     _inherit = 'stock.picking'
     _columns = {
+        'transporter': fields.char('Transporter', store=True),
+        'driver': fields.char('Driver', store=True),
+        'vehical': fields.char('Vehical', store=True),
+        'phone': fields.char('Phone', store=True),
         'do_ref': fields.many2one('stock.picking','DO Reference', store=True),
         'claim_ref': fields.many2one('stock.picking', 'Claim Reference', store=True, domain="[('custom_move_type','=','File Claim')]"),
         'stock_split_lines': fields.one2many('custom.stock.move', 'picking_id', 'Stock Splits', store=True),
@@ -125,64 +129,80 @@ class custom_stock_move(osv.osv):
         """ create invoices for the active sales orders """
         config_obj = self.pool.get('custom.cert.inv.config')
         _self = self.browse(cr, uid, ids[0], context=context)
-        if _self.ntn == False and _self.client_name != 'Allied Businees Corporation' and _self.partner_id.name != 'Allied Business Corporation':
+        if _self.partner_id.name != 'Allied Business Corporation' and _self.client_name != 'Allied Business Corporation':
+            if _self.ntn == False:
+                inv_obj = self.pool.get('custom.dummy.invoice')
+                inv_obj_line = self.pool.get('custom.dummy.invoice.line')
+                inv_vals = {
+                    'picking_id': _self.picking_id.id,
+                    'header': '/',
+                    'type': 'Unregistered',
+                    'dealer_id': _self.partner_id.id,
+                    'partner_id': _self.client_name,
+                    'date_invoice': fields.datetime.now(),
+                    'ntn': _self.ntn,
+                    'nic': _self.nic,
+                    'address': _self.address,
+                    'engine_number': _self.engine_number,
+                    'chassis_number': _self.chassis_number,
+                }
+                inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
+                prices = config_obj.search(cr, uid, [('type', '=', 'Unregistered')])
+                for price in config_obj.browse(cr, uid, prices, context=context):
+                    sp = price.price
+                inv_lines_vals = {
+                    'name': inv_ids,
+                    'products': _self.product_id.name,
+                    'quantity': _self.product_qty,
+                    'price_unit': sp,
+                    'chassis_number': _self.chassis_number,
+                    'engine_number': _self.engine_number,
+                }
+                inv_obj_line.create(cr,uid,inv_lines_vals,context=context)
+            elif _self.ntn:
+                inv_obj = self.pool.get('custom.dummy.invoice')
+                inv_obj_line = self.pool.get('custom.dummy.invoice.line')
+                inv_vals = {
+                    'picking_id': _self.picking_id.id,
+                    'header': '/',
+                    'type': 'Registered',
+                    'dealer_id': _self.partner_id.id,
+                    'partner_id': _self.client_name,
+                    'date_invoice': fields.datetime.now(),
+                    'ntn': _self.ntn,
+                    'nic': _self.nic,
+                    'address': _self.address,
+                    'engine_number': _self.engine_number,
+                    'chassis_number': _self.chassis_number,
+                }
+                inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
+                prices = config_obj.search(cr, uid, [('type', '=', 'Registered')])
+                for price in config_obj.browse(cr, uid, prices, context=context):
+                    sp = price.price
+                inv_lines_vals = {
+                    'name': inv_ids,
+                    'products': _self.product_id.name,
+                    'quantity': _self.product_qty,
+                    'price_unit': sp,
+                    'chassis_number': _self.chassis_number,
+                    'engine_number': _self.engine_number,
+                }
+                inv_obj_line.create(cr, uid, inv_lines_vals, context=context)
+        elif _self.partner_id.name != 'Allied Business Corporation' and _self.client_name == 'Allied Business Corporation':
             inv_obj = self.pool.get('custom.dummy.invoice')
             inv_obj_line = self.pool.get('custom.dummy.invoice.line')
             inv_vals = {
+                'picking_id': _self.picking_id.id,
+                'header': '/',
+                'type': 'sara_to_abc',
                 'dealer_id': _self.partner_id.id,
                 'partner_id': _self.client_name,
                 'date_invoice': fields.datetime.now(),
                 'ntn': _self.ntn,
                 'nic': _self.nic,
-                'address': _self.address
-            }
-            inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
-            prices = config_obj.search(cr, uid, [('type', '=', 'Unregistered')])
-            for price in config_obj.browse(cr, uid, prices, context=context):
-                sp = price.price
-            inv_lines_vals = {
-                'name': inv_ids,
-                'products': _self.product_id.name,
-                'quantity': _self.product_qty,
-                'price_unit': sp,
-                'chassis_number': _self.chassis_number,
+                'address': _self.address,
                 'engine_number': _self.engine_number,
-            }
-            inv_obj_line.create(cr,uid,inv_lines_vals,context=context)
-        elif _self.ntn != False and _self.client_name != 'Allied Businees Corporation' and _self.partner_id.name != 'Allied Business Corporation':
-            inv_obj = self.pool.get('custom.dummy.invoice')
-            inv_obj_line = self.pool.get('custom.dummy.invoice.line')
-            inv_vals = {
-                'dealer_id': _self.partner_id.id,
-                'partner_id': _self.client_name,
-                'date_invoice': fields.datetime.now(),
-                'ntn': _self.ntn,
-                'nic': _self.nic,
-                'address': _self.address
-            }
-            inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
-            prices = config_obj.search(cr, uid, [('type', '=', 'Registered')])
-            for price in config_obj.browse(cr, uid, prices, context=context):
-                sp = price.price
-            inv_lines_vals = {
-                'name': inv_ids,
-                'products': _self.product_id.name,
-                'quantity': _self.product_qty,
-                'price_unit': sp,
                 'chassis_number': _self.chassis_number,
-                'engine_number': _self.engine_number,
-            }
-            inv_obj_line.create(cr, uid, inv_lines_vals, context=context)
-        elif _self.client_name == 'Allied Business Corporation' and _self.partner_id.name != 'Allied Business Corporation':
-            inv_obj = self.pool.get('custom.dummy.invoice')
-            inv_obj_line = self.pool.get('custom.dummy.invoice.line')
-            inv_vals = {
-                'dealer_id': _self.partner_id.id,
-                'partner_id': _self.client_name,
-                'date_invoice': fields.datetime.now(),
-                'ntn': _self.ntn,
-                'nic': _self.nic,
-                'address': _self.address
             }
             inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
             prices = config_obj.search(cr, uid, [('type', '=', 'sara_to_abc')])
@@ -205,12 +225,17 @@ class custom_stock_move(osv.osv):
                     inv_obj = self.pool.get('custom.dummy.invoice')
                     inv_obj_line = self.pool.get('custom.dummy.invoice.line')
                     inv_vals = {
+                        'picking_id': _self.picking_id.id,
+                        'header': '/',
+                        'type': 'dealer_abc',
                         'dealer_id': _self.partner_id.id,
                         'partner_id': _self.client_name,
                         'date_invoice': fields.datetime.now(),
                         'ntn': _self.ntn,
                         'nic': _self.nic,
-                        'address': _self.address
+                        'address': _self.address,
+                        'engine_number': _self.engine_number,
+                        'chassis_number': _self.chassis_number,
                     }
                     inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
                     prices = config_obj.search(cr, uid, [('type', '=', type)])
@@ -229,11 +254,16 @@ class custom_stock_move(osv.osv):
                     inv_obj = self.pool.get('custom.dummy.invoice')
                     inv_obj_line = self.pool.get('custom.dummy.invoice.line')
                     inv_vals = {
+                        'picking_id': _self.picking_id.id,
+                        'header': '/',
+                        'type': 'sara_to_abc',
                         'partner_id': 'Allied Business Corporation',
                         'date_invoice': fields.datetime.now(),
                         'ntn': _self.ntn,
                         'nic': _self.nic,
-                        'address': _self.address
+                        'address': _self.address,
+                        'engine_number': _self.engine_number,
+                        'chassis_number': _self.chassis_number,
                     }
                     inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
                     prices = config_obj.search(cr, uid, [('type', '=', type)])

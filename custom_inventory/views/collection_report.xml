@@ -41,7 +41,7 @@
                                             <span t-esc="l['customer']"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['debit']"/>
+                                            <span t-esc="'{0:,.2f}'.format(int(l['debit']))"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['ref']"/>

@@ -55,7 +55,7 @@
                                         </h5>
                                     </div>
                                     <div style="margin-top:500px">
-                                        <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', certificate.generate_qr_code(), 100, 100)" style="float:left;margin-left:110px;height:60px;width:60px;margin-top:-20px;"/>
+                                        <span t-field="certificate.qr_code" widget="image" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}" style="float:left;margin-left:110px;height:60px;width:60px;margin-top:-20px;" />
                                         <span t-esc="certificate.certificate_serial" style="float:right;margin-right:90px;margin-top:3px"/><br/><br/>
                                         <span t-esc="certificate.partner_id.name" style="float:left;font-size:16px;font-weight:bold;margin-left:100px;margin-top:13px;"/>
                                         <span t-esc="certificate.partner_id.city" style="float:left;font-size:16px;font-weight:bold;margin-left:300px;"/><br/><br/>

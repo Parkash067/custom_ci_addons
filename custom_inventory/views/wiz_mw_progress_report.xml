@@ -34,28 +34,28 @@
                                             <span t-esc="l['customer']"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['opening']"/>
+                                            <span t-esc="'{0:,.2f}'.format(int(l['opening']))"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['collection']"/>
+                                            <span t-esc="'{0:,.2f}'.format(int(l['collection']))"/>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['opening']-l['collection']"/>
+                                            <span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']))"/>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['sale_amount']"/>
+                                            <span t-esc="'{0:,.2f}'.format(int(l['sale_amount']))"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span>0</span>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                             <span t-esc="l['opening']-l['collection']+l['sale_amount']"/>
+                                             <span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']+l['sale_amount']))"/>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['opening']-l['collection']+l['sale_amount']"/>
+                                            <span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']+l['sale_amount']))"/>
                                          </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['opening']-l['collection']+l['sale_amount']"/>
+                                            <span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']+l['sale_amount']))"/>
                                          </td>
                                     </tr>
                                 </tbody>

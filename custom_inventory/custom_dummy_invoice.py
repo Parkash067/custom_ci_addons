@@ -10,8 +10,17 @@ class custom_dummy_invoice(osv.osv):
     _name = "custom.dummy.invoice"
     _rec_name = "partner_id"
     _columns = {
+        'picking_id': fields.many2one('stock.picking', 'DO', store=True),
+        'chassis_number': fields.char('Chassis No.'),
+        'engine_number': fields.char('Engine No.'),
+        'type': fields.selection([('Registered', 'For Registered Customer'),
+                                  ('Unregistered', 'For Unregistered Customer'),
+                                  ('sara_to_abc', 'Sara To ABC'),
+                                  ('dealer_abc', 'For Dealer ABC')]
+                                 , store=True, string='Type'),
         'header': fields.selection([('Sara Automobiles', 'Sara Automobiles'),
-                               ('Allied Business Corporation', 'Allied Business Corporation')],string='Header',store=True),
+                                    ('Allied Business Corporation', 'Allied Business Corporation'),
+                                    ('/', '/')], string='Header', store=True),
         'sop': fields.char('SOP', store=True),
         'sale_type': fields.char('Sale Type', store=True),
         'extra_tax': fields.float('Extra Tax', store=True),

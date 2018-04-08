@@ -18,7 +18,8 @@
         <record id="sara_inv_serial_" model="ir.sequence">
             <field name="name">Sara Invoice Serial</field>
             <field name="code">sara.inv.serial</field>
-            <field name="padding">3</field>
+            <field name="padding">4</field>
+            <field name="suffix">/%(month)s/%(year)s</field>
         </record>
 
         <record id="abc_inv_serial" model="ir.sequence.type">
@@ -28,7 +29,8 @@
         <record id="abc_inv_serial_" model="ir.sequence">
             <field name="name">ABC Invoice Serial</field>
             <field name="code">abc.inv.serial</field>
-            <field name="padding">3</field>
+            <field name="padding">4</field>
+            <field name="suffix">/%(month)s/%(year)s</field>
         </record>
     </data>
 </openerp>

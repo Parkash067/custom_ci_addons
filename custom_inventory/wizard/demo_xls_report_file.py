@@ -157,6 +157,7 @@ class xls_report(osv.osv):
         return res
 
     def mw_progress_report(self):
+        final_res = []
         new = []
         _res = []
         result = []
@@ -190,8 +191,10 @@ class xls_report(osv.osv):
                 rec['sale_amount'] = 0
                 rec['customer'] = customer.name
                 new.append(rec)
-        return new
-
+        for i in new:
+            if int(i['opening'])>0 or int(i['collection'])>0 or int(i['sale_amount'])>0:
+                final_res.append(i)
+        return final_res
 
 
     def print_report(self, cr, uid, ids, data, context=None):
@@ -256,6 +259,8 @@ class xls_report(osv.osv):
         return data
 
     def report_xls(self, cr, uid, ids, context=None):
+        date_format = "%d-%m-%Y"
+        date_format_new = "%Y-%m-%d"
         if self.check_dates(cr, uid, ids, context=None):
             obj = self.browse(cr, uid, ids[0], context=context)
             fl = StringIO.StringIO()
@@ -286,7 +291,7 @@ class xls_report(osv.osv):
                         ws.write(i+1, 5, data[i]['engine_number'], new_style7)
                         ws.write(i+1, 6, data[i]['chassis_number'], new_style7)
                         ws.write(i+1, 7, data[i]['sara_inv_number'], new_style7)
-                        ws.write(i+1, 8, data[i]['date'], new_style7)
+                        ws.write(i+1, 8, datetime.strftime(datetime.strptime(data[i]['date'],date_format_new),date_format), new_style7)
                         ws.write(i+1, 9, data[i]['excl_val'], new_style7)
                         ws.write(i+1, 10, data[i]['further_tax'], new_style7)
                         ws.write(i+1, 11, data[i]['sales_tax'], new_style7)
@@ -304,8 +309,8 @@ class xls_report(osv.osv):
                         ws.write(i + 1, 2, data[i]['name'], new_style7)
                         ws.write(i + 1, 3, str(data[i]['street']) + str(data[i]['city']), new_style7)
                         ws.write(i + 1, 4, '', new_style7)
-                        ws.write(i + 1, 5,data[i]['number'],new_style7)
-                        ws.write(i + 1, 6, data[i]['date_invoice'], new_style7)
+                        ws.write(i + 1, 5, data[i]['number'],new_style7)
+                        ws.write(i + 1, 6, datetime.strftime(datetime.strptime(data[i]['date_invoice'],date_format_new),date_format), new_style7)
                         ws.write(i + 1, 7, data[i]['quantity'], new_style7)
                         ws.write(i + 1, 8, data[i]['price_unit'], new_style7)
                         ws.write(i + 1, 9, data[i]['amount_untaxed'], new_style7)
@@ -326,7 +331,7 @@ class xls_report(osv.osv):
                         ws.write(i+1, 3, str(data[i]['street'])+str(data[i]['city']), new_style7)
                         ws.write(i+1, 4, '', new_style7)
                         ws.write(i+1, 5, '', new_style7)
-                        ws.write(i+1, 6, data[i]['date'], new_style7)
+                        ws.write(i+1, 6, datetime.strftime(datetime.strptime(data[i]['date'],date_format_new),date_format), new_style7)
                         ws.write(i+1, 7, data[i]['ref'], new_style7)
                         ws.write(i + 1, 8, '', new_style7)
                         ws.write(i + 1, 9, '', new_style7)
@@ -349,7 +354,7 @@ class xls_report(osv.osv):
                         ws.write(i+1, 5, '', new_style7)
                         ws.write(i+1, 6, 'SI', new_style7)
                         ws.write(i+1, 7, data[i]['sara_inv_serial'], new_style7)
-                        ws.write(i+1, 8, data[i]['date_invoice'], new_style7)
+                        ws.write(i+1, 8, datetime.strftime(datetime.strptime(data[i]['date_invoice'],date_format_new),date_format), new_style7)
                         ws.write(i+1, 9, '', new_style7)
                         ws.write(i+1, 10, '', new_style7)
                         ws.write(i+1, 11, '', new_style7)

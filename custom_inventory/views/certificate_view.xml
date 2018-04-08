@@ -45,7 +45,8 @@
             <field name="model">custom.stock.move</field>
             <field name="arch" type="xml">
                 <tree string="Certificate Tree"  version="8.0" editable="top" default_order="client_name desc">
-                    <field name="certificate_serial"/>
+                    <field name="counter" string="Log" readonly="1"/>
+                    <field name="certificate_serial" readonly="1"/>
                     <field name="engine_number" readonly="1"/>
                     <field name="chassis_number" readonly="1"/>
                     <field name="picking_id" string="DO" readonly="1"/>
@@ -58,6 +59,23 @@
                 </tree>
             </field>
         </record>
+         <record id="action_cert_origin_new_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="custom_certificate_tree"/>
+            <field name="act_window_id" ref="custom_certificate_view"/>
+        </record>
+
+
+         <menuitem
+            name="Certificates"
+            action="custom_certificate_view"
+            id="menu_certificate_view"
+            sequence="100"
+            parent="certificate_side_top_menu"
+            groups="custom_inventory.group_user"
+           >
+        </menuitem>
         <record id="custom_certificate_form" model="ir.ui.view">
             <field name="name">stock.move.form</field>
             <field name="model">custom.stock.move</field>
@@ -90,7 +108,6 @@
                                 <field name="nic"/>
                                 <field name="ntn"/>
                                 <field name="issuance_date"/>
-                                <field name="certificate_issuance"/>
                             </group>
                         </group>
                         <notebook>
@@ -167,15 +184,7 @@
             <field name="act_window_id" ref="custom_certificate_request_duplicate_view"/>
         </record>
 
-         <menuitem
-            name="Certificates"
-            action="custom_certificate_view"
-            id="menu_certificate_view"
-            sequence="100"
-            parent="certificate_side_top_menu"
-            groups="custom_inventory.group_user"
-           >
-        </menuitem>
+
         <menuitem
             name="Pending Requests"
             action="custom_certificate_request_view"
@@ -196,31 +205,31 @@
         </menuitem>
 
 
-         <menuitem
-                name="Report"
-                id="certificate_tax_report_side_top"
-                parent="certificate_top_menu"
-                sequence="20"/>
+         <!--<menuitem-->
+                <!--name="Report"-->
+                <!--id="certificate_tax_report_side_top"-->
+                <!--parent="certificate_top_menu"-->
+                <!--sequence="20"/>-->
 
-        <record id="custom_tax_report" model="ir.actions.act_window">
-	        <field name="name">Tax Report</field>
-            <field name="res_model">custom.dummy.invoice.line</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">click create to add a new record</p>
-            </field>
-        </record>
+        <!--<record id="custom_tax_report" model="ir.actions.act_window">-->
+	        <!--<field name="name">Tax Report</field>-->
+            <!--<field name="res_model">custom.dummy.invoice.line</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">tree</field>-->
+            <!--<field name="help" type="html">-->
+                <!--<p class="oe_view_nocontent_create">click create to add a new record</p>-->
+            <!--</field>-->
+        <!--</record>-->
 
-         <menuitem
-            name="Tax Report"
-            action="custom_tax_report"
-            id="menu_custom_tax_report"
-            sequence="10"
-            parent="certificate_tax_report_side_top"
-            groups="custom_inventory.group_user"
-            >
-        </menuitem>
+         <!--<menuitem-->
+            <!--name="Tax Report"-->
+            <!--action="custom_tax_report"-->
+            <!--id="menu_custom_tax_report"-->
+            <!--sequence="10"-->
+            <!--parent="certificate_tax_report_side_top"-->
+            <!--groups="custom_inventory.group_user"-->
+            <!--&gt;-->
+        <!--</menuitem>-->
 
         <record id="tax_report_tree" model="ir.ui.view">
             <field name="name">Config Tree</field>

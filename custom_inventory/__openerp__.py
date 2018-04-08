@@ -33,12 +33,13 @@ Dashboard / Reports for Inventory Management will include:
 * Moves Analysis
     """,
     'website': 'https://www.odoo.com/page/warehouse',
-    'depends': ['base','stock','mrp'],
+    'depends': ['base','stock','mrp','sale'],
     'category': 'Inventory Management',
     'sequence': 13,
     'data': [
         'security/certificate_security.xml',
         'security/ir.model.access.csv',
+        'views/custom_sale_view.xml',
         'views/custom_stock_move_view.xml',
         'views/custom_stock_transfer_wiz.xml',
         'views/certificate_print.xml',

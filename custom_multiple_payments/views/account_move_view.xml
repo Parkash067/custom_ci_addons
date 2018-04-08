@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+         <record id="account.view_move_line_tree_mutual" model="ir.ui.view">
+              <field name="name">account.move.line.tree</field>
+              <field name="model">account.move.line</field>
+              <field name="inherit_id" ref="account.view_move_line_tree" />
+              <field name="arch" type="xml">
+                  <xpath expr="//field[@name='ref']" position="after">
+                      <field name="customer_invoice"/>
+                  </xpath>
+              </field>
+         </record>
+         <record id="account.view_move_form_mutual" model="ir.ui.view">
+              <field name="name">account.move.form</field>
+              <field name="model">account.move</field>
+              <field name="inherit_id" ref="account.view_move_form" />
+              <field name="arch" type="xml">
+                  <xpath  expr="//page/field/tree/field[@name='partner_id']" position="before">
+                      <field name="customer_invoice"/>
+                  </xpath>
+              </field>
+         </record>
+    </data>
+</openerp>

@@ -30,17 +30,20 @@
                     <h2><field name="sara_inv_serial" readonly="1"/></h2>
                     <group>
                         <group>
-                            <field string="Customer" name="partner_id"/>
-                            <field name="nic"/>
-                            <field name="ntn"/>
+                            <field string="Customer" name="partner_id" readonly="1"/>
+                            <field name="dealer_id" readonly="1"/>
+                            <field name="nic" readonly="1"/>
+                            <field name="ntn" readonly="1"/>
                             <field name="header"/>
                         </group>
                         <group>
+                            <field name="engine_number" readonly="1"/>
+                            <field name="chassis_number" readonly="1"/>
+                            <field name="picking_id" readonly="1"/>
                             <field name="date_invoice" />
                             <field name="due_date" />
-                            <field name="from_"/>
-                            <field name="to_"/>
                             <field name="ref_" placeholder="MAJ/2017/0000"/>
+                            <field name="type" readonly="1"/>
                         </group>
                     </group>
                     <notebook colspan="4">
@@ -92,9 +95,32 @@
             <field name="arch" type="xml">
                 <tree string="Invoices" version="8.0">
                     <field name="partner_id" />
+                    <field name="dealer_id"/>
+                    <field name="engine_number" readonly="1"/>
+                    <field name="chassis_number" readonly="1"/>
+                    <field name="picking_id"/>
                     <field name="date_invoice" />
                     <field name="ref_" />
+                    <field name="type"/>
                 </tree>
+            </field>
+        </record>
+
+         <!-- ================================================== Begin Search view of Dummy Invoices ================================================ -->
+        <record id="custom_dummy_invoice_search_view" model="ir.ui.view">
+            <field name="name">custom_dummy_invoice.search.view</field>
+            <field name="model">custom.dummy.invoice</field>
+            <field name="arch" type="xml">
+                <search string="Invoices" version="8.0">
+                    <field name="engine_number" readonly="1"/>
+                    <field name="chassis_number" readonly="1"/>
+                    <field name="picking_id" string="DO"/>
+                    <field name="partner_id" />
+                    <field name="dealer_id"/>
+                    <field name="date_invoice" />
+                    <field name="ref_" />
+                    <field name="type"/>
+                </search>
             </field>
         </record>
     </data>
