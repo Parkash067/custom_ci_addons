@@ -5,3 +5,5 @@ import custom_dummy_invoice
 import custom_manufacturing
 import debit_note
 import wizard
+import purchase_order
+import logo_invoice

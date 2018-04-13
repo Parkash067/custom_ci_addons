@@ -59,5 +59,25 @@
             menu="False"
         />
 
+        <report
+            id="action_certificate_issuance_report"
+            model="wiz.reports"
+            string="Certificate Issuance"
+            report_type="qweb-pdf"
+            name="custom_inventory.certificate_issuance"
+            file="custom_inventory.certificate_issuance"
+            menu="False"
+        />
+
+         <report
+            id="action_sale_letter_summary_remain"
+            model="wiz.reports"
+            string="Certificate Issuance"
+            report_type="qweb-pdf"
+            name="custom_inventory.sale_letter_summary_remain"
+            file="custom_inventory.sale_letter_summary_remain"
+            menu="False"
+        />
+
     </data>
 </openerp>

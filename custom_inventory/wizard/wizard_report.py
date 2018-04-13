@@ -11,24 +11,18 @@ class WizardReports(osv.TransientModel):
     _description = 'PDF Reports for showing all disconnection,reconnection'
 
     _columns = {
-        'type': fields.selection([('Collection Report', 'Collection Report'),
-                                  ('Individual Aging', 'Individual Aging'),
-                                  ('Sales Register', 'Sales Register')], 'Report Type', store=True),
+        'type': fields.selection([('Certificate Issuance With Invoice', 'Certificate Issuance With Invoice'),
+                                  ('Sale Letter Summary (Remain)', 'Sale Letter Summary (Remain)'),
+                                  ], 'Report Type'),
+        'partner_id': fields.many2one('res.partner',string='Dealer'),
         'date_from': fields.date('Start Date'),
         'date_to': fields.date('End Date'),
-        'partner_id': fields.many2one('res.partner', 'Customer'),
-        'company_id': fields.many2one('res.company', 'Company'),
-        'multiple_customers': fields.boolean('Multiple Customer'),
-
     }
 
     _defaults = {
         'date_from': lambda *a: datetime.now().strftime('%Y-%m-%d'),
         'date_to': lambda *a: datetime.now().strftime('%Y-%m-%d'),
-        'multiple_customers': False
     }
-
-
 
     def check_dates(self, cr, uid, ids, context=None):
         wizard = self.browse(cr, uid, ids, context=context)[0]
@@ -43,64 +37,54 @@ class WizardReports(osv.TransientModel):
                      'Error: Invalid Dates\nDate From must be less than Date To\nDate To must not be greater than todays date.',
                      ['date_from', 'date_to']), ]
 
-    def report_data(self, data,account_head):
-        res = {}
-        for rec in data:
-            partner_id = self.env['res.partner'].search([['id', '=', rec['partner_id']],])
-            res = {
-                'customer': partner_id.name,
-                'account_head': account_head,
-                'entry': rec['ref'],
-                'particulars': rec['name'],
-                'date': rec['date'],
-                'amount': rec['debit'],
-            }
-        return res
+    def certificate_issuance(self):
+      self.env.cr.execute("""
+      select csm.id,csm.issuance_date,csm.engine_number,csm.chassis_number,csm.dealer_name,
+      csm.do_number,csm.do_date,csm.inv_date,csm.inv_num_sara,csm.inv_num_abc
+      from custom_stock_move as csm where csm.issuance_date is not null and (csm.issuance_date between '%s' and '%s') order by csm.issuance_date asc,csm.dealer_name asc"""%(self.date_from,self.date_to))
 
-    def collection_report(self):
-        res = []
-        account_ids = self.env['account.account'].search([['type', '=', 'liquidity'],['company_id', '=', self.company_id.id]])
-        for id in account_ids:
-            self.env.cr.execute("select account_move_line.ref,account_move_line.partner_id,account_move_line.debit,account_move_line.date,account_move_line.account_id,account_move_line.name from account_move_line where account_move_line.account_id="+str(id.id)+" and "+"account_move_line.date between'"+str(self.date_from)+"'"+" and '"+str(self.date_to)+"'")
-            data = self.env.cr.dictfetchall()
-            if len(data)>0:
-                res.append(self.report_data(data,id.name))
-        return res
+      result = self.env.cr.dictfetchall()
+      return result
 
-    def individual_aging_report(self):
-        data = []
-        if self.multiple_customers==False:
-            self.env.cr.execute("select account_invoice.number,account_invoice.partner_id,account_invoice.date_invoice,account_invoice.amount_total from account_invoice where account_invoice.date_invoice between'" + str(self.date_from) + "'" + " and '" + str(self.date_to) + "'"+"and state='open'"+"and account_invoice.company_id="+str(self.company_id.id)+"order by account_invoice.date_invoice")
-            data = self.env.cr.dictfetchall()
-        return data
+    def sale_letter_summary(self):
+        result = []
+        self.env.cr.execute("""
+        select csm.do_number,csm.do_date,count(csm.engine_number) as total
+        from custom_stock_move as csm where csm.partner_id=%s and (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
+        order by csm.do_number,csm.do_date asc
+        """%(str(self.partner_id.id),self.date_from,self.date_to))
+        total_letters = self.env.cr.dictfetchall()
 
-    def sales_register_report(self):
-        self.env.cr.execute(
-                "select * from custom_dummy_invoice_line where custom_dummy_invoice_line.date between'" + str(
-                    self.date_from) + "'" + " and '" + str(
-                    self.date_to) + "'"+"order by account_invoice.date")
-        data = self.env.cr.dictfetchall()
-        return data
+        self.env.cr.execute("""
+               select csm.do_number,csm.do_date,count(csm.issuance_date) as total
+               from custom_stock_move as csm where csm.partner_id=%s and (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
+               order by csm.do_number,csm.do_date asc
+               """ % (str(self.partner_id.id), self.date_from, self.date_to))
+        issued_letters = self.env.cr.dictfetchall()
+
+        for i in range(len(total_letters)):
+            result.append({
+                'do_number': total_letters[i]['do_number'],
+                'do_date': total_letters[i]['do_date'],
+                'total': total_letters[i]['total'],
+                'issued':issued_letters[i]['total'],
+                'balance': total_letters[i]['total'] - issued_letters[i]['total']
+            })
+
+        return result
 
     def print_report(self, cr, uid, ids, data, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
-        if obj.type == 'Collection Report':
+        if obj.type == 'Certificate Issuance With Invoice':
             return {
                 'type': 'ir.actions.report.xml',
-                'name': 'custom_inventory.wiz_collection_report',
-                'report_name': 'custom_inventory.wiz_collection_report'
+                'name': 'custom_inventory.certificate_issuance',
+                'report_name': 'custom_inventory.certificate_issuance'
             }
-        elif obj.type == 'Individual Aging':
+        if obj.type == 'Sale Letter Summary (Remain)':
             return {
                 'type': 'ir.actions.report.xml',
-                'name': 'custom_inventory.wiz_individual_aging_report',
-                'report_name': 'custom_inventory.wiz_individual_aging_report'
+                'name': 'custom_inventory.sale_letter_summary_remain',
+                'report_name': 'custom_inventory.sale_letter_summary_remain'
             }
-        elif obj.type == 'Sales Register':
-            return {
-                'type': 'ir.actions.report.xml',
-                'name': 'custom_inventory.wiz_sales_register_report',
-                'report_name': 'custom_inventory.wiz_sales_register_report'
-            }
-
 

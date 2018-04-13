@@ -192,6 +192,29 @@
                                               </tr>
                                           </table>
                                       </div>
+                                      <div class="col-xs-4">
+                                          <t t-if="account_invoice.header == 'Sara Automobiles'">
+                                             <h1> </h1>
+                                              <t t-set="record_collection" t-value="account_invoice.get_data('Sara Automobiles')"/>
+                                              <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                          </t>
+                                          <t t-if="account_invoice.header == 'Allied Business Corporation'">
+                                             <h1> </h1>
+                                              <t t-set="record_collection" t-value="account_invoice.get_data('Allied Business Corporation')"/>
+                                              <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                          </t>
+                                           <t t-if="account_invoice.header == '/'">
+                                               <h1> </h1>
+                                               <t t-if="account_invoice.dealer_id.name == 'Allied Business Corporation'">
+                                                   <t t-set="record_collection" t-value="account_invoice.get_data('Allied Business Corporation')"/>
+                                                   <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                               </t>
+                                               <t t-if="account_invoice.dealer_id.name!= 'Allied Business Corporation'">
+                                                   <t t-set="record_collection" t-value="account_invoice.get_data('Sara Automobiles')"/>
+                                                   <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                               </t>
+                                           </t>
+                                      </div>
                                   </div>
                               </t>
                               <t t-if="account_invoice.type=='Unregistered'">
@@ -289,6 +312,29 @@
                                               </tr>
                                           </table>
                                       </div>
+                                      <div class="col-xs-4">
+                                          <t t-if="account_invoice.header == 'Sara Automobiles'">
+                                             <h1> </h1>
+                                              <t t-set="record_collection" t-value="account_invoice.get_data('Sara Automobiles')"/>
+                                              <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                          </t>
+                                          <t t-if="account_invoice.header == 'Allied Business Corporation'">
+                                             <h1> </h1>
+                                              <t t-set="record_collection" t-value="account_invoice.get_data('Allied Business Corporation')"/>
+                                              <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                          </t>
+                                           <t t-if="account_invoice.header == '/'">
+                                               <h1> </h1>
+                                               <t t-if="account_invoice.dealer_id.name == 'Allied Business Corporation'">
+                                                   <t t-set="record_collection" t-value="account_invoice.get_data('Allied Business Corporation')"/>
+                                                   <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                               </t>
+                                               <t t-if="account_invoice.dealer_id.name!= 'Allied Business Corporation'">
+                                                   <t t-set="record_collection" t-value="account_invoice.get_data('Sara Automobiles')"/>
+                                                   <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                               </t>
+                                           </t>
+                                      </div>
                                   </div>
                               </t>
                               <t t-if="account_invoice.type=='Registered'">
@@ -374,6 +420,29 @@
                                               </tr>
                                           </table>
                                       </div>
+                                      <div class="col-xs-4">
+                                          <t t-if="account_invoice.header == 'Sara Automobiles'">
+                                             <h1> </h1>
+                                              <t t-set="record_collection" t-value="account_invoice.get_data('Sara Automobiles')"/>
+                                              <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                          </t>
+                                          <t t-if="account_invoice.header == 'Allied Business Corporation'">
+                                             <h1> </h1>
+                                              <t t-set="record_collection" t-value="account_invoice.get_data('Allied Business Corporation')"/>
+                                              <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                          </t>
+                                           <t t-if="account_invoice.header == '/'">
+                                               <h1> </h1>
+                                               <t t-if="account_invoice.dealer_id.name == 'Allied Business Corporation'">
+                                                   <t t-set="record_collection" t-value="account_invoice.get_data('Allied Business Corporation')"/>
+                                                   <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                               </t>
+                                               <t t-if="account_invoice.dealer_id.name!= 'Allied Business Corporation'">
+                                                   <t t-set="record_collection" t-value="account_invoice.get_data('Sara Automobiles')"/>
+                                                   <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                               </t>
+                                           </t>
+                                      </div>
                                   </div>
                               </t>
                               <t t-if="account_invoice.type=='sara_to_abc'">
@@ -454,6 +523,29 @@
                                               </tr>
                                           </table>
                                       </div>
+                                      <div class="col-xs-4">
+                                          <t t-if="account_invoice.header == 'Sara Automobiles'">
+                                             <h1> </h1>
+                                              <t t-set="record_collection" t-value="account_invoice.get_data('Sara Automobiles')"/>
+                                              <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                          </t>
+                                          <t t-if="account_invoice.header == 'Allied Business Corporation'">
+                                             <h1> </h1>
+                                              <t t-set="record_collection" t-value="account_invoice.get_data('Allied Business Corporation')"/>
+                                              <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                          </t>
+                                           <t t-if="account_invoice.header == '/'">
+                                               <h1> </h1>
+                                               <t t-if="account_invoice.dealer_id.name == 'Allied Business Corporation'">
+                                                   <t t-set="record_collection" t-value="account_invoice.get_data('Allied Business Corporation')"/>
+                                                   <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                               </t>
+                                               <t t-if="account_invoice.dealer_id.name!= 'Allied Business Corporation'">
+                                                   <t t-set="record_collection" t-value="account_invoice.get_data('Sara Automobiles')"/>
+                                                   <img t-att-src="'data:image/png;base64,%s' %record_collection" style="margin-left:10px;"/>
+                                               </t>
+                                           </t>
+                                      </div>
                                   </div>
                               </t>
                               <div>
@@ -462,6 +554,7 @@
                               </div>
                           </div>
                           <br/><br/>
+
                       </div>
                    </t>
                </t>

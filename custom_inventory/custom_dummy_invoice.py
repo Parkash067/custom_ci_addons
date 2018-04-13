@@ -77,6 +77,12 @@ class custom_dummy_invoice(osv.osv):
         convert_amount_in_words = convert_amount_in_words.replace(' and Zero Cent', ' Only ')
         return convert_amount_in_words
 
+    @api.multi
+    def get_data(self,string):
+        record_collection = []
+        # Do your browse, search, calculations, .. here and then return the data (which you can then use in the QWeb)
+        record_collection = self.env['logo.invoice'].search([('type', '=', string)])
+        return record_collection.logo
 
 class custom_dummy_invoice_lines(osv.osv):
     _name = "custom.dummy.invoice.line"

@@ -49,6 +49,7 @@
                     <field name="certificate_serial" readonly="1"/>
                     <field name="engine_number" readonly="1"/>
                     <field name="chassis_number" readonly="1"/>
+                    <field name="certificate_invoice" readonly="1"/>
                     <field name="picking_id" string="DO" readonly="1"/>
                     <button name="create_view_invoice" string="Create Invoice" type="object" icon="STOCK_PREFERENCES"/>
                     <field name="partner_id" readonly="1"/>
@@ -307,6 +308,51 @@
                         <group string="Configuration">
                             <field name="type"/>
                             <field name="price"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="custom_logo_invoice" model="ir.actions.act_window">
+	        <field name="name">Invoice Logo</field>
+            <field name="res_model">logo.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+
+         <menuitem
+            name="Set Logo"
+            action="custom_logo_invoice"
+            id="menu_custom_logo_invoice"
+            sequence="11"
+            parent="certificate_configuration_side_top"
+            groups="custom_inventory.group_user"
+            >
+        </menuitem>
+
+        <record id="logo_tree" model="ir.ui.view">
+            <field name="name">Logo Tree</field>
+            <field name="model">logo.invoice</field>
+            <field name="arch" type="xml">
+                <tree string="Config Tree"  version="8.0">
+                    <field name="type" required="True"/>
+                    <field name="logo" required="True"/>
+                </tree>
+            </field>
+        </record>
+        <record id="logo_form" model="ir.ui.view">
+            <field name="name">Logo Form</field>
+            <field name="model">logo.invoice</field>
+            <field name="arch" type="xml">
+                <form string="Config Form"  version="8.0">
+                    <sheet>
+                        <group string="Configuration">
+                            <field name="type"/>
+                            <field name="logo"/>
                         </group>
                     </sheet>
                 </form>

@@ -58,7 +58,15 @@ class custom_stock_move(osv.osv):
         'year': fields.char('Year',store=True),
         'issuance_date': fields.date('Issuance Date', store=True),
         'reason': fields.text('Reason',store=True),
-        'qr_code': fields.binary('QR Code', store=True)
+        'qr_code': fields.binary('QR Code', store=True),
+        'certificate_invoice': fields.many2one('custom.dummy.invoice', 'Invoiced Customer', store=True),
+        'do_date': fields.related('picking_id','date',type='datetime',  string='DO Date',  store=True),
+        'do_number': fields.related('picking_id', 'name', type='char',  string='DO Date',  store=True),
+        'inv_date': fields.related('certificate_invoice', 'date_invoice', type='date', string='DO Date', store=True),
+        'inv_num_sara': fields.related('certificate_invoice', 'sara_inv_serial', type='char', string='Sara Inv', store=True),
+        'inv_num_abc': fields.related('certificate_invoice', 'abc_inv_serial', type='char', string='ABC Inv',
+                                       store=True),
+        'dealer_name': fields.related('partner_id', 'name', type='char', string='DO Date', store=True),
     }
 
     _defaults = {
@@ -147,6 +155,7 @@ class custom_stock_move(osv.osv):
                     'chassis_number': _self.chassis_number,
                 }
                 inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
+                self.write(cr,uid,_self.id,{'certificate_invoice':inv_ids})
                 prices = config_obj.search(cr, uid, [('type', '=', 'Unregistered')])
                 for price in config_obj.browse(cr, uid, prices, context=context):
                     sp = price.price
@@ -176,6 +185,7 @@ class custom_stock_move(osv.osv):
                     'chassis_number': _self.chassis_number,
                 }
                 inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
+                self.write(cr, uid, _self.id, {'certificate_invoice': inv_ids})
                 prices = config_obj.search(cr, uid, [('type', '=', 'Registered')])
                 for price in config_obj.browse(cr, uid, prices, context=context):
                     sp = price.price
@@ -205,6 +215,7 @@ class custom_stock_move(osv.osv):
                 'chassis_number': _self.chassis_number,
             }
             inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
+            self.write(cr, uid, _self.id, {'certificate_invoice': inv_ids})
             prices = config_obj.search(cr, uid, [('type', '=', 'sara_to_abc')])
             for price in config_obj.browse(cr, uid, prices, context=context):
                 sp = price.price
@@ -238,6 +249,7 @@ class custom_stock_move(osv.osv):
                         'chassis_number': _self.chassis_number,
                     }
                     inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
+                    self.write(cr, uid, _self.id, {'certificate_invoice': inv_ids})
                     prices = config_obj.search(cr, uid, [('type', '=', type)])
                     for price in config_obj.browse(cr, uid, prices, context=context):
                         sp = price.price
@@ -266,6 +278,7 @@ class custom_stock_move(osv.osv):
                         'chassis_number': _self.chassis_number,
                     }
                     inv_ids = inv_obj.create(cr, uid, inv_vals, context=context)
+                    self.write(cr, uid, _self.id, {'certificate_invoice': inv_ids})
                     prices = config_obj.search(cr, uid, [('type', '=', type)])
                     for price in config_obj.browse(cr, uid, prices, context=context):
                         sp = price.price

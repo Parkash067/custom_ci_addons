@@ -50,6 +50,14 @@
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
+
+         <menuitem
+            name="Generic Report"
+            action="xls_report_action"
+            id="menu_xls_report_action"
+            sequence="5"
+            parent="reports_side_top_menu">
+         </menuitem>
     </data>
 </openerp>
 

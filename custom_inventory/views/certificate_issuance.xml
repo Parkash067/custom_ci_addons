@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="certificate_issuance">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="report.internal_layout">
+                <div class="page">
+                    <div class="row">
+                        <h1 align="center">Cetificate Issuance</h1><br/>
+                            <h4>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h4>
+                            <table class="table table-condensed" style="font-size:10px">
+                                <thead>
+                                    <tr style="background:#ccc;">
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Serial No.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Issuance Date</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Certificate ID</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Engine</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Chassis</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Dealer</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">DO. No.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">DO. Date</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Inv. No.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Inv. Date</td>
+                                    </tr>
+                                </thead>
+                                <tbody class="invoice_tbody">
+                                    <tr t-foreach="doc.certificate_issuance()" t-as="l">
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l_index+1"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['issuance_date']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['id']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['engine_number']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['chassis_number']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['dealer_name']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['do_number']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['do_date']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <t t-if="l['inv_num_sara']">
+                                                <span t-esc="l['inv_num_sara']"/>
+                                            </t>
+                                            <!--<t t-if="l['inv_num_abc']">-->
+                                                <!--<span t-esc="l['inv_num_abc']"/>-->
+                                            <!--</t>-->
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['inv_date']"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>

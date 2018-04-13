@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+         <record model="ir.ui.view" id="custom_po_form">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']" position="after">
+                     <div style="width: 50%%">
+                         <button name="button_reset_taxes" states="draft" string="(Tax Breakup)" type="object" class="oe_edit_only oe_link"/>
+                         <field name="tax_line">
+                             <tree editable="bottom" string="Taxes">
+                                 <field name="name"/>
+                                 <field name="amount" />
+                             </tree>
+                         </field>
+                     </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
