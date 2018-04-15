@@ -29,15 +29,27 @@ class custom_stock_transfer_details(osv.TransientModel):
 
     @api.one
     def do_detailed_transfer(self):
+        order_id = {}
         if self.picking_id.state not in ['assigned', 'partially_available']:
             raise Warning(_('You cannot transfer a picking in state \'%s\'.') % self.picking_id.state)
-
+        stock_wh_obj = self.env['stock.warehouse'].search([('name', '=', 'Allied Business Corporation')])
+        picking_id = self.env['stock.picking.type'].search([('name', '=', 'Receipts'),
+                                                            ('warehouse_id', '=', stock_wh_obj.id)])
+        if self.picking_id.partner_id.name == 'Allied Business Corporation':
+            purchase_order = {
+                'partner_id': 1491,
+                'company_id': 3,
+                'picking_type_id': picking_id.id,
+                'location_id': 116,
+                'date_order': fields.datetime.now(),
+                'invoice_method': 'picking',
+                'pricelist_id': 2,
+            }
+            order_id = self.env['purchase.order'].create(purchase_order)
         processed_ids = []
         # Create new and update existing pack operations
         for lstits in [self.item_ids, self.packop_ids]:
             for prod in lstits:
-                print prod
-                print prod.engine_number
                 pack_datas = {
                     'product_id': prod.product_id.id,
                     'product_uom_id': prod.product_uom_id.id,
@@ -53,18 +65,30 @@ class custom_stock_transfer_details(osv.TransientModel):
                 }
                 if self.picking_id.partner_id.customer:
                     stock_moves = {
-                        'engine_number': prod.engine_number,
-                        'chassis_number': prod.chassis_number,
-                        'color': prod.color,
-                        'model': prod.model,
-                        'year': prod.model,
+                        'engine_number': prod.lot_id.name,
+                        'chassis_number': prod.lot_id.chassis_number,
+                        'color': prod.lot_id.color,
+                        'model': prod.lot_id.model,
+                        'year': prod.lot_id.year,
                         'picking_id': self.picking_id.id,
                         'partner_id': self.picking_id.partner_id.id,
                         'product_id': prod.product_id.id,
                         'product_qty': prod.quantity,
                         'date': prod.date if prod.date else datetime.now(),
                     }
-                    stock_move_id = self.env['custom.stock.move'].create(stock_moves)
+                    self.env['custom.stock.move'].create(stock_moves)
+                    self.env.cr.execute("""update stock_production_lot set status='%s' where name='%s'"""%('Issued',prod.lot_id.name))
+                    if self.picking_id.partner_id.name == 'Allied Business Corporation':
+                        purchase_order_lines = {
+                            'product_id': prod.product_id.id,
+                            'name': prod.product_id.name,
+                            'product_uom': prod.product_uom_id.id,
+                            'product_qty': prod.quantity,
+                            'price_unit': prod.product_id.standard_price,
+                            'date_planned': fields.datetime.now(),
+                            'order_id': order_id.id
+                        }
+                        self.env['purchase.order.line'].create(purchase_order_lines)
                 if prod.packop_id:
                     prod.packop_id.with_context(no_recompute=True).write(pack_datas)
                     processed_ids.append(prod.packop_id.id)

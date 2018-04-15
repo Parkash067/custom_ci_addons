@@ -7,6 +7,14 @@
             <t t-call="report.internal_layout">
                 <div class="page">
                     <div class="row">
+                        <t t-set="total" t-value="0"/>
+                        <t t-set="one" t-value="0"/>
+                        <t t-set="two" t-value="0"/>
+                        <t t-set="three" t-value="0"/>
+                        <t t-set="four" t-value="0"/>
+                        <t t-set="five" t-value="0"/>
+                        <t t-set="six" t-value="0"/>
+                        <t t-set="seven" t-value="0"/>
                         <t t-if="doc.type=='Individual Aging'">
                             <h1 align="center">Individual Aging</h1><br/>
                             <h3 t-esc="doc.partner_id.name"/>
@@ -40,43 +48,62 @@
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="'{0:,.2f}'.format(int(l['amount_total']))"/>
+                                            <t t-set="total" t-value="total+l['amount_total']"/>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <t t-if="l['days']&lt;=30">
                                                 <span t-esc="'{0:,.2f}'.format(int(l['amount_total']))"/>
+                                                <t t-set="one" t-value="one+l['amount_total']"/>
                                             </t>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <t t-if="l['days']&gt;=31 and l['days']&lt;=45">
                                                 <span t-esc="'{0:,.2f}'.format(int(l['amount_total']))"/>
+                                                <t t-set="two" t-value="two+l['amount_total']"/>
                                             </t>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <t t-if="l['days']&gt;=46 and l['days']&lt;=60">
                                                 <span t-esc="'{0:,.2f}'.format(int(l['amount_total']))"/>
+                                                <t t-set="three" t-value="three+l['amount_total']"/>
                                             </t>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <t t-if="l['days']&gt;=61 and l['days']&lt;=90">
                                                 <span t-esc="'{0:,.2f}'.format(int(l['amount_total']))"/>
+                                                <t t-set="four" t-value="four+l['amount_total']"/>
                                             </t>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <t t-if="l['days']&gt;=91 and l['days']&lt;=120">
                                                 <span t-esc="'{0:,.2f}'.format(int(l['amount_total']))"/>
+                                                <t t-set="five" t-value="five+l['amount_total']"/>
                                             </t>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <t t-if="l['days']&gt;=121 and l['days']&lt;=150">
                                                 <span t-esc="'{0:,.2f}'.format(int(l['amount_total']))"/>
+                                                <t t-set="six" t-value="six+l['amount_total']"/>
                                             </t>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <t t-if="l['days']&gt;=150">
                                                 <span t-esc="'{0:,.2f}'.format(int(l['amount_total']))"/>
+                                                <t t-set="seven" t-value="seven+l['amount_total']"/>
                                             </t>
                                         </td>
                                     </tr>
+                                     <tr>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;" colspan="3">Total</td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(total))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(one))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(two))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(three))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(four))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(five))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(six))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(seven))"/></td>
+                                 </tr>
                                 </tbody>
                             </table>
                         </t>

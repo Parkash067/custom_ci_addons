@@ -7,3 +7,4 @@ import debit_note
 import wizard
 import purchase_order
 import logo_invoice
+import stock_serial

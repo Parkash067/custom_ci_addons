@@ -8,6 +8,14 @@
                 <div class="page">
                     <div class="row">
                         <t t-if="doc.type=='Monthly or Weekly Progress'">
+                            <t t-set="ending" t-value="0"/>
+                            <t t-set="collection" t-value="0"/>
+                            <t t-set="opening" t-value="0"/>
+                            <t t-set="sale_amount" t-value="0"/>
+                            <t t-set="sale_rtn" t-value="0"/>
+                            <t t-set="end_bal" t-value="0"/>
+                            <t t-set="balance_due" t-value="0"/>
+                            <t t-set="balance_over" t-value="0"/>
                             <h1 align="center">Progress Report</h1><br/>
                             <h4>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h4>
                             <table class="table table-condensed" style="font-size:10px width:100%">
@@ -35,29 +43,48 @@
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="'{0:,.2f}'.format(int(l['opening']))"/>
+                                            <t t-set="ending" t-value="ending+l['opening']"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="'{0:,.2f}'.format(int(l['collection']))"/>
+                                            <t t-set="collection" t-value="ending+l['collection']"/>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']))"/>
+                                             <t t-set="opening" t-value="opening+l['opening']-l['collection']"/>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="'{0:,.2f}'.format(int(l['sale_amount']))"/>
+                                             <t t-set="sale_amount" t-value="sale_amount+l['sale_amount']"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span>0</span>
+                                             <t t-set="sale_rtn" t-value="sale_rtn+0"/>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                              <span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']+l['sale_amount']))"/>
+                                              <t t-set="end_bal" t-value="end_bal+l['opening']-l['collection']+l['sale_amount']"/>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']+l['sale_amount']))"/>
+                                             <t t-set="balance_over" t-value="balance_over+l['opening']-l['collection']+l['sale_amount']"/>
                                          </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']+l['sale_amount']))"/>
+                                             <t t-set="balance_due" t-value="balance_due+l['opening']-l['collection']+l['sale_amount']"/>
                                          </td>
                                     </tr>
+                                      <tr>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;" colspan="2">Total</td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(ending))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(collection))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(opening))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(sale_amount))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(sale_rtn))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(end_bal))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(balance_over))"/></td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(balance_due))"/></td>
+                                 </tr>
                                 </tbody>
                             </table>
                         </t>
