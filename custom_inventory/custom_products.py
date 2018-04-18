@@ -10,6 +10,9 @@ import qrcode
 class custom_stock_picking(osv.osv):
     _inherit = 'stock.picking'
     _columns = {
+        'dc': fields.char('DC No.', store=True),
+        'in_remarks': fields.char('Remarks', store=True),
+        'reference': fields.char('Reference', store=True),
         'transporter': fields.char('Transporter', store=True),
         'driver': fields.char('Driver', store=True),
         'vehical': fields.char('Vehical', store=True),
@@ -19,6 +22,12 @@ class custom_stock_picking(osv.osv):
         'stock_split_lines': fields.one2many('custom.stock.move', 'picking_id', 'Stock Splits', store=True),
         'custom_move_type': fields.selection([('File Claim', 'File Claim'), ('Return against claim', 'Return against claim')], string='Move Type', store=True)
     }
+    
+    def fetch_quantity(self):
+        quantity = 0.0
+        for qty in self.move_lines:
+            quantity += qty.product_qty
+        return quantity 
 
     @api.onchange('custom_move_type')
     def assign_picking_type(self):

@@ -25,7 +25,8 @@
                                     </tr>
                                 </thead>
                                 <tbody class="invoice_tbody">
-                                    <tr t-foreach="doc.certificate_issuance()" t-as="l">
+                                    <t t-if="doc.type=='Certificate Issuance With Invoice Date Wise'">
+                                         <tr t-foreach="doc.certificate_issuance()" t-as="l">
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l_index+1"/>
                                         </td>
@@ -54,14 +55,48 @@
                                             <t t-if="l['inv_num_sara']">
                                                 <span t-esc="l['inv_num_sara']"/>
                                             </t>
-                                            <!--<t t-if="l['inv_num_abc']">-->
-                                                <!--<span t-esc="l['inv_num_abc']"/>-->
-                                            <!--</t>-->
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['inv_date']"/>
+                                        </td>
+                                         </tr>
+                                    </t>
+                                     <t t-if="doc.type=='Certificate Issuance With Invoice Dealer Wise'">
+                                         <tr t-foreach="doc.certificate_issuance_dealer_wise()" t-as="l">
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l_index+1"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['issuance_date']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['id']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['engine_number']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['chassis_number']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['dealer_name']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['do_number']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['do_date']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <t t-if="l['inv_num_sara']">
+                                                <span t-esc="l['inv_num_sara']"/>
+                                            </t>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['inv_date']"/>
                                         </td>
                                     </tr>
+                                    </t>
                                 </tbody>
                             </table>
                     </div>

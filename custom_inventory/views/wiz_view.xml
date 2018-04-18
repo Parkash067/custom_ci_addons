@@ -12,7 +12,7 @@
                         <field name="date_to"/>
                     </group>
                     <group>
-                        <field name="partner_id"  attrs="{'invisible':[('type','=','Certificate Issuance With Invoice')]}"/>
+                        <field name="partner_id"  attrs="{'invisible':[('type','=','Certificate Issuance With Invoice Date Wise')]}"/>
                     </group>
                     <footer>
                         <button name="print_report" type="object" string="Print" class="oe_highlight"/>

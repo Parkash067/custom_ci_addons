@@ -14,7 +14,8 @@
                                </h1>
                                <div style="max-width:100%;height:auto;width:80%;margin-left:auto;margin-right:auto;text-align:center;">
                                    <span style="text-decoration:underline; font-size:18px;">Plot No B-6 Scheme 33, Super Highway S.I.T.E Karachi, Tel:02132736673</span>
-                                   <h3 style="text-decoration:underline;">Delivery Order / Gate Pass</h3>
+                                   <t t-if="do.picking_type_id.name!='Receipts'"><h3 style="text-decoration:underline;">Delivery Order / Gate Pass</h3></t>
+                                    <t t-if="do.picking_type_id.name=='Receipts'"><h3 style="text-decoration:underline;">Inward</h3></t>
                               </div>
                                <div style="margin-top:30px;">
                                    <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
@@ -22,7 +23,7 @@
                                              <tr>
                                                  <td style="width:140px; border-right:1px solid black; padding:7px; !important;"><strong>Dealer</strong></td>
                                                  <td style="width:290px; border-right:1px solid black; padding:7px; !important;"><span t-esc="do.partner_id.name" /></td>
-                                                 <td style="width:90px;  border-right:1px solid black; padding:7px; !important;"><strong>Dlvr NIC:</strong></td>
+                                                 <td style="width:90px;  border-right:1px solid black; padding:7px; !important;"><strong>NIC:</strong></td>
                                                  <td style="width:177px; border-right:1px solid black; padding:7px; !important;"><span t-esc="do.partner_id.nic"/> </td>
                                                  <td style="width:110px; border-right:1px solid black; padding:7px; !important;"><strong>Date:</strong> </td>
                                                  <td style="border-right:1px solid black; padding:7px; !important;"><span t-esc="do.date"/> </td>
@@ -36,9 +37,18 @@
                                               <tr>
                                                  <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><strong>Address</strong></td>
                                                  <td colspan="3" style="width:557px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><span t-esc="do.partner_id.street"/>,<span t-esc="do.partner_id.city"/> </td>
-                                                 <td style="width:110px; border-right:1px solid black;border-top:1px solid black; padding:7px; !important;"><strong>Quantity:</strong> </td>
-                                                 <td style="border-right:1px solid black; padding:7px;border-top:1px solid black; !important;"><span t-esc="quantity_count"/></td>
+                                                  <t t-if="do.picking_type_id.name!='Receipts'"><td style="width:110px; border-right:1px solid black;border-top:1px solid black; padding:7px; !important;"><strong>Quantity:</strong> </td></t>
+                                                  <t t-if="do.picking_type_id.name=='Receipts'"><td style="width:110px; border-right:1px solid black;border-top:1px solid black; padding:7px; !important;"><strong>DC No.</strong> </td></t>
+                                                  <t t-if="do.picking_type_id.name!='Receipts'"><td style="border-right:1px solid black; padding:7px;border-top:1px solid black; !important;"><span t-esc="do.fetch_quantity()"/></td></t>
+                                                  <t t-if="do.picking_type_id.name=='Receipts'"><td style="border-right:1px solid black; padding:7px;border-top:1px solid black; !important;"><span t-esc="do.dc"/></td></t>
                                              </tr>
+                                              <t t-if="do.picking_type_id.name=='Receipts'">
+                                                   <tr>
+                                                       <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><strong>Ref</strong></td>
+                                                       <td colspan="5" style="width:557px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><span t-esc="do.reference"/></td>
+                                                   </tr>
+                                              </t>
+
                                           </thead>
                                       </table>
                                    <br/>
@@ -87,6 +97,7 @@
                                                   <th style="border-right: 1px solid black; padding:10px; text-align:center;">Sr No.</th>
                                                   <th style="border-right: 1px solid black; padding:10px; text-align:center;">Product</th>
                                                   <th style="border-right: 1px solid black; padding:10px; text-align:center;">Description</th>
+                                                  <th style="border-right: 1px solid black; padding:10px; text-align:center;">Qty</th>
                                               </tr>
                                           </thead>
                                           <tbody class="invoice_tbody">
@@ -101,21 +112,25 @@
                                                   <td style="text-align:center; border: 1px solid black; padding:10px; !important;">
                                                       <span t-esc="l.product_id.name"/> , <span t-esc="l.product_id.default_code"/>
                                                   </td>
+                                                  <td style="text-align:center; border: 1px solid black; padding:10px; !important;">
+                                                      <span t-esc="l.product_qty"/>
+                                                  </td>
                                               </tr>
                                           </tbody>
                                       </table>
                                    <br/>
                                </div>
                                </t>
-                               <div style="display:inline-block; float:left;width:455px;">
-                               <table class="table table-condensed" style="font-size:16px; width:451px;border-color:black;">
+                                <t t-if="do.picking_type_id.name!='Receipts'">
+                                    <div style="display:inline-block; float:left;width:455px;">
+                                        <table class="table table-condensed" style="font-size:16px; width:451px;border-color:black;">
                                    <tbody class="invoice_tbody">
                                        <tr>
                                            <td style="font-weight:bold; border: 1px solid black; padding:11px; !important;">
                                                BATTERY:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important;">
-                                               2.0
+                                               <span t-esc="2*do.fetch_quantity()"/>
                                            </td>
                                            <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
                                                Pcs
@@ -126,7 +141,7 @@
                                                FRONT/REAR FLAP WITH HARDWARE:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important;">
-                                               2.0
+                                              <span t-esc="2*do.fetch_quantity()"/>
                                            </td>
                                            <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
                                                Set
@@ -137,7 +152,7 @@
                                                VIEW MIRROR:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important;">
-                                               2.0
+                                               <span t-esc="2*do.fetch_quantity()"/>
                                            </td>
                                            <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
                                                Set
@@ -148,7 +163,7 @@
                                                TOOLKIT:
                                            </td>
                                            <td style=" border: 1px solid black; padding:10px; !important;">
-                                               2.0
+                                              <span t-esc="2*do.fetch_quantity()"/>
                                            </td>
                                            <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
                                                Pcs
@@ -159,18 +174,20 @@
                                                MANUAL BOOKS:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important;">
-                                               2.0
+                                               <span t-esc="2*do.fetch_quantity()"/>
                                            </td>
                                            <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
                                                Pcs
                                            </td>
                                        </tr>
                                    </tbody>
-                               </table>
-                           </div>
-                            <div style="display:inline-block;float:right;">
-                               <table class="table table-condensed" style="font-size:16px; width:499px;border-color:black;">
-                                   <tbody class="invoice_tbody">
+                                   </table>
+                               </div>
+                                </t>
+                               <t t-if="do.picking_type_id.name!='Receipts'">
+                               <div style="display:inline-block;float:right;">
+                                   <table class="table table-condensed" style="font-size:16px; width:499px;border-color:black;">
+                                       <tbody class="invoice_tbody">
                                        <tr>
                                            <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;width:250px;">
                                                TRANSPORTER:
@@ -211,9 +228,12 @@
                                            </td>
                                        </tr>
                                    </tbody>
-                               </table>
+                                   </table>
+                               </div>
+                               </t>
+
                            </div>
-                           </div>
+                            <t t-if="do.picking_type_id.name!='Receipts'">
                            <div class="row">
                                <div style="width:100%; border:1px solid black;">
                                    <span style="margin-left:130px">
@@ -221,6 +241,10 @@
                                    </span>
                                </div>
                            </div>
+                           </t>
+                           <t t-if="do.picking_type_id.name=='Receipts'">
+                               <span style="font-size:16px;font-weight:bold;">Remarks:<u><span t-esc="do.in_remarks"/></u></span>
+                           </t>
                            <br/><br/><br/><br/><br/>
                            <div class="row">
                                 <div style="margin-top:30px;">

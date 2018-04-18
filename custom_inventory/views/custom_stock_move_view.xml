@@ -28,6 +28,13 @@
                             <field name="phone"/>
                         </group>
                     </page>
+                    <page string="Inward Info">
+                        <group string="Inward Info">
+                            <field name="dc"/>
+                            <field name="in_remarks"/>
+                            <field name="reference"/>
+                        </group>
+                    </page>
                 </xpath>
             </field>
         </record>

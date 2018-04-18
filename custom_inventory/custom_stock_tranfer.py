@@ -37,7 +37,7 @@ class custom_stock_transfer_details(osv.TransientModel):
                                                             ('warehouse_id', '=', stock_wh_obj.id)])
         if self.picking_id.partner_id.name == 'Allied Business Corporation':
             purchase_order = {
-                'partner_id': 1491,
+                'partner_id': 1497,
                 'company_id': 3,
                 'picking_type_id': picking_id.id,
                 'location_id': 116,
@@ -80,7 +80,7 @@ class custom_stock_transfer_details(osv.TransientModel):
                     self.env.cr.execute("""update stock_production_lot set status='%s' where name='%s'"""%('Issued',prod.lot_id.name))
                     if self.picking_id.partner_id.name == 'Allied Business Corporation':
                         purchase_order_lines = {
-                            'product_id': prod.product_id.id,
+                            'product_id': 6,
                             'name': prod.product_id.name,
                             'product_uom': prod.product_uom_id.id,
                             'product_qty': prod.quantity,

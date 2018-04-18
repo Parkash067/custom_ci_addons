@@ -64,6 +64,7 @@ Dashboard / Reports for Inventory Management will include:
         'views/serials.xml',
         'views/debit_note_sequence.xml',
         'views/page_setup.xml',
+        'views/account_voucher.xml',
         ],
     'installable': True,
     'application': True,

@@ -11,7 +11,8 @@ class WizardReports(osv.TransientModel):
     _description = 'PDF Reports for showing all disconnection,reconnection'
 
     _columns = {
-        'type': fields.selection([('Certificate Issuance With Invoice', 'Certificate Issuance With Invoice'),
+        'type': fields.selection([('Certificate Issuance With Invoice Date Wise', 'Certificate Issuance With Invoice Date Wise'),
+                                  ('Certificate Issuance With Invoice Dealer Wise', 'Certificate Issuance With Invoice Dealer Wise'),
                                   ('Sale Letter Summary (Remain)', 'Sale Letter Summary (Remain)'),
                                   ], 'Report Type'),
         'partner_id': fields.many2one('res.partner',string='Dealer'),
@@ -45,6 +46,16 @@ class WizardReports(osv.TransientModel):
 
       result = self.env.cr.dictfetchall()
       return result
+
+    def certificate_issuance_dealer_wise(self):
+        self.env.cr.execute("""
+         select csm.id,csm.issuance_date,csm.engine_number,csm.chassis_number,csm.dealer_name,
+         csm.do_number,csm.do_date,csm.inv_date,csm.inv_num_sara,csm.inv_num_abc
+         from custom_stock_move as csm where partner_id=%s and csm.issuance_date is not null and (csm.issuance_date between '%s' and '%s') order by csm.issuance_date asc,csm.dealer_name asc""" % (
+        self.partner_id.id,self.date_from, self.date_to))
+
+        result = self.env.cr.dictfetchall()
+        return result
 
     def sale_letter_summary(self):
         result = []

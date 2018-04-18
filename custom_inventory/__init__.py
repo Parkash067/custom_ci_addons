@@ -8,3 +8,4 @@ import wizard
 import purchase_order
 import logo_invoice
 import stock_serial
+import account_voucher
