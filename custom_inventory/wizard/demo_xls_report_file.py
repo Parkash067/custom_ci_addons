@@ -148,7 +148,7 @@ class xls_report(osv.osv):
 
     def individual_aging_report(self):
         self.env.cr.execute(
-                "select account_invoice.number,account_invoice.partner_id,account_invoice.date_invoice,account_invoice.amount_total from account_invoice where account_invoice.date_invoice between'" + str(
+                "select account_invoice.number,account_invoice.partner_id,account_invoice.date_invoice,account_invoice.residual as amount_total from account_invoice where account_invoice.date_invoice between'" + str(
                     self.date_from) + "'" + " and '" + str(
                     self.date_to) + "'" + "and state='open'" + "and account_invoice.company_id=" + str(
                     self.company_id.id) + "and account_invoice.partner_id="+str(self.partner_id.id)+"and type='out_invoice'order by account_invoice.date_invoice")

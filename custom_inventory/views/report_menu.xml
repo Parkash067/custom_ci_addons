@@ -79,5 +79,14 @@
             menu="False"
         />
 
+         <report
+            id="action_purchase_order_print"
+            model="purchase.order"
+            string="Purchase Order"
+            report_type="qweb-pdf"
+            name="custom_inventory.purchase_order_print"
+            file="custom_inventory.purchase_order_print"
+        />
+
     </data>
 </openerp>
