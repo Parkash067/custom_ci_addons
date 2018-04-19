@@ -13,7 +13,9 @@ class WizardReports(osv.TransientModel):
     _columns = {
         'type': fields.selection([('Certificate Issuance With Invoice Date Wise', 'Certificate Issuance With Invoice Date Wise'),
                                   ('Certificate Issuance With Invoice Dealer Wise', 'Certificate Issuance With Invoice Dealer Wise'),
+                                  ('Remaining Letter Party Wise', 'Remaining Letter Party Wise'),
                                   ('Sale Letter Summary (Remain)', 'Sale Letter Summary (Remain)'),
+                                  ('Sale History', 'Sale History'),
                                   ], 'Report Type'),
         'partner_id': fields.many2one('res.partner',string='Dealer'),
         'date_from': fields.date('Start Date'),
@@ -40,19 +42,38 @@ class WizardReports(osv.TransientModel):
 
     def certificate_issuance(self):
       self.env.cr.execute("""
-      select csm.id,csm.issuance_date,csm.engine_number,csm.chassis_number,csm.dealer_name,
+      select csm.certificate_serial as id,csm.issuance_date,csm.engine_number,csm.chassis_number,csm.dealer_name,
       csm.do_number,csm.do_date,csm.inv_date,csm.inv_num_sara,csm.inv_num_abc
       from custom_stock_move as csm where csm.issuance_date is not null and (csm.issuance_date between '%s' and '%s') order by csm.issuance_date asc,csm.dealer_name asc"""%(self.date_from,self.date_to))
-
       result = self.env.cr.dictfetchall()
       return result
 
     def certificate_issuance_dealer_wise(self):
         self.env.cr.execute("""
-         select csm.id,csm.issuance_date,csm.engine_number,csm.chassis_number,csm.dealer_name,
+         select csm.certificate_serial as id,csm.issuance_date,csm.engine_number,csm.chassis_number,csm.dealer_name,
          csm.do_number,csm.do_date,csm.inv_date,csm.inv_num_sara,csm.inv_num_abc
          from custom_stock_move as csm where partner_id=%s and csm.issuance_date is not null and (csm.issuance_date between '%s' and '%s') order by csm.issuance_date asc,csm.dealer_name asc""" % (
         self.partner_id.id,self.date_from, self.date_to))
+        result = self.env.cr.dictfetchall()
+        return result
+
+    def sale_history(self):
+        self.env.cr.execute("""select stock_picking.origin,custom_stock_move.do_number,custom_stock_move.date,
+        custom_stock_move.dealer_name,product_product.name_template as item,custom_stock_move.engine_number,custom_stock_move.chassis_number,custom_stock_move.model,
+        custom_stock_move.color,custom_stock_move.year,custom_stock_move.product_qty from stock_picking 
+        inner join custom_stock_move 
+        on stock_picking.id = custom_stock_move.picking_id
+        inner join product_product on custom_stock_move.product_id = product_product.id 
+        where stock_picking.partner_id=%s and  stock_picking.date between '%s' and '%s'"""%(self.partner_id.id,self.date_from,self.date_to))
+        result = self.env.cr.dictfetchall()
+        return result
+
+    def remaining_letter_dealer_wise(self):
+        self.env.cr.execute("""
+            select csm.certificate_serial as id,csm.issuance_date,csm.engine_number,csm.chassis_number,csm.dealer_name,
+            csm.do_number,csm.do_date,csm.inv_date,csm.inv_num_sara,csm.inv_num_abc
+            from custom_stock_move as csm where partner_id=%s and csm.counter=0 and (csm.create_date between '%s' and '%s') order by csm.create_date asc,csm.dealer_name asc""" % (
+            self.partner_id.id, self.date_from, self.date_to))
 
         result = self.env.cr.dictfetchall()
         return result
@@ -68,7 +89,7 @@ class WizardReports(osv.TransientModel):
 
         self.env.cr.execute("""
                select csm.do_number,csm.do_date,count(csm.issuance_date) as total
-               from custom_stock_move as csm where csm.partner_id=%s and (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
+               from custom_stock_move as csm where csm.partner_id=%s and csm.issuance_date is not null (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
                order by csm.do_number,csm.do_date asc
                """ % (str(self.partner_id.id), self.date_from, self.date_to))
         issued_letters = self.env.cr.dictfetchall()
@@ -86,16 +107,25 @@ class WizardReports(osv.TransientModel):
 
     def print_report(self, cr, uid, ids, data, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
-        if obj.type == 'Certificate Issuance With Invoice':
+        if obj.type == 'Certificate Issuance With Invoice Date Wise' or obj.type == 'Certificate Issuance With Invoice Dealer Wise' or \
+                obj.type == 'Remaining Letter Party Wise':
             return {
                 'type': 'ir.actions.report.xml',
                 'name': 'custom_inventory.certificate_issuance',
                 'report_name': 'custom_inventory.certificate_issuance'
             }
-        if obj.type == 'Sale Letter Summary (Remain)':
+        elif obj.type == 'Sale Letter Summary (Remain)':
             return {
                 'type': 'ir.actions.report.xml',
                 'name': 'custom_inventory.sale_letter_summary_remain',
                 'report_name': 'custom_inventory.sale_letter_summary_remain'
             }
+
+        elif obj.type == 'Sale History':
+            return {
+                'type': 'ir.actions.report.xml',
+                'name': 'custom_inventory.sale_history',
+                'report_name': 'custom_inventory.sale_history'
+            }
+
 

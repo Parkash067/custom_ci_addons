@@ -11,6 +11,8 @@
                             <h4>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h4>
                             <table class="table table-condensed" style="font-size:10px">
                                 <thead>
+                                    <t t-set="total" t-value="0"/>
+                                    <t t-set="issued" t-value="0"/>
                                     <tr style="background:#ccc;">
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Serial No.</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">DO. No.</td>
@@ -32,13 +34,27 @@
                                             <span t-esc="l['do_date']"/>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['total']"/>
+                                             <span t-esc="l['total']"/>
+                                             <t t-set="total" t-value="total+l['total']"/>
                                         </td>
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['issued']"/>
+                                             <t t-set="issued" t-value="issued+l['issued']"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['balance']"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;font-weight:bold" colspan="3">Total</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;font-weight:bold">
+                                            <span t-esc="total"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;font-weight:bold" >
+                                            <span t-esc="issued"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;font-weight:bold" >
+                                            <span t-esc="total-issued"/>
                                         </td>
                                     </tr>
                                 </tbody>

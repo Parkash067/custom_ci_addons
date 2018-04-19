@@ -79,6 +79,16 @@
             menu="False"
         />
 
+        <report
+            id="action_sale_hsitory"
+            model="wiz.reports"
+            string="Sale History"
+            report_type="qweb-pdf"
+            name="custom_inventory.sale_history"
+            file="custom_inventory.sale_history"
+            menu="False"
+        />
+
          <report
             id="action_purchase_order_print"
             model="purchase.order"

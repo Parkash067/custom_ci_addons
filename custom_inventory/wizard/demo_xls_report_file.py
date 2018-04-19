@@ -90,33 +90,18 @@ class xls_report(osv.osv):
             }
         return res
 
-    def collection_report(self,mw_id):
-        result = []
-        collection_amount = 0.0
-        res = []
-        account_ids = self.env['account.account'].search(
-            [['type', '=', 'liquidity'], ['company_id', '=', self.company_id.id]])
-        if mw_id != 'False':
-            for id in account_ids:
-                self.env.cr.execute(
-                    "select sum(aml.debit) as collection from account_move as am inner join account_move_line as aml on am.id = aml.move_id inner join res_partner as rp on aml.partner_id = rp.id inner join account_account as aa on aml.account_id = aa.id where am.date between'" + str(
-                        self.date_from) + "'" + "and'" + str(self.date_to) + "'" + "and aml.account_id=" + str(
-                        id.id) + "and aml.debit>0 and am.state='posted' and aml.partner_id ="+str(mw_id)+"group by aml.partner_id")
-                data = self.env.cr.dictfetchall()
-                if len(data) > 0:
-                    for rec in data:
-                        collection_amount += rec['debit']
-                    return collection_amount
-        else:
-            for id in account_ids:
-                self.env.cr.execute("select aa.name as account_head, am.name as number,am.date,am.ref,aml.debit,rp.name as customer,aml.name as remarks from account_move as am inner join account_move_line as aml on am.id = aml.move_id inner join res_partner as rp on aml.partner_id = rp.id inner join account_account as aa on aml.account_id = aa.id where am.date between'"+str(self.date_from)+"'"+"and'"+str(self.date_to)+"'"+"and aml.account_id="+str(id.id)+"and aml.debit>0 and am.state='posted' order by am.date asc")
-                data = self.env.cr.dictfetchall()
-                if len(data)>0:
-                    result.append(data)
-        for records in result:
-            for rec in records:
-                res.append(rec)
-        return res
+    def collection_report(self):
+       self.env.cr.execute("""select account_move_line.date,account_move.name as number,
+       account_account.name as account_head, res_partner.name as customer,
+       account_move_line.debit,account_move_line.ref
+       from account_move inner join account_move_line on account_move.id = account_move_line.move_id
+       inner join account_account on account_move_line.account_id = account_account.id
+       inner join res_partner on account_move_line.partner_id=res_partner.id
+       where account_account.type ='liquidity' and account_move.state='posted' 
+       and account_move_line.debit>0 and account_move_line.date between '%s' and '%s' and account_account.company_id=%s order by account_move_line.date asc
+       """%(self.date_from,self.date_to,self.company_id.id))
+       result= self.env.cr.dictfetchall()
+       return result
 
     def collection_report_(self,mw_id):
         result = []

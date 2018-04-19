@@ -9,6 +9,7 @@
                     <div class="row">
                         <t t-if="doc.type=='Collection Report'">
                             <t t-set="count" t-value="1"/>
+                             <t t-set="total" t-value="0"/>
                             <h1 align="center">Collection Report</h1><br/>
                             <h4>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h4>
                             <table class="table table-condensed" style="font-size:10px">
@@ -19,12 +20,12 @@
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Entry/Voucher No.</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Debit Account Name</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Credit Account Name</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Entry Amount</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Entry Particulars</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Entry Amount</td>
                                     </tr>
                                 </thead>
                                 <tbody class="invoice_tbody">
-                                      <tr t-foreach="doc.collection_report('False')" t-as="l">
+                                      <tr t-foreach="doc.collection_report()" t-as="l">
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l_index+1"/>
                                         </td>
@@ -40,11 +41,20 @@
                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['customer']"/>
                                         </td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="'{0:,.2f}'.format(int(l['debit']))"/>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['ref']"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                            <span t-esc="l['ref']"/>
+                                            <span t-esc="'{0:,.2f}'.format(int(l['debit']))"/>
+                                            <t t-set="total" t-value="total+l['debit']"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6"  style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <strong>Total</strong>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;font-weight:bold;" class="text-right">
+                                            <span t-esc="total"/>
                                         </td>
                                     </tr>
                                 </tbody>

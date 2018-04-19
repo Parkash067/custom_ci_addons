@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="sale_history">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="report.internal_layout">
+                        <div class="page">
+                            <div class="row">
+                                <t t-set="count" t-value="1"/>
+                                <h1 align="center">Sale History</h1>
+                                <br/>
+                                <h4>From
+                                    <span t-esc="doc.date_from"/>
+                                    to
+                                    <span t-esc="doc.date_to"/>
+                                </h4>
+                                <table class="table table-condensed" style="font-size:10px">
+                                    <thead>
+                                        <tr style="background:#ccc;">
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                Serial No.
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                Date
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                SO
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                DO
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                Customer
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                Product
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                QTY
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                Engine No.
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                Chassis No.
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                Model
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                Color
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                Year
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="invoice_tbody">
+                                        <tr t-foreach="doc.sale_history()" t-as="l">
+                                            <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l_index+1"/>
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l['date']"/>
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l['origin']"/>
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l['do_number']"/>
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l['dealer_name']"/>
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l['item']"/>
+                                            </td>
+                                            <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l['product_qty']"/>
+                                            </td>
+                                             <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l['engine_number']"/>
+                                            </td>
+                                             <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l['chassis_number']"/>
+                                            </td>
+                                             <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l['model']"/>
+                                            </td>
+                                             <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l['color']"/>
+                                            </td>
+                                             <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <span t-esc="l['year']"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>
