@@ -34,7 +34,7 @@
         <menuitem name="Reports" id="reports_side_top_menu" parent="base.menu_reporting" sequence="2"/>
 
         <menuitem
-            name="Certificate Reports"
+            name="Other Reports"
             action="action_wiz_report_form"
             id="menu_action_wiz_report_form"
             sequence="4"
