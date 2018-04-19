@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="write_amount_two_mutual">
+            <field name="name">account.voucher.receipt.form</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='writeoff_amount']" position="before">
+                    <field name="multi_counter_parts"/>
+                    <field name="payment_method" attrs="{'invisible': [('multi_counter_parts','=',False)],'required': [('multi_counter_parts', '=', True)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='line_dr_ids']" position="after">
+                    <field name="write_off_line" colspan="4" nolabel="1" attrs="{'invisible': [('multi_counter_parts','=',False)]}">
+                        <strong> Multiple Write-Off </strong>
+                        <tree editable="top" string="Multiparts" >
+                            <field name="account" required="1"/>
+                            <field name="writeoff_amount" required="1"  sum="Total Amount"/>
+                            <field name="comment" required="1"/>
+                        </tree>
+                    </field>
+                </xpath>
+                <xpath expr="//field[@name='payment_option']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('multi_counter_parts','=',True)],'required': [('multi_counter_parts', '=', False)]}</attribute>
+                </xpath>
+                <!--<xpath expr="//field[@name='writeoff_acc_id']" position="attributes">-->
+                    <!--<attribute name="attrs">{'invisible': [('multi_counter_parts','=',True)],'required': [('multi_counter_parts', '=', False)]}</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='analytic_id']" position="attributes">-->
+                    <!--<attribute name="attrs">{'invisible': [('multi_counter_parts','=',True)]}</attribute>-->
+                <!--</xpath>-->
+            </field>
+        </record>
+    </data>
+</openerp>
