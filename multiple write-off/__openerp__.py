@@ -22,8 +22,7 @@
 
     # always loaded
     'data': [
-        'write_off_view.xml',
-        'payment_registration_view.xml'
+        'write_off_view.xml'
     ],
 
 }

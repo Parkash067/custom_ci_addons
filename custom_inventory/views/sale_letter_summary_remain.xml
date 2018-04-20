@@ -8,6 +8,7 @@
                 <div class="page">
                     <div class="row">
                         <h1 align="center">Sale Letter Summary (Remain)</h1><br/>
+                        <h3><span t-esc="doc.partner_id.name"/></h3>
                             <h4>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h4>
                             <table class="table table-condensed" style="font-size:10px">
                                 <thead>

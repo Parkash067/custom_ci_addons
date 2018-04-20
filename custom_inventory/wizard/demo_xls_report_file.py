@@ -218,7 +218,7 @@ class xls_report(osv.osv):
     def annex_c_report(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
         cr.execute(
-            "select rp.ntn,rp.nic,rp.name,rp.taxation,cdi.amount_untaxed,cdi.date_invoice,cdi.sara_inv_serial,cdi.amount_tax,cdi.amount_total,cdi.further_tax from custom_dummy_invoice as cdi inner join res_partner as rp on cdi.dealer_id = rp.id where cdi.date_invoice between'" + str(
+            "select rp.ntn,rp.nic,rp.name,rp.taxation,cdi.amount_untaxed,cdi.type,cdi.date_invoice,cdi.sara_inv_serial,cdi.amount_tax,cdi.amount_total,cdi.further_tax from custom_dummy_invoice as cdi inner join res_partner as rp on cdi.dealer_id = rp.id where cdi.date_invoice between'" + str(
                 obj.date_from) + "'" + " and '" + str(
                 obj.date_to) + "'" + "order by cdi.date_invoice asc")
         data = cr.dictfetchall()
@@ -341,7 +341,10 @@ class xls_report(osv.osv):
                         ws.write(i+1, 7, data[i]['sara_inv_serial'], new_style7)
                         ws.write(i+1, 8, datetime.strftime(datetime.strptime(data[i]['date_invoice'],date_format_new),date_format), new_style7)
                         ws.write(i+1, 9, '', new_style7)
-                        ws.write(i+1, 10, '', new_style7)
+                        if data[i]['type'] == 'Unregistered':
+                            ws.write(i+1, 10, data[i]['type'],new_style7)
+                        else:
+                            ws.write(i + 1, 10,'Registered',new_style7)
                         ws.write(i+1, 11, '', new_style7)
                         ws.write(i+1, 12, '', new_style7)
                         ws.write(i+1, 13, '', new_style7)

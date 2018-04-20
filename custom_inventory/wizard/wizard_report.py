@@ -64,7 +64,7 @@ class WizardReports(osv.TransientModel):
         inner join custom_stock_move 
         on stock_picking.id = custom_stock_move.picking_id
         inner join product_product on custom_stock_move.product_id = product_product.id 
-        where stock_picking.partner_id=%s and  stock_picking.date between '%s' and '%s'"""%(self.partner_id.id,self.date_from,self.date_to))
+        where stock_picking.partner_id=%s and  stock_picking.date between '%s' and '%s'"""%(self.partner_id.id,self.date_from,self.date_to+" 23:00:00"))
         result = self.env.cr.dictfetchall()
         return result
 
@@ -73,7 +73,7 @@ class WizardReports(osv.TransientModel):
             select csm.certificate_serial as id,csm.issuance_date,csm.engine_number,csm.chassis_number,csm.dealer_name,
             csm.do_number,csm.do_date,csm.inv_date,csm.inv_num_sara,csm.inv_num_abc
             from custom_stock_move as csm where partner_id=%s and csm.counter=0 and (csm.create_date between '%s' and '%s') order by csm.create_date asc,csm.dealer_name asc""" % (
-            self.partner_id.id, self.date_from, self.date_to))
+            self.partner_id.id, self.date_from, self.date_to+' 23:00:00'))
 
         result = self.env.cr.dictfetchall()
         return result
@@ -89,7 +89,7 @@ class WizardReports(osv.TransientModel):
 
         self.env.cr.execute("""
                select csm.do_number,csm.do_date,count(csm.issuance_date) as total
-               from custom_stock_move as csm where csm.partner_id=%s and csm.issuance_date is not null (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
+               from custom_stock_move as csm where csm.partner_id=%s and csm.issuance_date is not null and (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
                order by csm.do_number,csm.do_date asc
                """ % (str(self.partner_id.id), self.date_from, self.date_to))
         issued_letters = self.env.cr.dictfetchall()
