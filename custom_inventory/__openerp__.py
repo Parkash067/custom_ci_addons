@@ -37,6 +37,8 @@ Dashboard / Reports for Inventory Management will include:
     'category': 'Inventory Management',
     'sequence': 13,
     'data': [
+        'views/custom_template.xml',
+        'views/post_dated.xml',
         'views/sale_history.xml',
         'views/purchase_order_print.xml',
         'security/certificate_security.xml',

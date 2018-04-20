@@ -16,6 +16,7 @@ class WizardReports(osv.TransientModel):
                                   ('Remaining Letter Party Wise', 'Remaining Letter Party Wise'),
                                   ('Sale Letter Summary (Remain)', 'Sale Letter Summary (Remain)'),
                                   ('Sale History', 'Sale History'),
+                                  ('Post Dated Cheque Report', 'Post Dated Cheque Report'),
                                   ], 'Report Type'),
         'partner_id': fields.many2one('res.partner',string='Dealer'),
         'date_from': fields.date('Start Date'),
@@ -47,6 +48,21 @@ class WizardReports(osv.TransientModel):
       from custom_stock_move as csm where csm.issuance_date is not null and (csm.issuance_date between '%s' and '%s') order by csm.issuance_date asc,csm.dealer_name asc"""%(self.date_from,self.date_to))
       result = self.env.cr.dictfetchall()
       return result
+
+    def post_dated(self):
+        result=[]
+        account_ids = self.env['account.account'].search(
+            [['type', '=', 'liquidity'], ['company_id', '=', 1]])
+        for id in account_ids:
+            self.env.cr.execute("""select av.number,av.date,av.cheque_date,aml.ref,aml.credit,av.cheque_no
+            from account_voucher as av inner join account_move as am on av.number = am.name 
+            inner join account_move_line as aml on am.id = aml.move_id where aml.credit>0 and av.type='payment'
+            and aml.account_id=%s and av.cheque_date is not null and av.date between '%s' and '%s'
+            order by av.date"""%(id.id,self.date_from,self.date_to))
+            data = self.env.cr.dictfetchall()
+            if len(data)>0:
+                result.append([{'bank': id.name, 'details': data}])
+        return result
 
     def certificate_issuance_dealer_wise(self):
         self.env.cr.execute("""
@@ -127,5 +143,13 @@ class WizardReports(osv.TransientModel):
                 'name': 'custom_inventory.sale_history',
                 'report_name': 'custom_inventory.sale_history'
             }
+
+        elif obj.type == 'Post Dated Cheque Report':
+            return {
+                'type': 'ir.actions.report.xml',
+                'name': 'custom_inventory.post_dated',
+                'report_name': 'custom_inventory.post_dated'
+            }
+
 
 

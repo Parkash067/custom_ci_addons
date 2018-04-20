@@ -98,5 +98,15 @@
             file="custom_inventory.purchase_order_print"
         />
 
+        <report
+            id="action_post_dated_print"
+            model="wiz.reports"
+            string="Post Dated"
+            report_type="qweb-pdf"
+            name="custom_inventory.post_dated"
+            file="custom_inventory.post_dated"
+            menu="False"
+        />
+
     </data>
 </openerp>
