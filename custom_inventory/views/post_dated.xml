@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="post_dated">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="report.internal_layout">
+                        <div class="page">
+                            <div class="row">
+                                <t t-set="total" t-value="0"/>
+                                <h1 align="center">Post Dated Cheque Report</h1>
+                                <br/>
+                                <h4>From
+                                    <span t-esc="doc.date_from"/>
+                                    to
+                                    <span t-esc="doc.date_to"/>
+                                </h4>
+                                <table class="table table-condensed" style="font-size:10px">
+                                    <tbody class="invoice_tbody">
+                                        <t t-foreach="doc.post_dated()" t-as="l">
+                                            <tr style="padding:5px;">
+                                                <td style=" padding:5px; font-size:14px; font-weight:bold"
+                                                    colspan="6">
+                                                    <span t-esc="l[0]['bank']"/>
+                                                </td>
+                                            </tr>
+                                            <tr style="background:#ccc;border: 1px solid black;">
+                                                <td style="border: 1px solid black;  padding:5px;  text-align:center;">
+                                                    Voucher No.
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                    Date
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                    Cheque Date
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                    Debit
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                    Cheque No.
+                                                </td>
+                                                 <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                    Credit
+                                                </td>
+                                            </tr>
+                                            <tr style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <t t-foreach="l[0]['details']" t-as="p">
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="p['number']"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="p['date']"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="p['cheque_date']"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="p['ref']"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="p['cheque_no']"/>
+                                                    </td>
+                                                     <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="p['credit']"/>
+                                                         <t t-set="total" t-value="total+p['credit']"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                            <tr style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bold" colspan="5">Total</td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bold" ><span t-esc="total"/> </td>
+                                            </tr>
+                                            <t t-set="total" t-value="0"/>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

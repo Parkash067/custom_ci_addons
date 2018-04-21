@@ -7,7 +7,15 @@
                     <t t-call="report.internal_layout">
                         <div class="page">
                             <div class="row">
-                                <h1 align="center">Cetificate Issuance</h1>
+                                <t t-if="Certificate Issuance With Invoice Date Wise">
+                                     <h1 align="center">Cetificate Issuance With Date Wise</h1>
+                                </t>
+                                <t t-if="Certificate Issuance With Invoice Dealer Wise">
+                                     <h1 align="center">Cetificate Issuance With Dealer Wise</h1>
+                                </t>
+                                <t t-if="Remaining Letter Party Wise">
+                                     <h1 align="center">Remaining Letter Party Wise</h1>
+                                </t>
                                 <br/>
                                 <h4>From
                                     <span t-esc="doc.date_from"/>
