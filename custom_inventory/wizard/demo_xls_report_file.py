@@ -236,7 +236,7 @@ class xls_report(osv.osv):
     def purchase_register_report(self,cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
         cr.execute(
-            "select rp.ntn,rp.name,rp.street,rp.city,av.date_invoice,av.amount_tax,av.number,av.amount_total,av.amount_untaxed,avl.quantity,avl.price_unit from account_invoice as av inner join res_partner as rp on av.partner_id = rp.id "
+            "select rp.ntn,rp.name,rp.street,rp.city,av.date_invoice,av.amount_tax,av.number,av.amount_total,av.amount_untaxed,avl.name as description,avl.quantity,avl.price_unit from account_invoice as av inner join res_partner as rp on av.partner_id = rp.id "
             "inner join account_invoice_line as avl on av.id = avl.invoice_id where av.date_invoice between'" + str(
                 obj.date_from) + "'" + " and '" + str(
                 obj.date_to) + "'" + "and av.type='in_invoice' order by date_invoice asc")
@@ -293,7 +293,7 @@ class xls_report(osv.osv):
                         ws.write(i + 1, 1, data[i]['ntn'], new_style7)
                         ws.write(i + 1, 2, data[i]['name'], new_style7)
                         ws.write(i + 1, 3, str(data[i]['street']) + str(data[i]['city']), new_style7)
-                        ws.write(i + 1, 4, '', new_style7)
+                        ws.write(i + 1, 4, data[i]['description'], new_style7)
                         ws.write(i + 1, 5, data[i]['number'],new_style7)
                         ws.write(i + 1, 6, datetime.strftime(datetime.strptime(data[i]['date_invoice'],date_format_new),date_format), new_style7)
                         ws.write(i + 1, 7, data[i]['quantity'], new_style7)

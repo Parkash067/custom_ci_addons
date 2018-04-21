@@ -96,30 +96,80 @@ class WizardReports(osv.TransientModel):
 
     def sale_letter_summary(self):
         result = []
-        self.env.cr.execute("""
-        select csm.do_number,csm.do_date,count(csm.engine_number) as total
-        from custom_stock_move as csm where csm.partner_id=%s and (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
-        order by csm.do_number,csm.do_date asc
-        """%(str(self.partner_id.id),self.date_from,self.date_to))
-        total_letters = self.env.cr.dictfetchall()
+        if self.partner_id:
+            self.env.cr.execute("""
+            select csm.do_number,csm.do_date,count(csm.engine_number) as total
+            from custom_stock_move as csm where csm.partner_id=%s and (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
+            order by csm.do_number,csm.do_date asc
+            """%(str(self.partner_id.id),self.date_from,self.date_to))
+            total_letters = self.env.cr.dictfetchall()
 
-        self.env.cr.execute("""
-               select csm.do_number,csm.do_date,count(csm.issuance_date) as total
-               from custom_stock_move as csm where csm.partner_id=%s and csm.issuance_date is not null and (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
-               order by csm.do_number,csm.do_date asc
-               """ % (str(self.partner_id.id), self.date_from, self.date_to))
-        issued_letters = self.env.cr.dictfetchall()
+            self.env.cr.execute("""
+                   select csm.do_number,csm.do_date,count(csm.issuance_date) as total
+                   from custom_stock_move as csm where csm.partner_id=%s and csm.issuance_date is not null and (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
+                   order by csm.do_number,csm.do_date asc
+                   """ % (str(self.partner_id.id), self.date_from, self.date_to))
+            issued_letters = self.env.cr.dictfetchall()
 
-        for i in range(len(total_letters)):
-            result.append({
-                'do_number': total_letters[i]['do_number'],
-                'do_date': total_letters[i]['do_date'],
-                'total': total_letters[i]['total'],
-                'issued':issued_letters[i]['total'],
-                'balance': total_letters[i]['total'] - issued_letters[i]['total']
-            })
+            for i in range(len(total_letters)):
+                result.append({
+                    'do_number': total_letters[i]['do_number'],
+                    'do_date': total_letters[i]['do_date'],
+                    'total': total_letters[i]['total'],
+                    'issued':issued_letters[i]['total'],
+                    'balance': total_letters[i]['total'] - issued_letters[i]['total']
+                })
 
-        return result
+            return result
+        else:
+            self.env.cr.execute("""select id,name as customer from res_partner where customer=True""")
+            customers = self.env.cr.dictfetchall()
+            for customer in customers:
+                self.env.cr.execute("""
+                            select csm.do_number,csm.do_date,count(csm.engine_number) as total
+                            from custom_stock_move as csm where csm.partner_id=%s and (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
+                            order by csm.do_number,csm.do_date asc
+                            """ % (str(customer['id']), self.date_from, self.date_to))
+                total_letters = self.env.cr.dictfetchall()
+
+                self.env.cr.execute("""
+                                   select csm.do_number,csm.do_date,count(csm.issuance_date) as total
+                                   from custom_stock_move as csm where csm.partner_id=%s and csm.issuance_date is not null and (csm.date between '%s' and '%s') group by csm.do_number,csm.do_date
+                                   order by csm.do_number,csm.do_date asc
+                                   """ % (str(customer['id']), self.date_from, self.date_to))
+                issued_letters = self.env.cr.dictfetchall()
+                for i in range(len(total_letters)):
+                    if len(total_letters)>0:
+                        if len(issued_letters) > 0:
+                            result.append({'name':customer['customer'],
+                                           'details':[{
+                                               'do_number': total_letters[i]['do_number'],
+                                               'do_date': total_letters[i]['do_date'],
+                                               'total': total_letters[i]['total'],
+                                               'issued':issued_letters[i]['total'],
+                                               'balance': total_letters[i]['total'] - issued_letters[i]['total']
+                                           }]})
+                        else:
+                            result.append({'name': customer['customer'],
+                                           'details': [{
+                                               'do_number': total_letters[i]['do_number'],
+                                               'do_date': total_letters[i]['do_date'],
+                                               'total': total_letters[i]['total'],
+                                               'issued': 0,
+                                               'balance': total_letters[i]['total'] - 0
+                                           }]})
+                    else:
+                        result.append({'name': customer['customer'],
+                                       'details': [{
+                                           'do_number': 'NIL',
+                                           'do_date': 'NIL',
+                                           'total': 0,
+                                           'issued': 0,
+                                           'balance': 0
+                                       }]})
+            return result
+
+
 
     def print_report(self, cr, uid, ids, data, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
