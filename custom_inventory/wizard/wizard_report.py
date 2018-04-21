@@ -94,6 +94,13 @@ class WizardReports(osv.TransientModel):
         result = self.env.cr.dictfetchall()
         return result
 
+    def check_in_sale_summary(self,result,customer_id):
+        for res in range(len(result)):
+            if result[res]['id'] == customer_id:
+                return res
+            else:
+                return False
+
     def sale_letter_summary(self):
         result = []
         if self.partner_id:
@@ -139,34 +146,64 @@ class WizardReports(osv.TransientModel):
                                    """ % (str(customer['id']), self.date_from, self.date_to))
                 issued_letters = self.env.cr.dictfetchall()
                 for i in range(len(total_letters)):
-                    if len(total_letters)>0:
-                        if len(issued_letters) > 0:
-                            result.append({'name':customer['customer'],
-                                           'details':[{
-                                               'do_number': total_letters[i]['do_number'],
-                                               'do_date': total_letters[i]['do_date'],
-                                               'total': total_letters[i]['total'],
-                                               'issued':issued_letters[i]['total'],
-                                               'balance': total_letters[i]['total'] - issued_letters[i]['total']
-                                           }]})
+                    if len((total_letters)):
+                        if len(result)== 0:
+                            if len(issued_letters) > 0:
+                                result.append({
+                                    'id': customer['id'],
+                                    'name': customer['customer'],
+                                    'details': [{
+                                        'do_number': total_letters[i]['do_number'],
+                                        'do_date': total_letters[i]['do_date'],
+                                        'total': total_letters[i]['total'],
+                                        'issued':issued_letters[i]['total'],
+                                        'balance': total_letters[i]['total'] - issued_letters[i]['total']
+                                    }]})
+                            else:
+                                result.append({
+                                    'id': customer['id'],
+                                    'name': customer['customer'],
+                                    'details': [{
+                                        'do_number': total_letters[i]['do_number'],
+                                        'do_date': total_letters[i]['do_date'],
+                                        'total': total_letters[i]['total'],
+                                        'issued': 0,
+                                       'balance': total_letters[i]['total'] - 0
+                                   }]})
                         else:
-                            result.append({'name': customer['customer'],
-                                           'details': [{
-                                               'do_number': total_letters[i]['do_number'],
-                                               'do_date': total_letters[i]['do_date'],
-                                               'total': total_letters[i]['total'],
-                                               'issued': 0,
-                                               'balance': total_letters[i]['total'] - 0
-                                           }]})
-                    else:
-                        result.append({'name': customer['customer'],
-                                       'details': [{
-                                           'do_number': 'NIL',
-                                           'do_date': 'NIL',
-                                           'total': 0,
-                                           'issued': 0,
-                                           'balance': 0
-                                       }]})
+                            result_id = self.check_in_sale_summary(result, customer['id'])
+                            if type(result_id) == int:
+                                print(">>>>>>>>>>>>>>>>>>>>>>>Get",result_id)
+                                result[result_id]['details'].append({
+                                    'do_number': total_letters[i]['do_number'],
+                                    'do_date': total_letters[i]['do_date'],
+                                    'total': total_letters[i]['total'],
+                                    'issued': issued_letters[i]['total'],
+                                    'balance': total_letters[i]['total'] - issued_letters[i]['total']
+                                })
+                            else:
+                                if len(issued_letters) > 0:
+                                    result.append({
+                                        'id': customer['id'],
+                                        'name': customer['customer'],
+                                        'details': [{
+                                            'do_number': total_letters[i]['do_number'],
+                                            'do_date': total_letters[i]['do_date'],
+                                            'total': total_letters[i]['total'],
+                                            'issued': issued_letters[i]['total'],
+                                            'balance': total_letters[i]['total'] - issued_letters[i]['total']
+                                        }]})
+                                else:
+                                    result.append({
+                                        'id': customer['id'],
+                                        'name': customer['customer'],
+                                        'details': [{
+                                            'do_number': total_letters[i]['do_number'],
+                                            'do_date': total_letters[i]['do_date'],
+                                            'total': total_letters[i]['total'],
+                                            'issued': 0,
+                                            'balance': total_letters[i]['total'] - 0
+                                        }]})
             return result
 
 

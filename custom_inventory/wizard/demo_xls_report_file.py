@@ -103,23 +103,6 @@ class xls_report(osv.osv):
        result= self.env.cr.dictfetchall()
        return result
 
-    def collection_report_(self,mw_id):
-        result = []
-        collection_amount = 0.0
-        res = []
-        account_ids = self.env['account.account'].search(
-            [['type', '=', 'liquidity'], ['company_id', '=', self.company_id.id]])
-        if mw_id != 'False':
-            for id in account_ids:
-                self.env.cr.execute(
-                    "select sum(aml.debit) as collection from account_move as am inner join account_move_line as aml on am.id = aml.move_id inner join res_partner as rp on aml.partner_id = rp.id inner join account_account as aa on aml.account_id = aa.id where am.date between'" + str(
-                        self.date_from) + "'" + "and'" + str(self.date_to) + "'" + "and aml.account_id=" + str(
-                        id.id) + "and aml.debit>0 and am.state='posted' and aml.partner_id ="+str(mw_id)+"group by aml.partner_id")
-                data = self.env.cr.dictfetchall()
-                if len(data) > 0:
-                    collection_amount += data[0]['collection']
-                return collection_amount
-
     def cal_aging_brackets(self,data):
         _list = []
         date_format = "%Y-%m-%d"
@@ -140,6 +123,22 @@ class xls_report(osv.osv):
         data = self.env.cr.dictfetchall()
         res = self.cal_aging_brackets(data)
         return res
+
+    def collection_report_(self, mw_id):
+        collection_amount = 0
+        self.env.cr.execute("""select account_move_line.date,account_move.name as number,
+                  account_account.name as account_head, res_partner.name as customer,
+                  account_move_line.debit,account_move_line.ref
+                  from account_move inner join account_move_line on account_move.id = account_move_line.move_id
+                  inner join account_account on account_move_line.account_id = account_account.id
+                  inner join res_partner on account_move_line.partner_id=res_partner.id
+                  where account_account.type ='liquidity' and account_move.state='posted' and account_move_line.partner_id=%s
+                  and account_move_line.debit>0 and account_move_line.date between '%s' and '%s' and account_account.company_id=%s order by account_move_line.date asc
+                  """ % (mw_id,self.date_from, self.date_to, self.company_id.id))
+        result = self.env.cr.dictfetchall()
+        for res in result:
+            collection_amount += res['debit']
+        return collection_amount
 
     def mw_progress_report(self):
         final_res = []
@@ -181,7 +180,6 @@ class xls_report(osv.osv):
                 final_res.append(i)
         return final_res
 
-
     def print_report(self, cr, uid, ids, data, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
         if obj.type == 'Collection Report':
@@ -202,7 +200,6 @@ class xls_report(osv.osv):
                 'name': 'custom_inventory.wiz_mw_progress_report',
                 'report_name': 'custom_inventory.wiz_mw_progress_report'
             }
-
 
     def sales_register_report(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
