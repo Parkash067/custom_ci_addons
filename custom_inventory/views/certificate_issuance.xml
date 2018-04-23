@@ -7,13 +7,13 @@
                     <t t-call="report.internal_layout">
                         <div class="page">
                             <div class="row">
-                                <t t-if="Certificate Issuance With Invoice Date Wise">
+                                <t t-if="doc.type=='Certificate Issuance With Invoice Date Wise'">
                                      <h1 align="center">Cetificate Issuance With Date Wise</h1>
                                 </t>
-                                <t t-if="Certificate Issuance With Invoice Dealer Wise">
+                                <t t-if="doc.type=='Certificate Issuance With Invoice Dealer Wise'">
                                      <h1 align="center">Cetificate Issuance With Dealer Wise</h1>
                                 </t>
-                                <t t-if="Remaining Letter Party Wise">
+                                <t t-if="doc.type=='Remaining Letter Party Wise'">
                                      <h1 align="center">Remaining Letter Party Wise</h1>
                                 </t>
                                 <br/>
