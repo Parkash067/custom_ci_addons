@@ -164,7 +164,7 @@ class xls_report(osv.osv):
                 rec['collection'] = collection
                 _res.append(rec)
         for rec in _res:
-            self.env.cr.execute("select rp.name as customer,so.partner_id,sum(so.amount_total) as amount_total from sale_order as so inner join res_partner as rp on so.partner_id = rp.id where so.date_order between'"+self.date_from+"'"+"and'"+self.date_to+"'"+"and so.partner_id="+str(rec['partner_id'])+"group by rp.name,so.partner_id")
+            self.env.cr.execute("select rp.name as customer,ai.partner_id,sum(ai.amount_total) as amount_total from account_invoice as ai inner join res_partner as rp on ai.partner_id = rp.id where ai.date_invoice between'"+self.date_from+"'"+"and'"+self.date_to+"'"+"and ai.partner_id="+str(rec['partner_id'])+"group by rp.name,ai.partner_id")
             data = self.env.cr.dictfetchall()
             customer = self.env['res.partner'].search([['id', '=', rec['partner_id']], ])
             if len(data)>0:
