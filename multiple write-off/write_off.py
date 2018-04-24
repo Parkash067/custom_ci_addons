@@ -247,7 +247,7 @@ class multiple_writeoff_parts(osv.osv):
     _name = "multiple.writeoff.part"
     _columns = {
         'voucher': fields.many2one('account.voucher', 'Voucher'),
-        'account': fields.many2one('account.account', 'Counterpart Account', store=True),
+        'account': fields.many2one('account.account', 'Counterpart Account', store=True, domain="['|',('type','=','other'),('type','=','liquidity')]"),
         "writeoff_amount": fields.float('Amount', store=True),
-        "comment": fields.char('Comment', store=True, default='Write-Off'),
+        "comment": fields.char('Cheque No.', store=True, default='Write-Off'),
     }
