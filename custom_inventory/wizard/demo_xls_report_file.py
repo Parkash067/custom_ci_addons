@@ -224,9 +224,14 @@ class xls_report(osv.osv):
     def income_tax_report(self,cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
         cr.execute(
-            "select rp.ntn,rp.name,rp.street,rp.city,aml.date,aml.ref,aml.move_id,aml.credit from account_move_line as aml inner join res_partner as rp on aml.partner_id = rp.id where aml.date between'" + str(
-                obj.date_from) + "'" + " and '" + str(
-                obj.date_to) + "'" + "and aml.credit > 0 and aml.account_id=213order by aml.date asc")
+            """
+            select rp.ntn,rp.name,rp.street,rp.city,aml.date,aml.ref,aml.move_id,aml.credit from account_move_line as aml 
+            inner join account_move as am on aml.move_id=am.id 
+            inner join account_account as aa on aml.account_id = aa.id 
+            inner join res_partner as rp on aml.partner_id = rp.id 
+            inner join account_account_type as aat on aa.user_type=aat.id
+            where aat.name = 'Income Tax' and aml.date between '%s' and '%s'
+            """%(obj.date_from, obj.date_to))
         data = cr.dictfetchall()
         return data
 
