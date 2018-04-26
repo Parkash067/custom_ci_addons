@@ -108,5 +108,15 @@
             menu="False"
         />
 
+         <report
+            id="action_manufactured_products"
+            model="wiz.reports"
+            string="Finished Productes"
+            report_type="qweb-pdf"
+            name="custom_inventory.manufactured_products"
+            file="custom_inventory.manufactured_products"
+            menu="False"
+        />
+
     </data>
 </openerp>

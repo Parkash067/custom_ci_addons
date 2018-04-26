@@ -17,6 +17,7 @@ class WizardReports(osv.TransientModel):
                                   ('Sale Letter Summary (Remain)', 'Sale Letter Summary (Remain)'),
                                   ('Sale History', 'Sale History'),
                                   ('Post Dated Cheque Report', 'Post Dated Cheque Report'),
+                                  ('Finished Products', 'Finished Products'),
                                   ], 'Report Type'),
         'partner_id': fields.many2one('res.partner',string='Dealer'),
         'date_from': fields.date('Start Date'),
@@ -48,6 +49,16 @@ class WizardReports(osv.TransientModel):
       from custom_stock_move as csm where csm.issuance_date is not null and (csm.issuance_date between '%s' and '%s') order by csm.issuance_date asc,csm.dealer_name asc"""%(self.date_from,self.date_to))
       result = self.env.cr.dictfetchall()
       return result
+
+    def finished_products(self):
+        self.env.cr.execute("""
+        select pt.name as product,spl.name as engine_number,spl.chassis_number,sq.qty,spl.color,spl.model,spl.year
+        from stock_production_lot as spl 
+        inner join product_template as pt on spl.product_id = pt.id
+        inner join stock_quant as sq on spl.id = sq.lot_id where spl.status != 'Issued' and spl.create_date between '%s' and '%s'
+        """%(self.date_from,self.date_to+" 23:00:00"))
+        result = self.env.cr.dictfetchall()
+        return result
 
     def post_dated(self):
         result=[]
@@ -236,6 +247,13 @@ class WizardReports(osv.TransientModel):
                 'type': 'ir.actions.report.xml',
                 'name': 'custom_inventory.post_dated',
                 'report_name': 'custom_inventory.post_dated'
+            }
+
+        elif obj.type == 'Finished Products':
+            return {
+                'type': 'ir.actions.report.xml',
+                'name': 'custom_inventory.manufactured_products',
+                'report_name': 'custom_inventory.manufactured_products'
             }
 
 

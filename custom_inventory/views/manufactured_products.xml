@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="manufactured_products">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="report.internal_layout">
+                <div class="page">
+                    <div class="row">
+                        <t t-if="doc.type=='Finished Products'">
+                            <t t-set="count" t-value="1"/>
+                             <t t-set="total" t-value="0"/>
+                            <h1 align="center">Finished Products</h1><br/>
+                            <h4>From <span t-esc="doc.date_from"/> to <span t-esc="doc.date_to"/> </h4>
+                            <table class="table table-condensed" style="font-size:10px">
+                                <thead>
+                                    <tr style="background:#ccc;">
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Serial No.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Product</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Qty</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Engine Number</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Chassis Number</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Color</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Model</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Year</td>
+                                    </tr>
+                                </thead>
+                                <tbody class="invoice_tbody">
+                                      <tr t-foreach="doc.finished_products()" t-as="l">
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l_index+1"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['product']"/>
+                                        </td>
+                                          <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['qty']"/>
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['engine_number']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['chassis_number']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['color']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['model']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="l['year']"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>
