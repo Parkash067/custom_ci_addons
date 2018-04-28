@@ -26,7 +26,7 @@
                                                  <td style="width:90px;  border-right:1px solid black; padding:7px; !important;"><strong>NIC:</strong></td>
                                                  <td style="width:177px; border-right:1px solid black; padding:7px; !important;"><span t-esc="do.partner_id.nic"/> </td>
                                                  <td style="width:110px; border-right:1px solid black; padding:7px; !important;"><strong>Date:</strong> </td>
-                                                 <td style="border-right:1px solid black; padding:7px; !important;"><span t-esc="do.date"/> </td>
+                                                 <td style="border-right:1px solid black; padding:7px; !important;"><span t-esc="do.min_date"/> </td>
                                              </tr>
                                              <tr>
                                                  <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><strong>Contact Info</strong></td>
@@ -130,7 +130,7 @@
                                                BATTERY:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important;">
-                                               <span t-esc="2*do.fetch_quantity()"/>
+                                               <span t-esc="1*do.fetch_quantity()"/>
                                            </td>
                                            <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
                                                Pcs
@@ -141,7 +141,7 @@
                                                FRONT/REAR FLAP WITH HARDWARE:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important;">
-                                              <span t-esc="2*do.fetch_quantity()"/>
+                                              <span t-esc="1*do.fetch_quantity()"/>
                                            </td>
                                            <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
                                                Set
@@ -152,7 +152,7 @@
                                                VIEW MIRROR:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important;">
-                                               <span t-esc="2*do.fetch_quantity()"/>
+                                               <span t-esc="1*do.fetch_quantity()"/>
                                            </td>
                                            <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
                                                Set
@@ -163,7 +163,7 @@
                                                TOOLKIT:
                                            </td>
                                            <td style=" border: 1px solid black; padding:10px; !important;">
-                                              <span t-esc="2*do.fetch_quantity()"/>
+                                              <span t-esc="1*do.fetch_quantity()"/>
                                            </td>
                                            <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
                                                Pcs
@@ -174,7 +174,7 @@
                                                MANUAL BOOKS:
                                            </td>
                                            <td style="border: 1px solid black; padding:10px; !important;">
-                                               <span t-esc="2*do.fetch_quantity()"/>
+                                               <span t-esc="1*do.fetch_quantity()"/>
                                            </td>
                                            <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
                                                Pcs
