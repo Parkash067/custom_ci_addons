@@ -2,280 +2,385 @@
 <openerp>
     <data>
         <template id="do_print">
-           <t t-call='report.html_container'>
-               <t t-foreach="docs" t-as="do">
-                   <t>
-                       <div class="page">
-                           <div class="row">
-                               <t t-set="quantity_count" t-value="0"/>
-                               <h1 style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
-                                         margin-right:auto;text-align:center;">
-                                   <span style="margin-left:10px;">SARA</span><span style="margin-left:10px;">AUTOMOBILE</span><span style="margin-left:10px;">INDUSTRIES</span>
-                               </h1>
-                               <div style="max-width:100%;height:auto;width:80%;margin-left:auto;margin-right:auto;text-align:center;">
-                                   <span style="text-decoration:underline; font-size:18px;">Plot No B-6 Scheme 33, Super Highway S.I.T.E Karachi, Tel:02132736673</span>
-                                   <t t-if="do.picking_type_id.name!='Receipts'"><h3 style="text-decoration:underline;">Delivery Order / Gate Pass</h3></t>
-                                    <t t-if="do.picking_type_id.name=='Receipts'"><h3 style="text-decoration:underline;">Inward</h3></t>
-                              </div>
-                               <div style="margin-top:30px;">
-                                   <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
-                                          <thead style="border:1px solid black; font-size:16px;">
-                                             <tr>
-                                                 <td style="width:140px; border-right:1px solid black; padding:7px; !important;"><strong>Dealer</strong></td>
-                                                 <td style="width:290px; border-right:1px solid black; padding:7px; !important;"><span t-esc="do.partner_id.name" /></td>
-                                                 <td style="width:90px;  border-right:1px solid black; padding:7px; !important;"><strong>NIC:</strong></td>
-                                                 <td style="width:177px; border-right:1px solid black; padding:7px; !important;"><span t-esc="do.partner_id.nic"/> </td>
-                                                 <td style="width:110px; border-right:1px solid black; padding:7px; !important;"><strong>Date:</strong> </td>
-                                                 <td style="border-right:1px solid black; padding:7px; !important;"><span t-esc="do.min_date"/> </td>
-                                             </tr>
-                                             <tr>
-                                                 <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><strong>Contact Info</strong></td>
-                                                 <td colspan="3" style="width:557px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"> </td>
-                                                 <td style="width:110px; border-right:1px solid black;border-top:1px solid black; padding:7px; !important;"><strong>D.O/GP No:</strong> </td>
-                                                 <td style="border-right:1px solid black; padding:7px;border-top:1px solid black; !important;"><span t-esc="do.name"/></td>
-                                             </tr>
-                                              <tr>
-                                                 <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><strong>Address</strong></td>
-                                                 <td colspan="3" style="width:557px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><span t-esc="do.partner_id.street"/>,<span t-esc="do.partner_id.city"/> </td>
-                                                  <t t-if="do.picking_type_id.name!='Receipts'"><td style="width:110px; border-right:1px solid black;border-top:1px solid black; padding:7px; !important;"><strong>Quantity:</strong> </td></t>
-                                                  <t t-if="do.picking_type_id.name=='Receipts'"><td style="width:110px; border-right:1px solid black;border-top:1px solid black; padding:7px; !important;"><strong>DC No.</strong> </td></t>
-                                                  <t t-if="do.picking_type_id.name!='Receipts'"><td style="border-right:1px solid black; padding:7px;border-top:1px solid black; !important;"><span t-esc="do.fetch_quantity()"/></td></t>
-                                                  <t t-if="do.picking_type_id.name=='Receipts'"><td style="border-right:1px solid black; padding:7px;border-top:1px solid black; !important;"><span t-esc="do.dc"/></td></t>
-                                             </tr>
-                                              <t t-if="do.picking_type_id.name=='Receipts'">
-                                                   <tr>
-                                                       <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><strong>Ref</strong></td>
-                                                       <td colspan="5" style="width:557px; border-right:1px solid black; border-top:1px solid black; padding:7px; !important;"><span t-esc="do.reference"/></td>
-                                                   </tr>
-                                              </t>
+            <t t-call='report.html_container'>
+                <t t-foreach="docs" t-as="do">
+                    <t t-call="custom_inventory.my_own_layout">
+                        <div class="page">
+                            <div class="row">
+                                <t t-set="quantity_count" t-value="0"/>
+                                <!--<h1 style="padding:3px;max-width:100%;height:auto;width:100%;margin-left:auto;-->
+                                         <!--margin-right:auto;text-align:center;">-->
+                                    <!--<span style="margin-left:10px;">SARA</span>-->
+                                    <!--<span style="margin-left:10px;">AUTOMOBILE</span>-->
+                                    <!--<span style="margin-left:10px;">INDUSTRIES</span>-->
+                                <!--</h1>-->
+                                <!--<div style="max-width:100%;height:auto;width:80%;margin-left:auto;margin-right:auto;text-align:center;">-->
+                                    <!--<span style="text-decoration:underline; font-size:18px;">Plot No B-6 Scheme 33,-->
+                                        <!--Super Highway S.I.T.E Karachi, Tel:02132736673-->
+                                    <!--</span>-->
+                                    <!--<t t-if="do.picking_type_id.name!='Receipts'">-->
+                                        <!--<h3 style="text-decoration:underline;">Delivery Order / Gate Pass</h3>-->
+                                    <!--</t>-->
+                                    <!--<t t-if="do.picking_type_id.name=='Receipts'">-->
+                                        <!--<h3 style="text-decoration:underline;">Inward</h3>-->
+                                    <!--</t>-->
+                                <!--</div>-->
+                                <div style="margin-top:30px;">
+                                    <table class="table table-condensed"
+                                           style="font-size:16px; width:998px;border-color:black;">
+                                        <thead style="border:1px solid black; font-size:16px;">
+                                            <tr>
+                                                <td style="width:140px; border-right:1px solid black; padding:3px; !important;">
+                                                    <t t-if="do.picking_type_id.name!='Receipts'"> <strong>Dealer</strong></t>
+                                                    <t t-if="do.picking_type_id.name=='Receipts'"> <strong>Supplier</strong></t>
+                                                </td>
+                                                <td style="width:290px; border-right:1px solid black; padding:3px; !important;">
+                                                    <span t-esc="do.partner_id.name"/>
+                                                </td>
+                                                <td style="width:90px;  border-right:1px solid black; padding:3px; !important;">
+                                                    <strong>NIC:</strong>
+                                                </td>
+                                                <td style="width:177px; border-right:1px solid black; padding:3px; !important;">
+                                                    <span t-esc="do.partner_id.nic"/>
+                                                </td>
+                                                <td style="width:110px; border-right:1px solid black; padding:3px; !important;">
+                                                    <strong>Date:</strong>
+                                                </td>
+                                                <td style="border-right:1px solid black; padding:3px; !important;">
+                                                    <span t-esc="do.min_date"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:3px; !important;">
+                                                    <strong>Contact Info</strong>
+                                                </td>
+                                                <td colspan="3"
+                                                    style="width:557px; border-right:1px solid black; border-top:1px solid black; padding:3px; !important;"></td>
+                                                <td style="width:110px; border-right:1px solid black;border-top:1px solid black; padding:3px; !important;">
+                                                    <strong>D.O/GP No:</strong>
+                                                </td>
+                                                <td style="border-right:1px solid black; padding:3px;border-top:1px solid black; !important;">
+                                                    <span t-esc="do.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:3px; !important;">
+                                                    <strong>Address</strong>
+                                                </td>
+                                                <td colspan="3"
+                                                    style="width:557px; border-right:1px solid black; border-top:1px solid black; padding:3px; !important;">
+                                                    <span t-esc="do.partner_id.street"/>,
+                                                    <span t-esc="do.partner_id.city"/>
+                                                </td>
+                                                <t t-if="do.picking_type_id.name!='Receipts'">
+                                                    <td style="width:110px; border-right:1px solid black;border-top:1px solid black; padding:3px; !important;">
+                                                        <strong>Quantity:</strong>
+                                                    </td>
+                                                </t>
+                                                <t t-if="do.picking_type_id.name=='Receipts'">
+                                                    <td style="width:110px; border-right:1px solid black;border-top:1px solid black; padding:3px; !important;">
+                                                        <strong>DC No.</strong>
+                                                    </td>
+                                                </t>
+                                                <t t-if="do.picking_type_id.name!='Receipts'">
+                                                    <td style="border-right:1px solid black; padding:3px;border-top:1px solid black; !important;">
+                                                        <span t-esc="do.fetch_quantity()"/>
+                                                    </td>
+                                                </t>
+                                                <t t-if="do.picking_type_id.name=='Receipts'">
+                                                    <td style="border-right:1px solid black; padding:3px;border-top:1px solid black; !important;">
+                                                        <span t-esc="do.dc"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                            <t t-if="do.picking_type_id.name=='Receipts'">
+                                                <tr>
+                                                    <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:3px; !important;">
+                                                        <strong>Ref</strong>
+                                                    </td>
+                                                    <td colspan="5"
+                                                        style="width:557px; border-right:1px solid black; border-top:1px solid black; padding:3px; !important;">
+                                                        <span t-esc="do.reference"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
 
-                                          </thead>
-                                      </table>
-                                   <br/>
-                               </div>
-                               <t t-if="do.picking_type_id.name=='Delivery Orders'">
-                               <div style="margin-top:10px;">
-                                   <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
-                                          <thead style="border:1px solid black; font-size:18px;">
-                                              <tr>
-                                                  <th style="border-right: 1px solid black; padding:10px; text-align:center;">Sr No.</th>
-                                                  <th style="border-right: 1px solid black; padding:10px; text-align:center;">Product</th>
-                                                  <th style="border-right: 1px solid black; padding:10px; text-align:center;">Description</th>
-                                                  <th style="border-right: 1px solid black; padding:10px; text-align:center;">Engine Number</th>
-                                                  <th style="padding:10px; text-align:center;">Chassis Number</th>
-                                              </tr>
-                                          </thead>
-                                          <tbody class="invoice_tbody">
-                                              <tr t-foreach="do.stock_split_lines" t-as="l">
-                                                  <td style="text-align:center; border: 1px solid black; padding:10px; !important;">
-                                                      <span t-esc="l_index+1"/>
-                                                      <t t-set="quantity_count" t-value="quantity_count+l_index"/>
-                                                  </td>
-                                                  <td style="text-align:center; border: 1px solid black; padding:10px; !important;">
-                                                      <span t-esc="l.product_id.name"/>
-                                                  </td>
-                                                  <td style="text-align:center; border: 1px solid black; padding:10px; !important;">
-                                                      <span t-esc="l.color"/> Color, <span t-esc="l.product_id.default_code"/>
-                                                  </td>
-                                                  <td style="text-align:center; border: 1px solid black; padding:10px; !important;">
-                                                      <span t-esc="l.engine_number" />
-                                                  </td>
-                                                  <td style="text-align:center; border: 1px solid black; padding:10px; !important;">
-                                                      <span t-esc="l.chassis_number" />
-                                                  </td>
-                                              </tr>
-                                          </tbody>
-                                      </table>
-                                   <br/>
-                               </div>
-                               </t>
+                                        </thead>
+                                    </table>
+                                    <br/>
+                                </div>
+                                <t t-if="do.picking_type_id.name=='Delivery Orders'">
+                                    <div style="margin-top:10px;">
+                                        <table class="table table-condensed"
+                                               style="font-size:16px; width:998px;border-color:black;">
+                                            <thead style="border:1px solid black; font-size:18px;">
+                                                <tr>
+                                                    <th style="border-right: 1px solid black; padding:3px; text-align:center;">
+                                                        Sr No.
+                                                    </th>
+                                                    <th style="border-right: 1px solid black; padding:3px; text-align:center;">
+                                                        Product
+                                                    </th>
+                                                    <th style="border-right: 1px solid black; padding:3px; text-align:center;">
+                                                        Description
+                                                    </th>
+                                                    <th style="border-right: 1px solid black; padding:3px; text-align:center;">
+                                                        Engine Number
+                                                    </th>
+                                                    <th style="padding:3px; text-align:center;">Chassis Number</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="invoice_tbody">
+                                                <tr t-foreach="do.stock_split_lines" t-as="l">
+                                                    <td style="text-align:center; border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="l_index+1"/>
+                                                        <t t-set="quantity_count" t-value="quantity_count+l_index"/>
+                                                    </td>
+                                                    <td style="text-align:center; border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="l.product_id.name"/>
+                                                    </td>
+                                                    <td style="text-align:center; border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="l.color"/>
+                                                        Color,
+                                                        <span t-esc="l.product_id.default_code"/>
+                                                    </td>
+                                                    <td style="text-align:center; border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="l.engine_number"/>
+                                                    </td>
+                                                    <td style="text-align:center; border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="l.chassis_number"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <br/>
+                                    </div>
+                                </t>
                                 <t t-if="do.picking_type_id.name=='Receipts'">
-                               <div style="margin-top:10px;">
-                                   <table class="table table-condensed" style="font-size:16px; width:998px;border-color:black;">
-                                          <thead style="border:1px solid black; font-size:18px;">
-                                              <tr>
-                                                  <th style="border-right: 1px solid black; padding:10px; text-align:center;">Sr No.</th>
-                                                  <th style="border-right: 1px solid black; padding:10px; text-align:center;">Product</th>
-                                                  <th style="border-right: 1px solid black; padding:10px; text-align:center;">Description</th>
-                                                  <th style="border-right: 1px solid black; padding:10px; text-align:center;">Qty</th>
-                                              </tr>
-                                          </thead>
-                                          <tbody class="invoice_tbody">
-                                              <tr t-foreach="do.move_lines" t-as="l">
-                                                  <td style="text-align:center; border: 1px solid black; padding:10px; !important;">
-                                                      <span t-esc="l_index+1"/>
-                                                      <t t-set="quantity_count" t-value="quantity_count+l_index"/>
-                                                  </td>
-                                                  <td style="text-align:center; border: 1px solid black; padding:10px; !important;">
-                                                      <span t-esc="l.product_id.name"/>
-                                                  </td>
-                                                  <td style="text-align:center; border: 1px solid black; padding:10px; !important;">
-                                                      <span t-esc="l.product_id.name"/> , <span t-esc="l.product_id.default_code"/>
-                                                  </td>
-                                                  <td style="text-align:center; border: 1px solid black; padding:10px; !important;">
-                                                      <span t-esc="l.product_qty"/>
-                                                  </td>
-                                              </tr>
-                                          </tbody>
-                                      </table>
-                                   <br/>
-                               </div>
-                               </t>
+                                    <div style="margin-top:10px;">
+                                        <table class="table table-condensed"
+                                               style="font-size:16px; width:998px;border-color:black;">
+                                            <thead style="border:1px solid black; font-size:18px;">
+                                                <tr>
+                                                    <th style="border-right: 1px solid black; padding:3px; text-align:center;">
+                                                        Sr No.
+                                                    </th>
+                                                    <th style="border-right: 1px solid black; padding:3px; text-align:center;">
+                                                        Product
+                                                    </th>
+                                                    <th style="border-right: 1px solid black; padding:3px; text-align:center;">
+                                                        Description
+                                                    </th>
+                                                    <th style="border-right: 1px solid black; padding:3px; text-align:center;">
+                                                        Qty
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="invoice_tbody">
+                                                <tr t-foreach="do.move_lines" t-as="l">
+                                                    <td style="text-align:center; border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="l_index+1"/>
+                                                        <!--<t t-set="quantity_count" t-value="quantity_count+l_index"/>-->
+                                                    </td>
+                                                    <td style="text-align:center; border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="l.product_id.name"/>
+                                                    </td>
+                                                    <td style="text-align:center; border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="l.product_id.name"/>
+                                                        ,
+                                                        <span t-esc="l.product_id.default_code"/>
+                                                    </td>
+                                                    <td style="text-align:center; border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="l.product_qty"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <br/>
+                                    </div>
+                                </t>
                                 <t t-if="do.picking_type_id.name!='Receipts'">
                                     <div style="display:inline-block; float:left;width:455px;">
-                                        <table class="table table-condensed" style="font-size:16px; width:451px;border-color:black;">
-                                   <tbody class="invoice_tbody">
-                                       <tr>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:11px; !important;">
-                                               BATTERY:
-                                           </td>
-                                           <td style="border: 1px solid black; padding:10px; !important;">
-                                               <span t-esc="1*do.fetch_quantity()"/>
-                                           </td>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               Pcs
-                                           </td>
-                                       </tr>
-                                        <tr>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               FRONT/REAR FLAP WITH HARDWARE:
-                                           </td>
-                                           <td style="border: 1px solid black; padding:10px; !important;">
-                                              <span t-esc="1*do.fetch_quantity()"/>
-                                           </td>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               Set
-                                           </td>
-                                       </tr>
-                                       <tr>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               VIEW MIRROR:
-                                           </td>
-                                           <td style="border: 1px solid black; padding:10px; !important;">
-                                               <span t-esc="1*do.fetch_quantity()"/>
-                                           </td>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               Set
-                                           </td>
-                                       </tr>
-                                       <tr>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               TOOLKIT:
-                                           </td>
-                                           <td style=" border: 1px solid black; padding:10px; !important;">
-                                              <span t-esc="1*do.fetch_quantity()"/>
-                                           </td>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               Pcs
-                                           </td>
-                                       </tr>
-                                       <tr>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               MANUAL BOOKS:
-                                           </td>
-                                           <td style="border: 1px solid black; padding:10px; !important;">
-                                               <span t-esc="1*do.fetch_quantity()"/>
-                                           </td>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               Pcs
-                                           </td>
-                                       </tr>
-                                   </tbody>
-                                   </table>
-                               </div>
+                                        <table class="table table-condensed"
+                                               style="font-size:16px; width:451px;border-color:black;">
+                                            <tbody class="invoice_tbody">
+                                                <tr>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        BATTERY:
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="1*do.fetch_quantity()"/>
+                                                    </td>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        Pcs
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        FRONT/REAR FLAP WITH HARDWARE:
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="1*do.fetch_quantity()"/>
+                                                    </td>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        Set
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        VIEW MIRROR:
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="1*do.fetch_quantity()"/>
+                                                    </td>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        Set
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        TOOLKIT:
+                                                    </td>
+                                                    <td style=" border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="1*do.fetch_quantity()"/>
+                                                    </td>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        Pcs
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        MANUAL BOOKS:
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="1*do.fetch_quantity()"/>
+                                                    </td>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        Pcs
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </t>
-                               <t t-if="do.picking_type_id.name!='Receipts'">
-                               <div style="display:inline-block;float:right;">
-                                   <table class="table table-condensed" style="font-size:16px; width:499px;border-color:black;">
-                                       <tbody class="invoice_tbody">
-                                       <tr>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;width:250px;">
-                                               TRANSPORTER:
-                                           </td>
-                                           <td style="border: 1px solid black; padding:10px; !important; width:250px;">
-                                               <span t-esc="do.transporter"/>
-                                           </td>
-                                       </tr>
-                                        <tr>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               DRIVER NAME:
-                                           </td>
-                                           <td style="border: 1px solid black; padding:10px; !important;">
-                                               <span t-esc="do.driver"/>
-                                           </td>
-                                       </tr>
-                                        <tr>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               VEHICLE NUMBER:
-                                           </td>
-                                           <td style="border: 1px solid black; padding:10px; !important;">
-                                               <span t-esc="do.vehical"/>
-                                           </td>
-                                       </tr>
-                                        <tr>
-                                           <td style="font-weight:bold; border: 1px solid black; padding:10px; !important;">
-                                               PHONE NUMBER:
-                                           </td>
-                                           <td style="border: 1px solid black; padding:10px; !important;">
-                                               <span t-esc="do.phone"/>
-                                           </td>
-                                       </tr>
-                                       <tr>
-                                           <td>
-                                           </td>
-                                           <td style="padding:10px; !important;">
-                                              <strong>Counting Rows: <span t-esc="quantity_count" style="margin-left:12px;"/></strong>
-                                           </td>
-                                       </tr>
-                                   </tbody>
-                                   </table>
-                               </div>
-                               </t>
+                                <t t-if="do.picking_type_id.name!='Receipts'">
+                                    <div style="display:inline-block;float:right;">
+                                        <table class="table table-condensed"
+                                               style="font-size:16px; width:499px;border-color:black;">
+                                            <tbody class="invoice_tbody">
+                                                <tr>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;width:250px;">
+                                                        TRANSPORTER:
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:3px; !important; width:250px;">
+                                                        <span t-esc="do.transporter"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        DRIVER NAME:
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="do.driver"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        VEHICLE NUMBER:
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="do.vehical"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-weight:bold; border: 1px solid black; padding:3px; !important;">
+                                                        PHONE NUMBER:
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:3px; !important;">
+                                                        <span t-esc="do.phone"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                    </td>
+                                                    <td style="padding:3px; !important;">
+                                                        <strong>Counting Rows:
+                                                            <span t-esc="do.fetch_quantity()"
+                                                                  style="margin-left:12px;"/>
+                                                        </strong>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </t>
 
-                           </div>
+                            </div>
                             <t t-if="do.picking_type_id.name!='Receipts'">
-                           <div class="row">
-                               <div style="width:100%; border:1px solid black;">
-                                   <span style="margin-left:130px">
-                                       Check Color and Accessories when receive the above Motorcycle(s), after there company will not be reponsible
-                                   </span>
-                               </div>
-                           </div>
-                           </t>
-                           <t t-if="do.picking_type_id.name=='Receipts'">
-                               <span style="font-size:16px;font-weight:bold;">Remarks:<u><span t-esc="do.in_remarks"/></u></span>
-                           </t>
-                           <br/><br/><br/><br/><br/>
-                           <div class="row">
+                                <div class="row">
+                                    <div style="width:100%; border:1px solid black;">
+                                        <span style="margin-left:130px">
+                                            Check Color and Accessories when receive the above Motorcycle(s), after
+                                            there company will not be reponsible
+                                        </span>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-if="do.picking_type_id.name=='Receipts'">
+                                <span style="font-size:16px;font-weight:bold;">Remarks:
+                                    <u>
+                                        <span t-esc="do.in_remarks"/>
+                                    </u>
+                                </span>
+                            </t>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div class="row">
                                 <div style="margin-top:30px;">
-                                   <table style="font-size:16px; width:999px;border-collapse:separate;border-spacing:50px 0;">
-                                          <thead>
-                                             <tr>
-                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px"><strong>Prepared By:</strong></td>
-                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px" ><strong>Authorized Signature:</strong></td>
-                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px"><strong>Received By:</strong></td>
-                                             </tr>
-                                          </thead>
-                                      </table>
-                                   <br/>
-                               </div>
-                              <div style="margin-top:70px;">
-                                   <table style="font-size:16px; width:999px;border-collapse:separate;border-spacing:50px 0;">
-                                          <thead>
-                                             <tr>
-                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px"><strong>For Sara Automobile Ind.</strong></td>
-                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px" ><strong>Manager Admin:</strong></td>
-                                                 <td style="border-top: 1px solid black;padding:10px; text-align:center; width:333px"><strong>Received By:</strong></td>
-                                             </tr>
-                                          </thead>
-                                      </table>
-                                   <br/>
-                               </div>
-                           </div>
-                       </div>
-                   </t>
-               </t>
-           </t>
+                                    <table style="font-size:16px; width:999px;border-collapse:separate;border-spacing:50px 0;">
+                                        <thead>
+                                            <tr>
+                                                <td style="border-top: 1px solid black;padding:3px; text-align:center; width:333px">
+                                                    <strong>Prepared By:</strong>
+                                                </td>
+                                                <td style="border-top: 1px solid black;padding:3px; text-align:center; width:333px">
+                                                    <strong>Authorized Signature:</strong>
+                                                </td>
+                                                <td style="border-top: 1px solid black;padding:3px; text-align:center; width:333px">
+                                                    <strong>Received By:</strong>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    <br/>
+                                </div>
+                                <div style="margin-top:70px;">
+                                    <table style="font-size:16px; width:999px;border-collapse:separate;border-spacing:50px 0;">
+                                        <thead>
+                                            <tr>
+                                                <td style="border-top: 1px solid black;padding:3px; text-align:center; width:333px">
+                                                    <strong>For Sara Automobile Ind.</strong>
+                                                </td>
+                                                <td style="border-top: 1px solid black;padding:3px; text-align:center; width:333px">
+                                                    <strong>Manager Admin:</strong>
+                                                </td>
+                                                <td style="border-top: 1px solid black;padding:3px; text-align:center; width:333px">
+                                                    <strong>Received By:</strong>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
         </template>
     </data>
 </openerp>
+

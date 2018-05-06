@@ -10,7 +10,7 @@ from openerp import models, fields, api, _
 class res_partner(osv.osv):
     _inherit = "res.partner"
 
-    taxation = fields.Selection([('Tax Payer','Tax Payer'),('Non Tax Payer','Non Tax Payer')], default='n-pay', String='Tax Condition', required=True)
+    taxation = fields.Selection([('Tax Payer','Tax Payer'),('Non Tax Payer','Non Tax Payer')], default='Non Tax Payer', String='Tax Condition', required=True)
     ntn = fields.Char(string="NTN", domain=[('taxation','=','n-pay')])
     nic = fields.Char(string="NIC")
     strn = fields.Char(string="STRN")

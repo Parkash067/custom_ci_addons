@@ -50,6 +50,7 @@
                     <field name="engine_number" readonly="1"/>
                     <field name="chassis_number" readonly="1"/>
                     <field name="certificate_invoice" readonly="1"/>
+                    <field name="issuance_date" readonly="1"/>
                     <field name="picking_id" string="DO" readonly="1"/>
                     <button name="create_view_invoice" string="Create Invoice" type="object" icon="STOCK_PREFERENCES"/>
                     <field name="partner_id" readonly="1"/>
@@ -149,6 +150,7 @@
                     <field name="picking_id" string="DO" readonly="1"/>
                     <field name="engine_number"/>
                     <field name="chassis_number"/>
+                    <field name="issuance_date" readonly="1"/>
                     <field name="partner_id" readonly="1"/>
                     <field name="date" readonly="1"/>
                     <field name="status" readonly="1"/>
