@@ -11,7 +11,7 @@ class custom_debit_note(osv.osv):
         'view_invoice_id': fields.integer('View ID', store=True),
         'view_id': fields.integer('View ID', store=True),
         'name': fields.char('Name', store=True),
-        'partner_id': fields.many2one('res.partner','Supplier', store=True, duplicate=True, domain="['|',('supplier','=',True),('customer','=',True)]"),
+        'partner_id': fields.many2one('res.partner','Supplier/Customer', store=True, duplicate=True, domain="['|',('supplier','=',True),('customer','=',True)]"),
         'supplier_invoice': fields.many2one('account.invoice', 'Supplier Invoice', store=True, duplicate=True),
         'date': fields.date('Date', store=True, duplicate=True),
         'debit_note_line': fields.one2many('custom.debit.note.line', 'name', 'Debit Note Lines', store=True),
@@ -34,6 +34,14 @@ class custom_debit_note(osv.osv):
     def create(self, cr, uid, vals, context=None):
         vals['name'] = self.pool.get('ir.sequence').get(cr, uid, 'debit_note.serial')
         return super(custom_debit_note, self).create(cr, uid, vals, context=context)
+
+    @api.onchange('type')
+    def change_domain(self):
+        if self.type == 'Credit Note':
+            return {'domain': {'partner_id': [('customer', '=', True)]}}
+
+        if self.type == 'Debit Note':
+            return {'domain': {'partner_id': [('supplier', '=', True)]}}
 
     def view_order(self, cr, uid, ids, context=None):
         _self = self.browse(cr, uid, ids[0], context=context)

@@ -38,6 +38,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='writeoff_amount']" position="before">
                     <field name="multi_counter_parts"/>
+                    <field name="tax_amount"/>
                     <field name="payment_method" attrs="{'invisible': [('multi_counter_parts','=',False)],'required': [('multi_counter_parts', '=', True)]}"/>
                 </xpath>
                 <xpath expr="//field[@name='line_cr_ids']" position="after">
@@ -45,6 +46,7 @@
                         <strong> Multiple Write-Off </strong>
                         <tree editable="top" string="Multiparts" >
                             <field name="account" required="1"/>
+                            <field name="taxes"/>
                             <field name="writeoff_amount" required="1"  sum="Total Amount"/>
                             <field name="comment" required="1"/>
                         </tree>

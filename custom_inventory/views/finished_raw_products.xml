@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="custom_finished_products" model="ir.actions.act_window">
+            <field name="name">Finished Products</field>
+            <field name="res_model">product.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,form,tree</field>
+            <field name="domain">[('sale_ok', '=', 'True')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+        <menuitem
+                name="Finished Products"
+                action="custom_finished_products"
+                id="menu_custom_finished_products"
+                sequence="10"
+                parent="stock.menu_stock_product"
+        >
+        </menuitem>
+
+        <record id="custom_raw_products" model="ir.actions.act_window">
+            <field name="name">Raw Products</field>
+            <field name="res_model">product.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,form,tree</field>
+            <field name="domain">[('purchase_ok', '=', 'True')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+        <menuitem
+                name="Raw Products"
+                action="custom_raw_products"
+                id="menu_custom_raw_products"
+                sequence="20"
+                parent="stock.menu_stock_product"
+        >
+        </menuitem>
+    </data>
+</openerp>

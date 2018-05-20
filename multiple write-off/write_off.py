@@ -12,7 +12,8 @@ from openerp import api
 class writeoff_amount(osv.osv):
     _inherit = "account.voucher"
     _columns = {
-        'write_off_line': fields.one2many('multiple.writeoff.part', 'voucher', 'Write-Off', store=True),
+        "tax_amount": fields.float('Base Amount',store=True),
+        "write_off_line": fields.one2many('multiple.writeoff.part', 'voucher', 'Write-Off', store=True),
         "multi_counter_parts": fields.boolean('Multiple Counter Part', store=True),
         "payment_method": fields.selection([('with_writeoff', 'Reconcile Payment Balance'), ], 'Payment Method',
                                            help="This field helps you to choose what you want to do with the eventual difference between the paid amount and the sum of allocated amounts. You can either choose to keep open this difference on the partner's account, or reconcile it with the payment(s)"),
@@ -250,4 +251,11 @@ class multiple_writeoff_parts(osv.osv):
         'account': fields.many2one('account.account', 'Counterpart Account', store=True, domain="['|',('type','=','other'),('type','=','liquidity')]"),
         "writeoff_amount": fields.float('Amount', store=True),
         "comment": fields.char('Cheque No.', store=True, default='Write-Off'),
+        "taxes": fields.many2one('account.tax', 'Taxes', store=True),
     }
+
+    @api.onchange('account')
+    def cal_taxes(self):
+        if len(self.account.tax_ids) > 0:
+            for tax in self.account.tax_ids:
+                self.writeoff_amount = self.voucher.tax_amount * tax.amount

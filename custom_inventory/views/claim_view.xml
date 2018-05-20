@@ -2,9 +2,13 @@
 <openerp>
     <data>
         <menuitem
+                name="CRM"
+                id="crm_top_menu"
+                sequence="60"/>
+        <menuitem
                 name="Claims"
                 id="custom_claim_top_side"
-                parent="stock.menu_stock_root"
+                parent="crm_top_menu"
                 sequence="10"
         />
          <record id="custom_claim_new_view" model="ir.actions.act_window">
@@ -29,6 +33,7 @@
                     <field name="min_date" invisible="1"/>
                     <field name="origin"/>
                     <field name="group_id" invisible="1"/>
+                    <field name="custom_status" string="State"/>
                     <field name="state"/>
                     <field name="picking_type_id" invisible="1"/>
                 </tree>
@@ -63,6 +68,7 @@
                                     <field name="partner_id"/>
                                     <field name="custom_move_type"/>
                                     <field name="do_ref"/>
+                                    <!--<field name="custom_status"/>-->
                                     <field name="backorder_id" readonly="1" attrs="{'invisible': [('backorder_id','=',False)]}"/>
                                 </group>
                                 <group>
@@ -76,6 +82,7 @@
                                                 class="oe_link oe_edit_only"/>
                                     </div>
                                 </group>
+                                <!--<button name="return_claim" string="Return Against Claim" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'done')]}"/>-->
                             </group>
                             <notebook>
                                 <page string="Products">

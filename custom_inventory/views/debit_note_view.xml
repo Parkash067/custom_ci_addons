@@ -27,7 +27,7 @@
                 <form string="Invoice">
                       <header>
                         <button name="deduct_inventory" type="object" string="Inventory Adjustment" class="oe_highlight"  attrs="{'invisible': [('status','!=','draft')]}" />
-                        <button name="refund_invoice" type="object" string="Invoice Adjustment" class="oe_highlight" attrs="{'invisible': ['|',('status','=','draft'),('status','=','invoice_adjustment')]}" />
+                        <button name="refund_invoice" type="object" string="Invoice Adjustment" class="oe_highlight"  />
                         <button name="view_order" type="object" string="View Order" class="oe_highlight"/>
                         <button name="view_invoice" type="object" string="View Invoice" class="oe_highlight"/>
                         <field name="status" widget="statusbar"  statusbar_colors='{"draft":"blue","inventory_adjustment":"blue","refund_invoice":"blue"}'/>
@@ -37,11 +37,11 @@
                     <h2><field name="type"/></h2>
                     <group>
                         <group>
-                            <field name="partner_id" string="Supplier"/>
+                            <field name="partner_id" string="Supplier/Customer"/>
                         </group>
                         <group>
                             <field name="date" />
-                            <field name="supplier_invoice"/>
+                            <!--<field name="supplier_invoice"/>-->
                         </group>
                     </group>
                     <notebook colspan="4">
@@ -83,10 +83,11 @@
             <field name="model">custom.debit.note</field>
             <field name="arch" type="xml">
                 <tree string="Debit Note" version="8.0">
+                    <field name="type"/>
                     <field name="name" string="Reference"/>
                     <field name="partner_id" />
                     <field name="date"/>
-                    <field name="supplier_invoice"/>
+                    <!--<field name="supplier_invoice"/>-->
                 </tree>
             </field>
         </record>

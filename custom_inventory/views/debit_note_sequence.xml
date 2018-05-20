@@ -9,7 +9,7 @@
             <field name="name">Debit Note</field>
             <field name="code">debit_note.serial</field>
             <field name="padding">3</field>
-            <field name="prefix">DBN</field>
+            <field name="prefix">NOTE/</field>
         </record>
     </data>
 </openerp>

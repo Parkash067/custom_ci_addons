@@ -10,6 +10,7 @@ import qrcode
 class custom_stock_picking(osv.osv):
     _inherit = 'stock.picking'
     _columns = {
+        'custom_status': fields.selection([('Claimed', 'Claimed'), ('Returned', 'Returned')],'Status',store=True, default='Claimed', compute='update_custom_status'),
         'dc': fields.char('DC No.', store=True),
         'in_remarks': fields.char('Remarks', store=True),
         'reference': fields.char('Reference', store=True),
@@ -22,12 +23,37 @@ class custom_stock_picking(osv.osv):
         'stock_split_lines': fields.one2many('custom.stock.move', 'picking_id', 'Stock Splits', store=True),
         'custom_move_type': fields.selection([('File Claim', 'File Claim'), ('Return against claim', 'Return against claim')], string='Move Type', store=True)
     }
-    
+
+    @api.one
+    @api.depends('state')
+    def update_custom_status(self):
+        if self.state == 'done':
+           self.env.cr.execute("""update stock_picking set custom_status='Returned' where name ='%s'"""%(self.claim_ref.name))
+
+
+    # @api.multi
+    # def return_claim(self):
+    #     wh_id = self.env['stock.warehouse'].search([['name', '=', 'Sara Automobiles'], ])
+    #     picking_id = self.env['stock.picking.type'].search([['name', '=', 'Receipts'], ['warehouse_id', '=', wh_id.id]])
+    #     vals = {
+    #         'partner_id': self.partner_id.id,
+    #         'custom_move_type': 'Return against claim',
+    #         'claim_ref': self.do_ref.id,
+    #         'picking_type_id': picking_id.id
+    #     }
+    #     claim_id = self.create(vals)
+        
     def fetch_quantity(self):
         quantity = 0.0
         for qty in self.move_lines:
             quantity += qty.product_qty
-        return quantity 
+        return quantity
+
+    @api.onchange('claim_ref')
+    def fetch_claims(self):
+        if self.claim_ref:
+            self.partner_id = self.claim_ref.partner_id.id
+            self.custom_move_type = 'Return against claim'
 
     @api.onchange('custom_move_type')
     def assign_picking_type(self):
@@ -35,6 +61,8 @@ class custom_stock_picking(osv.osv):
         if self.custom_move_type == 'File Claim':
             picking_id = self.env['stock.picking.type'].search([['name', '=', 'Delivery Orders'],['warehouse_id', '=', wh_id.id]])
             self.picking_type_id = picking_id
+            return {'domain':{'do_ref':[('picking_type_id','=',picking_id.id)]}}
+
         elif self.custom_move_type == 'Return against claim':
             picking_id = self.env['stock.picking.type'].search([['name', '=', 'Receipts'], ['warehouse_id', '=', wh_id.id]])
             self.picking_type_id = picking_id
