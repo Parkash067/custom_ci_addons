@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="material_issuance">
+            <t t-call='report.html_container'>
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <div class="row">
+                            <h1 align="center">Material Issuance</h1>
+                            <h4>
+                                <strong>Department:</strong>
+                                <span t-esc="o.partner_id.name"/>
+                            </h4>
+                            <table class="table table-condensed" style="font-size:14px" width="100%">
+                                <thead>
+                                    <tr style="background:#ccc;">
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Sr.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                            Product
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                            Quantity
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.order_line" t-as="line">
+                                        <td t-esc="line_index+1"
+                                            style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "/>
+                                        <td t-esc="line.product_id.name"
+                                            style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "/>
+                                        <td t-esc="line.product_uom_qty"
+                                            style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

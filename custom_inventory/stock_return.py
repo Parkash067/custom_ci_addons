@@ -65,11 +65,15 @@ class custom_stock_return_picking(osv.osv_memory):
             'origin': pick.name,
         }, context=context)
 
-        for data_get in data_obj.browse(cr, uid, data['product_return_moves'], context=context):
-            move = data_get.move_id
-            if not move:
-                raise osv.except_osv(_('Warning !'), _("You have manually created product lines, please delete them to proceed"))
-            new_qty = data_get.quantity
+        obj = self.browse(cr, uid, ids[0], context=context)
+        for product in obj.product_return_moves:
+            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>product",product.move_id)
+        #for data_get in data_obj.browse(cr, uid, data['product_return_moves'], context=context):
+            move = product.move_id
+            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..move>>>>>>>>>>>>>>>>>>>>",move)
+            # if not move:
+            #     raise osv.except_osv(_('Warning !'), _("You have manually created product lines, please delete them to proceed"))
+            new_qty = product.quantity
             if new_qty:
                 # The return of a return should be linked with the original's destination move if it was not cancelled
                 if move.origin_returned_move_id.move_dest_id.id and move.origin_returned_move_id.move_dest_id.state != 'cancel':
@@ -77,11 +81,17 @@ class custom_stock_return_picking(osv.osv_memory):
                 else:
                     move_dest_id = False
 
+                print(">>>>>>>>>>>>>>>>>>>>>>>>>new qty>>>>>>>>>>>>>>>>",new_qty)
+                print(">>>>>>>>>>>>>>>>>>>>>>>>product uos<<<<<>>>>>>>>>>>>>",move.product_uos_qty)
+                print(">>>>>>>>>>>>>>>>>>>>>>>>product uom<<<<<>>>>>>>>>>>>>", move.product_uom_qty)
+                print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Dest Product>>>>>>>>>>>>>>>>>>>>>>>>>",move_dest_id)
+                print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Rest>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.>",move_dest_id)
+
                 returned_lines += 1
                 move_obj.copy(cr, uid, move.id, {
-                    'product_id': data_get.product_id.id,
+                    'product_id': product.product_id.id,
                     'product_uom_qty': new_qty,
-                    'product_uos_qty': new_qty * move.product_uos_qty / move.product_uom_qty,
+                    'product_uos_qty': new_qty,
                     'picking_id': new_picking,
                     'state': 'draft',
                     'location_id': move.location_dest_id.id,
@@ -90,7 +100,7 @@ class custom_stock_return_picking(osv.osv_memory):
                     'warehouse_id': pick.picking_type_id.warehouse_id.id,
                     'origin_returned_move_id': move.id,
                     'procure_method': 'make_to_stock',
-                    'restrict_lot_id': data_get.lot_id.id,
+                    'restrict_lot_id': product.lot_id.id,
                     'move_dest_id': move_dest_id,
                 })
 

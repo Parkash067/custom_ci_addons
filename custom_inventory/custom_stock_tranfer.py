@@ -19,6 +19,7 @@ class custom_stock_transfer_details_items(osv.TransientModel):
         'engine_number': 'SAE-',
     }
 
+
     @api.multi
     def split_quantities(self):
         for det in self:
@@ -40,6 +41,7 @@ class custom_stock_transfer_details(osv.TransientModel):
         'selected_quantity': fields.float('Selected Quantity', compute='select_quantity'),
     }
 
+    @api.one
     @api.depends('item_ids.quantity')
     def select_quantity(self):
         self.selected_quantity = 0

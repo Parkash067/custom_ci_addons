@@ -99,6 +99,15 @@
         />
 
         <report
+            id="action_material_issuance"
+            model="sale.order"
+            string="Material Issuance"
+            report_type="qweb-pdf"
+            name="custom_inventory.material_issuance"
+            file="custom_inventory.material_issuance"
+        />
+
+        <report
             id="action_post_dated_print"
             model="wiz.reports"
             string="Post Dated"

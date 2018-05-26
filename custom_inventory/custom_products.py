@@ -5,6 +5,18 @@ from openerp import api,_
 import base64
 import cStringIO
 import qrcode
+from datetime import datetime as datetime
+from dateutil.relativedelta import relativedelta
+
+import logging
+import threading
+from openerp import SUPERUSER_ID
+from openerp import tools
+
+from openerp.osv import osv
+from openerp.api import Environment
+
+_logger = logging.getLogger(__name__)
 
 
 class custom_stock_picking(osv.osv):
@@ -87,7 +99,7 @@ class custom_stock_move(osv.osv):
         'chassis_number': fields.char('Chassis No.', store=True),
         'picking_id': fields.many2one('stock.picking', 'DO', store=True),
         'partner_id': fields.many2one('res.partner', 'Dealer', store=True),
-        'product_id': fields.many2one('product.template', 'Product', store=True),
+        'product_id': fields.many2one('product.product', 'Product', store=True),
         'product_qty': fields.float('Quantity', store=True),
         'date': fields.datetime('Date', store=True),
         'color': fields.char('Color',store=True),
@@ -357,3 +369,64 @@ class custom_certificate_inv_config(osv.osv):
                                  ,store=True,string='Type'),
         'price': fields.float('Price', store=True)
     }
+
+
+class custom_procurements(osv.osv):
+    _inherit = "procurement.order"
+
+    def _run_move_create(self, cr, uid, procurement, context=None):
+        ''' Returns a dictionary of values that will be used to create a stock move from a procurement.
+        This function assumes that the given procurement has a rule (action == 'move') set on it.
+
+        :param procurement: browse record
+        :rtype: dictionary
+        '''
+        newdate = (datetime.strptime(procurement.date_planned, '%Y-%m-%d %H:%M:%S') - relativedelta(days=procurement.rule_id.delay or 0)).strftime('%Y-%m-%d %H:%M:%S')
+        group_id = False
+        if procurement.rule_id.group_propagation_option == 'propagate':
+            group_id = procurement.group_id and procurement.group_id.id or False
+        elif procurement.rule_id.group_propagation_option == 'fixed':
+            group_id = procurement.rule_id.group_id and procurement.rule_id.group_id.id or False
+        #it is possible that we've already got some move done, so check for the done qty and create
+        #a new move with the correct qty
+        already_done_qty = 0
+        already_done_qty_uos = 0
+        for move in procurement.move_ids:
+            already_done_qty += move.product_uom_qty if move.state == 'done' else 0
+            already_done_qty_uos += move.product_uos_qty if move.state == 'done' else 0
+        qty_left = max(procurement.product_qty - already_done_qty, 0)
+        qty_uos_left = max(procurement.product_uos_qty - already_done_qty_uos, 0)
+        # new implementation added on inherited function on 7-11-2017
+        vals = {
+            'name': procurement.name,
+            'company_id': procurement.rule_id.company_id.id or procurement.rule_id.location_src_id.company_id.id or procurement.rule_id.location_id.company_id.id or procurement.company_id.id,
+            'product_id': procurement.product_id.id,
+            'product_uom': procurement.product_uom.id,
+            'product_uom_qty': qty_left,
+            'product_uos_qty': (procurement.product_uos and qty_uos_left) or qty_left,
+            'product_uos': (procurement.product_uos and procurement.product_uos.id) or procurement.product_uom.id,
+            'partner_id': procurement.rule_id.partner_address_id.id or (procurement.group_id and procurement.group_id.partner_id.id) or False,
+            'location_id': procurement.rule_id.location_src_id.id,
+            'location_dest_id': procurement.location_id.id,
+            'move_dest_id': procurement.move_dest_id and procurement.move_dest_id.id or False,
+            'procurement_id': procurement.id,
+            'rule_id': procurement.rule_id.id,
+            'procure_method': procurement.rule_id.procure_method,
+            'origin': procurement.origin,
+            'picking_type_id': procurement.rule_id.picking_type_id.id,
+            'group_id': group_id,
+            'route_ids': [(4, x.id) for x in procurement.route_ids],
+            'warehouse_id': procurement.rule_id.propagate_warehouse_id.id or procurement.rule_id.warehouse_id.id,
+            'date': newdate,
+            'date_expected': newdate,
+            'propagate': procurement.rule_id.propagate,
+            'priority': procurement.priority,
+        }
+        if vals['partner_id'] in self.pool.get('res.partner').search(cr, uid, [('custom_type', '=', 'department')]):
+            cond = self.pool.get('stock.warehouse').search(cr, uid, [('partner_id', '=', vals['partner_id'])])
+            if len(cond) > 0:
+                data = self.pool.get('stock.warehouse').browse(cr, uid, cond[0], context=None)
+                vals['location_dest_id'] = data.lot_stock_id.id
+            else:
+                raise osv.except_osv(('Error'), ('Warehouse is not configured'))
+        return vals

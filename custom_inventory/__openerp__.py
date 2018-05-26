@@ -73,6 +73,9 @@ Dashboard / Reports for Inventory Management will include:
         'views/debit_note_sequence.xml',
         'views/page_setup.xml',
         'views/account_voucher.xml',
+        'views/material_issuance.xml',
+        #'data/schedule_rule.xml'
+        #'views/custom_product_template.xml',
         ],
     'installable': True,
     'application': True,

@@ -7,6 +7,7 @@
 from openerp.osv import fields, osv
 from openerp import models, fields, api, _
 
+
 class res_partner(osv.osv):
     _inherit = "res.partner"
 
@@ -17,6 +18,7 @@ class res_partner(osv.osv):
     gst = fields.Char(string="GST")
     city_id = fields.Many2one('res.city', string="City", required=True)
     region_id = fields.Many2one('res.region', string="Region", required=True)
+    custom_type = fields.Selection([('department','WH Department')], 'Type', store=True)
 
 # class stock_picking(osv.osv):
 #     _inherit = "stock.picking"
