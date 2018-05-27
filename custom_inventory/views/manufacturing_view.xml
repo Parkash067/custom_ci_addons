@@ -254,5 +254,55 @@
             <field name="view_id" ref="custom_so_form"/>
             <field name="act_window_id" ref="material_distribution"/>
         </record>
+
+         <record id="custom_production_lines" model="ir.ui.view">
+            <field name="name">MRP Product Produce</field>
+            <field name="model">mrp.product.produce</field>
+            <field name="inherit_id" ref="mrp.view_mrp_product_produce_wizard"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/group[@string='Produce']" position="before">
+                    <group>
+                        <button
+                                        name="split_quantities"
+                                        string="Split"
+                                        type="object"
+                                        class="oe_highlight">
+                                </button>
+                    </group>
+                    <group string="To Produce">
+                        <field name="production_lines" nolabel="1">
+                            <tree string="Consume Lines" editable="bottom">
+                                <field name="product_qty"/>
+                                <field name="mode"/>
+                                <field name="engine_number"/>
+                                <field name="chassis_number"/>
+                                <field name="color"/>
+                                <field name="model"/>
+                                <field name="year"/>
+                                <!--<field name="lot_id" domain="[('product_id', '=', product_id)]" context="{'default_product_id':product_id}" groups="stock.group_production_lot"/> -->
+                            </tree>
+                        </field>
+                    </group>
+                </xpath>
+                <xpath expr="//form/group[@string='Produce']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+                <xpath expr="//form/group[@string='Produce']" position="attributes">
+                    <attribute name="string">Remaining Items</attribute>
+                </xpath>
+                <xpath expr="//field[@name='lot_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//form/group/field[@name='product_qty']" position="attributes">
+                    <attribute name="string">Items Quantity to Produce</attribute>
+                </xpath>
+                <xpath expr="//form/group/field[@name='mode']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//form/group[@string='To Consume']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
     </data>
 </openerp>
