@@ -89,8 +89,6 @@ class custom_stock_transfer_details(osv.TransientModel):
         return res
 
     def check_quantity(self):
-        print(">>>>>>>>>>>>>>>>>>>>>Select>>>>>>>>>>>",self.selected_quantity)
-        print(">>>>>>>>>>>>>>>>>>>>>Total>>>>>>>>>>>>",self.total_quantity)
         if self.selected_quantity <= self.total_quantity:
             return True
         else:
@@ -136,7 +134,11 @@ class custom_stock_transfer_details(osv.TransientModel):
                         'owner_id': prod.owner_id.id,
                         'engine_no': prod.engine_number
                     }
-                    if self.picking_id.partner_id.customer:
+                    if self.picking_id.partner_id.customer and self.picking_id.picking_type_id.name == 'Receipts':
+                        self.env.cr.execute("""update stock_production_lot set status='%s' where name='%s'""" % (
+                        'Available', prod.lot_id.name))
+
+                    if self.picking_id.partner_id.customer and self.picking_id.picking_type_id.name=='Delivery Orders':
                         stock_moves = {
                             'engine_number': prod.lot_id.name,
                             'chassis_number': prod.lot_id.chassis_number,
@@ -150,7 +152,6 @@ class custom_stock_transfer_details(osv.TransientModel):
                             'date': prod.date if prod.date else datetime.now(),
                         }
                         self.env['custom.stock.move'].create(stock_moves)
-                        self.env.cr.execute("""update stock_production_lot set status='%s' where name='%s'"""%('Issued',prod.lot_id.name))
                         if self.picking_id.partner_id.name == 'Allied Business Corporation':
                             purchase_order_lines = {
                                 'product_id': 6,
