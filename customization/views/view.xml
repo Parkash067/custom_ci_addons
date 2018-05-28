@@ -18,9 +18,9 @@
                 <xpath expr="//field[@name='country_id']" position="before">
                     <field name="region_id" placeholder="Region"/>
                 </xpath>
-                 <!--<xpath expr="//field[@name='company_id']" position="before">-->
-                    <!--<field name="custom_type"/>-->
-                <!--</xpath>-->
+                 <xpath expr="//field[@name='company_id']" position="before">
+                    <field name="custom_type"/>
+                </xpath>
             </field>
         </record>
 
