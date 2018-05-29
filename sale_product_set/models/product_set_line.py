@@ -11,7 +11,7 @@ class ProductSetLine(models.Model):
     _order = 'sequence'
 
     product_id = fields.Many2one(
-        'product.product', domain=[('sale_ok', '=', True)],
+        'product.product', domain=[('purchase_ok', '=', True)],
         string=u"Product", required=True)
     quantity = fields.Float(
         string=u"Quantity",
