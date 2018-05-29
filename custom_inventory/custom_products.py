@@ -19,6 +19,15 @@ from openerp.api import Environment
 _logger = logging.getLogger(__name__)
 
 
+class custom_product_template(osv.osv):
+    _inherit = 'product.template'
+    _columns = {
+        'item_type': fields.char('Item Type', store='True'),
+        'unit': fields.char('Unit', store='True'),
+        'issue_to_department': fields.char('Issued To Department', store='True'),
+    }
+
+
 class custom_stock_picking(osv.osv):
     _inherit = 'stock.picking'
     _columns = {
