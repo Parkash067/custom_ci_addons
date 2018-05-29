@@ -11,9 +11,9 @@
                      <field name="total_quantity" readonly="1"/>
                      <!--<field name="selected_quantity" readonly="1"/>-->
                  </xpath>
-                 <xpath expr="//tree/field[@name='lot_id']" position="attributes">
-                    <attribute name="domain">[('status','=','Available')]</attribute>
-                 </xpath>
+                 <!--<xpath expr="//tree/field[@name='lot_id']" position="attributes">-->
+                    <!--<attribute name="domain">[('status','=','Available')]</attribute>-->
+                 <!--</xpath>-->
                  <!--invisible="context.get('location')==False"-->
              </field>
          </record>
