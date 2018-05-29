@@ -152,6 +152,7 @@ class custom_stock_transfer_details(osv.TransientModel):
                             'date': prod.date if prod.date else datetime.now(),
                         }
                         self.env['custom.stock.move'].create(stock_moves)
+                        self.env.cr.execute("""update stock_production_lot set status='%s' where name='%s'"""%('Issued',prod.lot_id.name))
                         if self.picking_id.partner_id.name == 'Allied Business Corporation':
                             purchase_order_lines = {
                                 'product_id': 6,
