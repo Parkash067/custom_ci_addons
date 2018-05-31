@@ -29,7 +29,7 @@
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">Sale-Bw-Date</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">SRTN-Bw-Date</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">Ending-Bal</td>
-                                        <td style="border: 1px solid black; padding:5px; text-align:center;">Balance Due</td>
+                                        <!--<td style="border: 1px solid black; padding:5px; text-align:center;">Balance Due</td>-->
                                         <!--<td style="border: 1px solid black; padding:5px; text-align:center;">Bal-Over Due</td>-->
                                     </tr>
                                 </thead>
@@ -65,10 +65,10 @@
                                              <span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']+l['sale_amount']-l['sales_return']))"/>
                                               <t t-set="end_bal" t-value="end_bal+l['opening']-l['collection']+l['sale_amount']-l['sales_return']"/>
                                         </td>
-                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                             <span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']+l['sale_amount']-l['sales_return']))"/>
-                                              <t t-set="balance_over" t-value="balance_over+l['opening']-l['collection']+l['sale_amount']-l['sales_return']"/>
-                                         </td>
+                                         <!--<td style="border: 1px solid black; padding:5px; text-align:center;">-->
+                                             <!--<span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']+l['sale_amount']-l['sales_return']))"/>-->
+                                              <!--<t t-set="balance_over" t-value="balance_over+l['opening']-l['collection']+l['sale_amount']-l['sales_return']"/>-->
+                                         <!--</td>-->
                                          <!--<td style="border: 1px solid black; padding:5px; text-align:center;">-->
                                             <!--<span t-esc="'{0:,.2f}'.format(int(l['opening']-l['collection']+l['sale_amount']))"/>-->
                                              <!--<t t-set="balance_over" t-value="balance_due+l['opening']-l['collection']+l['sale_amount']"/>-->
@@ -82,8 +82,8 @@
                                      <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(sale_amount))"/></td>
                                      <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(sale_rtn))"/></td>
                                      <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(end_bal))"/></td>
-                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(balance_over))"/></td>
-                                     <!--<td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(balance_due))"/></td>-->
+                                     <!--<td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(balance_over))"/></td>-->
+                                     <!--&lt;!&ndash;<td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(balance_due))"/></td>&ndash;&gt;-->
                                  <!--</tr>-->
                                       </tr>
                                 </tbody>
