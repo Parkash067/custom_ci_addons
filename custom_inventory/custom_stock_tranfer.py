@@ -6,7 +6,7 @@ from datetime import datetime
 class custom_stock_transfer_details_items(osv.TransientModel):
     _inherit = 'stock.transfer_details_items'
     _columns = {
-        'chassis_number': fields.char('Chassis No.'),
+        'chassis_number': fields.char('Chassis Number'),
         'engine_number': fields.char('Engine No.'),
         'color': fields.char('Color'),
         'model': fields.char('Model'),
@@ -19,6 +19,13 @@ class custom_stock_transfer_details_items(osv.TransientModel):
         'engine_number': 'SAE-',
     }
 
+    @api.onchange('lot_id')
+    def fetch_info(self):
+        if self.lot_id:
+            self.chassis_number = self.lot_id.chassis_number
+            self.color = self.lot_id.color
+            self.model = self.lot_id.model
+            self.year =  self.lot_id.year
 
     @api.multi
     def split_quantities(self):
@@ -138,7 +145,7 @@ class custom_stock_transfer_details(osv.TransientModel):
                         self.env.cr.execute("""update stock_production_lot set status='%s' where name='%s'""" % (
                         'Available', prod.lot_id.name))
 
-                    if self.picking_id.partner_id.customer and self.picking_id.picking_type_id.name=='Delivery Orders':
+                    if self.picking_id.partner_id.customer and self.picking_id.picking_type_id.name=='Delivery Orders' and self.picking_id.partner_id.custom_type != 'department':
                         stock_moves = {
                             'engine_number': prod.lot_id.name,
                             'chassis_number': prod.lot_id.chassis_number,

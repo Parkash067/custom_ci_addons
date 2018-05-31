@@ -11,14 +11,14 @@
                 <p class="oe_view_nocontent_create">click create to add a new record</p>
             </field>
         </record>
-        <menuitem
-                name="Finished Products"
-                action="custom_finished_products"
-                id="menu_custom_finished_products"
-                sequence="10"
-                parent="stock.menu_stock_product"
-        >
-        </menuitem>
+        <!--<menuitem-->
+                <!--name="Finished Products"-->
+                <!--action="custom_finished_products"-->
+                <!--id="menu_custom_finished_products"-->
+                <!--sequence="10"-->
+                <!--parent="stock.menu_stock_product"-->
+        <!--&gt;-->
+        <!--</menuitem>-->
 
         <record id="custom_raw_products" model="ir.actions.act_window">
             <field name="name">Raw Products</field>
