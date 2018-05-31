@@ -41,7 +41,7 @@
             <field name="name">Overall Progress Kanban</field>
             <field name="model">mrp.production</field>
             <field name="arch" type="xml">
-                <kanban default_group_by='stage' quick_create="0">
+                <kanban default_group_by='stage' edit="false" quick_create="false">
                     <!-- write fields here to be used in kanban box-->
                     <field name='name'/>
                     <templates>
