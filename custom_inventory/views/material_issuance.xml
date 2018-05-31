@@ -6,17 +6,46 @@
                 <t t-foreach="docs" t-as="o">
                     <div class="page">
                         <div class="row">
-                            <h1 align="center">Material Issuance</h1>
-                            <h4>
+                            <h1 t-esc="'%s' %res_company.name" style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
+                                         margin-right:auto;text-align:center;"/>
+                            <div style="max-width:100%;height:auto;width:80%;margin-left:auto;
+                                         margin-right:auto;text-align:center;">
+                                <span style="font-size:18px;font-weight:bold;">Assembler Cum Manufacturer of
+                                    Union Star Motorcycle
+                                </span>
+                                <br/>
+                                <span t-esc="'%s' %res_company.street"
+                                      style="font-size:18px;font-weight:bold;"/>,
+                                <span t-esc="'%s' %res_company.city" style="font-size:18px;font-weight:bold;"/>
+                                <br/>
+                                <span style="font-size:18px;">
+                                    <strong>Tel:</strong>
+                                </span>
+                                <span t-esc="'%s' %res_company.phone" style="font-size:18px;font-weight:bold;"/>
+                            </div>
+                            <h3 align="center">Material Issuance</h3>
+                            <h5>
                                 <strong>Department:</strong>
                                 <span t-esc="o.partner_id.name"/>
-                            </h4>
+                                <br/>
+                                <strong>Date:</strong>
+                                <span t-esc="o.date_order"/>
+                                <br/>
+                            </h5>
                             <table class="table table-condensed" style="font-size:14px" width="100%">
                                 <thead>
                                     <tr style="background:#ccc;">
-                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Sr.</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
-                                            Product
+                                            Sr.
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                            Item Code
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                            Item Name
+                                        </td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                            Description
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
                                             Quantity
@@ -27,13 +56,22 @@
                                     <tr t-foreach="o.order_line" t-as="line">
                                         <td t-esc="line_index+1"
                                             style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "/>
+                                        <td t-esc="line.product_id.default_code"
+                                            style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "/>
                                         <td t-esc="line.product_id.name"
+                                            style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "/>
+                                        <td t-esc="line.name"
                                             style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "/>
                                         <td t-esc="line.product_uom_qty"
                                             style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "/>
                                     </tr>
                                 </tbody>
                             </table>
+                            <br/><br/><br/><br/>
+                            <div style="width:25%; border-bottom:1px solid black; float:right"/><br/>
+                            <span style="float:right;margin-right:35px">
+                                <strong>Authorized Signature</strong>
+                            </span>
                         </div>
                     </div>
                 </t>
