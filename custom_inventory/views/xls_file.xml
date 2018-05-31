@@ -28,10 +28,18 @@
                 <form string="form" version="8.0">
                     <field name="type"/>
                     <group string="Generic Wizard">
-                        <field name="partner_id" attrs="{'invisible':['|',('type','=','/'),('type','!=','Individual Aging')],'required':['|',('type','=','Individual Aging')]}"/>
+                        <field name="partner_id" attrs="{'invisible':['|',('type','=','/'),('type','!=','Individual Aging')]}"/>
                         <field name="date_from" />
                         <field name="date_to"/>
                         <field name="company_id" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging'),('type','!=','Monthly or Weekly Progress')],'required':['|','|','|',('type','=','/'),('type','=','Collection Report'),('type','=','Individual Aging'),('type','=','Monthly or Weekly Progress')]}"/>
+                        <field name="region_id"/>
+                    </group>
+                    <group string ='Multiple Customers'>
+                        <field name="partner_ids" nolabel="True">
+                            <tree string="Customers" editable="bottom">
+                                <field name="partner_id"/>
+                            </tree>
+                        </field>
                     </group>
                     <footer>
                         <button name="print_report" type="object" string="Generate PDF" class="oe_highlight" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging'),('type','!=','Monthly or Weekly Progress')]}"/>

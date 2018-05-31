@@ -38,6 +38,26 @@
             menu="False"
         />
 
+         <report
+            id="action_collection_region_wise"
+            model="xls.report"
+            string="Report"
+            report_type="qweb-pdf"
+            name="custom_inventory.collection_region_wise"
+            file="custom_inventory.collection_region_wise"
+            menu="False"
+        />
+
+        <report
+            id="action_individual_aging_multiple_customers"
+            model="xls.report"
+            string="Report"
+            report_type="qweb-pdf"
+            name="custom_inventory.individual_aging_multiple_customers"
+            file="custom_inventory.individual_aging_multiple_customers"
+            menu="False"
+        />
+
         <report
             id="action_wiz_individual_aging_report"
             model="xls.report"

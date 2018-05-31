@@ -27,7 +27,8 @@ class demo_xls_report_file(osv.osv_memory):
     _columns = {
         'file': fields.binary('File'),
         'file_name': fields.char('File Name', size=64),
-
+        'name': fields.many2one('xls.report', 'Name'),
+        'partner_id': fields.many2one('res.partner', 'Customer')
     }
 
     def default_get(self, cr, uid, fields, context=None):
@@ -40,9 +41,19 @@ class demo_xls_report_file(osv.osv_memory):
         return res
 
 
-class xls_report(osv.osv):
+class multi_partners(osv.osv_memory):
+    _name = 'multi.partners'
+    _columns = {
+        'name': fields.many2one('xls.report', 'Name'),
+        'partner_id': fields.many2one('res.partner', 'Customer')
+    }
+
+
+class xls_report(osv.osv_memory):
     _name = 'xls.report'
     _columns = {
+        'partner_ids': fields.one2many('multi.partners','name','Partner IDs'),
+        'region_id': fields.many2one('res.region', string="Region"),
         'type': fields.selection([('IncomeTax Report', 'IncomeTax Report'),
                                   ('Purchase Register', 'Purchase Register'),
                                   ('Sales Register', 'Sales Register'),
@@ -103,6 +114,21 @@ class xls_report(osv.osv):
        result= self.env.cr.dictfetchall()
        return result
 
+    def collection_report_region_wise(self):
+        self.env.cr.execute("""select account_move_line.date,account_move.name as number,
+          account_account.name as account_head, res_partner.name as customer,res_region.name as region,
+          account_move_line.debit,account_move_line.ref
+          from account_move inner join account_move_line on account_move.id = account_move_line.move_id
+          inner join account_account on account_move_line.account_id = account_account.id
+          inner join res_partner on account_move_line.partner_id=res_partner.id
+          inner join res_region on res_partner.region_id = res_region.id
+          where account_account.type ='liquidity' and account_move.state='posted' 
+          and res_partner.region_id=%s
+          and account_move_line.debit>0 and account_move_line.date between '%s' and '%s' and account_account.company_id=%s order by account_move_line.date asc
+          """ % (self.region_id.id,self.date_from, self.date_to, self.company_id.id))
+        result = self.env.cr.dictfetchall()
+        return result
+
     def cal_aging_brackets(self,data):
         _list = []
         date_format = "%Y-%m-%d"
@@ -115,14 +141,28 @@ class xls_report(osv.osv):
         return _list
 
     def individual_aging_report(self):
-        self.env.cr.execute(
-                "select account_invoice.number,account_invoice.partner_id,account_invoice.date_invoice,account_invoice.residual as amount_total from account_invoice where account_invoice.date_invoice between'" + str(
-                    self.date_from) + "'" + " and '" + str(
-                    self.date_to) + "'" + "and state='open'" + "and account_invoice.company_id=" + str(
-                    self.company_id.id) + "and account_invoice.partner_id="+str(self.partner_id.id)+"and type='out_invoice'order by account_invoice.date_invoice")
-        data = self.env.cr.dictfetchall()
-        res = self.cal_aging_brackets(data)
-        return res
+        if self.partner_id:
+            self.env.cr.execute(
+                    "select account_invoice.number,account_invoice.partner_id,account_invoice.date_invoice,account_invoice.residual as amount_total from account_invoice where account_invoice.date_invoice between'" + str(
+                        self.date_from) + "'" + " and '" + str(
+                        self.date_to) + "'" + "and state='open'" + "and account_invoice.company_id=" + str(
+                        self.company_id.id) + "and account_invoice.partner_id="+str(self.partner_id.id)+"and type='out_invoice'order by account_invoice.date_invoice")
+            data = self.env.cr.dictfetchall()
+            res = self.cal_aging_brackets(data)
+            return res
+        else:
+            res = []
+            for partner in self.partner_ids:
+                self.env.cr.execute(
+                    "select account_invoice.number,account_invoice.partner_id,account_invoice.date_invoice,account_invoice.residual as amount_total from account_invoice where account_invoice.date_invoice between'" + str(
+                        self.date_from) + "'" + " and '" + str(
+                        self.date_to) + "'" + "and state='open'" + "and account_invoice.company_id=" + str(
+                        self.company_id.id) + "and account_invoice.partner_id=" + str(
+                        partner.partner_id.id) + "and type='out_invoice'order by account_invoice.date_invoice")
+                data = self.env.cr.dictfetchall()
+                result = self.cal_aging_brackets(data)
+                res.append({'customer':partner.partner_id.name,'details':result})
+            return res
 
     def collection_report_(self, mw_id):
         collection_amount = 0
@@ -183,17 +223,31 @@ class xls_report(osv.osv):
     def print_report(self, cr, uid, ids, data, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
         if obj.type == 'Collection Report':
-            return {
-                'type': 'ir.actions.report.xml',
-                'name': 'custom_inventory.collection_report',
-                'report_name': 'custom_inventory.collection_report'
-            }
+            if obj.region_id:
+                return {
+                    'type': 'ir.actions.report.xml',
+                    'name': 'custom_inventory.collection_region_wise',
+                    'report_name': 'custom_inventory.collection_region_wise'
+                }
+            else:
+                return {
+                    'type': 'ir.actions.report.xml',
+                    'name': 'custom_inventory.collection_report',
+                    'report_name': 'custom_inventory.collection_report'
+                }
         elif obj.type == 'Individual Aging':
-            return {
-                'type': 'ir.actions.report.xml',
-                'name': 'custom_inventory.wiz_individual_aging_report',
-                'report_name': 'custom_inventory.wiz_individual_aging_report'
-            }
+            if obj.partner_id:
+                return {
+                    'type': 'ir.actions.report.xml',
+                    'name': 'custom_inventory.wiz_individual_aging_report',
+                    'report_name': 'custom_inventory.wiz_individual_aging_report'
+                }
+            else:
+                return {
+                    'type': 'ir.actions.report.xml',
+                    'name': 'custom_inventory.individual_aging_multiple_customers',
+                    'report_name': 'custom_inventory.individual_aging_multiple_customers'
+                }
         elif obj.type == 'Monthly or Weekly Progress':
             return {
                 'type': 'ir.actions.report.xml',

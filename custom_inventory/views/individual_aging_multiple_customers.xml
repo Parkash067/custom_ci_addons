@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="individual_aging_multiple_customers">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="report.internal_layout">
+                        <div class="page">
+                            <div class="row">
+                                <t t-set="total" t-value="0"/>
+                                <t t-set="one" t-value="0"/>
+                                <t t-set="two" t-value="0"/>
+                                <t t-set="three" t-value="0"/>
+                                <t t-set="four" t-value="0"/>
+                                <t t-set="five" t-value="0"/>
+                                <t t-set="six" t-value="0"/>
+                                <t t-set="seven" t-value="0"/>
+                                <t t-if="doc.type=='Individual Aging'">
+                                    <h1 align="center">Individual Aging</h1>
+                                    <br/>
+                                    <h5>From
+                                        <span t-esc="doc.date_from"/>
+                                        to
+                                        <span t-esc="doc.date_to"/>
+                                    </h5>
+                                    <table class="table table-condensed" style="font-size:12px">
+                                        <thead>
+                                            <tr style="background:#ccc;">
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    Serial No.
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    Date
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    Invoice No.
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    Amount Balance
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    1-30
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    31-45
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    46-60
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    61-90
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    91-120
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    121-150
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    150+
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="invoice_tbody">
+                                            <t t-foreach="doc.individual_aging_report()" t-as="l">
+                                                <tr style="background:royalblue;color:white;font-weight:bold;text-align:center;">
+                                                    <td colspan="11" t-esc="l['customer']"
+                                                        style="border: 1px solid black; padding:5px;"/>
+                                                </tr>
+                                                <tr t-foreach="l['details']" t-as="o">
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="o_index+1"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="o['date_invoice']"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="o['number']"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="'{0:,.2f}'.format(int(o['amount_total']))"/>
+                                                        <t t-set="total" t-value="total+o['amount_total']"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <t t-if="o['days']&lt;=30">
+                                                            <span t-esc="'{0:,.2f}'.format(int(o['amount_total']))"/>
+                                                            <t t-set="one" t-value="one+o['amount_total']"/>
+                                                        </t>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <t t-if="o['days']&gt;=31 and o['days']&lt;=45">
+                                                            <span t-esc="'{0:,.2f}'.format(int(o['amount_total']))"/>
+                                                            <t t-set="two" t-value="two+o['amount_total']"/>
+                                                        </t>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <t t-if="o['days']&gt;=46 and o['days']&lt;=60">
+                                                            <span t-esc="'{0:,.2f}'.format(int(o['amount_total']))"/>
+                                                            <t t-set="three" t-value="three+o['amount_total']"/>
+                                                        </t>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <t t-if="o['days']&gt;=61 and o['days']&lt;=90">
+                                                            <span t-esc="'{0:,.2f}'.format(int(o['amount_total']))"/>
+                                                            <t t-set="four" t-value="four+o['amount_total']"/>
+                                                        </t>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <t t-if="o['days']&gt;=91 and o['days']&lt;=120">
+                                                            <span t-esc="'{0:,.2f}'.format(int(o['amount_total']))"/>
+                                                            <t t-set="five" t-value="five+o['amount_total']"/>
+                                                        </t>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <t t-if="o['days']&gt;=121 and o['days']&lt;=150">
+                                                            <span t-esc="'{0:,.2f}'.format(int(o['amount_total']))"/>
+                                                            <t t-set="six" t-value="six+o['amount_total']"/>
+                                                        </t>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <t t-if="o['days']&gt;=150">
+                                                            <span t-esc="'{0:,.2f}'.format(int(o['amount_total']))"/>
+                                                            <t t-set="seven" t-value="seven+o['amount_total']"/>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;"
+                                                        colspan="3">Total
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                        <span t-esc="'{0:,.2f}'.format(int(total))"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                        <span t-esc="'{0:,.2f}'.format(int(one))"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                        <span t-esc="'{0:,.2f}'.format(int(two))"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                        <span t-esc="'{0:,.2f}'.format(int(three))"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                        <span t-esc="'{0:,.2f}'.format(int(four))"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                        <span t-esc="'{0:,.2f}'.format(int(five))"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                        <span t-esc="'{0:,.2f}'.format(int(six))"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                        <span t-esc="'{0:,.2f}'.format(int(seven))"/>
+                                                    </td>
+                                                </tr>
+                                                <t t-set="one" t-value="0"/>
+                                                <t t-set="two" t-value="0"/>
+                                                <t t-set="three" t-value="0"/>
+                                                <t t-set="four" t-value="0"/>
+                                                <t t-set="five" t-value="0"/>
+                                                <t t-set="six" t-value="0"/>
+                                                <t t-set="seven" t-value="0"/>
+                                                <t t-set="total" t-value="0"/>
+                                            </t>
+                                        </tbody>
+                                    </table>
+
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>
