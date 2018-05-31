@@ -181,6 +181,7 @@ class xls_report(osv.osv_memory):
         return collection_amount
 
     def mw_progress_report(self):
+        mw_report = []
         final_res = []
         new = []
         _res = []
@@ -218,7 +219,20 @@ class xls_report(osv.osv_memory):
         for i in new:
             if int(i['opening'])>0 or int(i['collection'])>0 or int(i['sale_amount'])>0:
                 final_res.append(i)
-        return final_res
+
+        for i in final_res:
+            print(i['partner_id'])
+            self.env.cr.execute("""
+            select sum(av.amount_total) as sales_return from account_invoice as av where av.type='out_refund' and av.partner_id=%s group by av.amount_total"""%(i['partner_id']))
+            data = self.env.cr.dictfetchall()
+            print(data)
+            if len(data) > 0:
+                i['sales_return'] = data[0]['sales_return']
+                mw_report.append(i)
+            else:
+                i['sales_return'] = 0
+                mw_report.append(i)
+        return mw_report
 
     def print_report(self, cr, uid, ids, data, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
