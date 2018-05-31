@@ -32,9 +32,9 @@
                         <field name="date_from" />
                         <field name="date_to"/>
                         <field name="company_id" attrs="{'invisible':['|',('type','=','/'),('type','!=','Collection Report'),('type','!=','Individual Aging'),('type','!=','Monthly or Weekly Progress')],'required':['|','|','|',('type','=','/'),('type','=','Collection Report'),('type','=','Individual Aging'),('type','=','Monthly or Weekly Progress')]}"/>
-                        <field name="region_id"/>
+                        <field name="region_id" attrs="{'invisible':[('type','!=','Collection Report')]}"/>
                     </group>
-                    <group string ='Multiple Customers'>
+                    <group string ='Multiple Customers' attrs="{'invisible':[('type','!=','Individual Aging')]}">
                         <field name="partner_ids" nolabel="True">
                             <tree string="Customers" editable="bottom">
                                 <field name="partner_id"/>
