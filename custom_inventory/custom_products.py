@@ -50,6 +50,8 @@ class custom_stock_picking(osv.osv):
     def update_custom_status(self):
         if self.state == 'done':
            self.env.cr.execute("""update stock_picking set custom_status='Returned' where name ='%s'"""%(self.claim_ref.name))
+        else:
+            self.custom_status = 'Claimed'
 
 
     # @api.multi

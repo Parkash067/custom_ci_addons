@@ -23,7 +23,7 @@
                                 </span>
                                 <span t-esc="'%s' %res_company.phone" style="font-size:18px;font-weight:bold;"/>
                             </div>
-                            <h3 align="center">Material Issuance</h3>
+                            <h3 align="center">Material Issuance Note</h3>
                             <h5>
                                 <strong>Department:</strong>
                                 <span t-esc="o.partner_id.name"/>
@@ -71,6 +71,11 @@
                             <div style="width:25%; border-bottom:1px solid black; float:right"/><br/>
                             <span style="float:right;margin-right:35px">
                                 <strong>Authorized Signature</strong>
+                            </span>
+                            <br/><br/><br/><br/>
+                            <div style="width:25%; border-bottom:1px solid black; float:right"/><br/>
+                            <span style="float:right;margin-right:35px">
+                                <strong>Department Receiving</strong>
                             </span>
                         </div>
                     </div>

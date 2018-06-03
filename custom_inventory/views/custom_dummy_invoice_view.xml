@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+        <record id="custom_recent_invoice_view" model="ir.actions.act_window">
+	        <field name="name">Certificate Invoices</field>
+            <field name="res_model">custom.dummy.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+             <field name="domain">[('create_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('create_date', '&lt;=', datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+        <menuitem
+            name="Recent Invoices"
+            action="custom_recent_invoice_view"
+            id="menu_custom_recent_invoice_view"
+            sequence="140"
+            parent="certificate_side_top_menu"
+            groups="custom_inventory.group_user">
+        </menuitem>
+
         <record id="custom_dummy_invoice_view" model="ir.actions.act_window">
 	        <field name="name">Certificate Invoices</field>
             <field name="res_model">custom.dummy.invoice</field>
@@ -122,6 +141,13 @@
                     <field name="type"/>
                 </search>
             </field>
+        </record>
+
+         <record id="action_custom_invoice_new_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="custom_dummy_invoice_search_view"/>
+            <field name="act_window_id" ref="custom_recent_invoice_view"/>
         </record>
     </data>
 </openerp>
