@@ -8,23 +8,7 @@
                         <div class="page">
                             <div class="row">
                                 <t t-set="quantity_count" t-value="0"/>
-                                <!--<h1 style="padding:3px;max-width:100%;height:auto;width:100%;margin-left:auto;-->
-                                         <!--margin-right:auto;text-align:center;">-->
-                                    <!--<span style="margin-left:10px;">SARA</span>-->
-                                    <!--<span style="margin-left:10px;">AUTOMOBILE</span>-->
-                                    <!--<span style="margin-left:10px;">INDUSTRIES</span>-->
-                                <!--</h1>-->
-                                <!--<div style="max-width:100%;height:auto;width:80%;margin-left:auto;margin-right:auto;text-align:center;">-->
-                                    <!--<span style="text-decoration:underline; font-size:18px;">Plot No B-6 Scheme 33,-->
-                                        <!--Super Highway S.I.T.E Karachi, Tel:02132736673-->
-                                    <!--</span>-->
-                                    <!--<t t-if="do.picking_type_id.name!='Receipts'">-->
-                                        <!--<h3 style="text-decoration:underline;">Delivery Order / Gate Pass</h3>-->
-                                    <!--</t>-->
-                                    <!--<t t-if="do.picking_type_id.name=='Receipts'">-->
-                                        <!--<h3 style="text-decoration:underline;">Inward</h3>-->
-                                    <!--</t>-->
-                                <!--</div>-->
+                                <br/><br/>
                                 <div style="margin-top:30px;">
                                     <table class="table table-condensed"
                                            style="font-size:16px; width:998px;border-color:black;">
