@@ -441,3 +441,10 @@ class custom_procurements(osv.osv):
             else:
                 raise osv.except_osv(('Error'), ('Warehouse is not configured'))
         return vals
+
+
+class custom_stockwarhouse(osv.osv):
+    _inherit = "stock.warehouse"
+    _columns = {
+        'code': fields.char('Short Name', size=100, store=True, required=True, select=True),
+    }

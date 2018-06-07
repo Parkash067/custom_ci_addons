@@ -9,7 +9,8 @@ import qrcode
 class custom_sale(osv.osv):
     _inherit = 'sale.order'
     _columns = {
-        'so_type': fields.selection([('distribution', 'Materials Distribution')], 'Operation', store=True)
+        'so_type': fields.selection([('distribution', 'Materials Distribution')], 'Operation', store=True),
+        'mo_reference': fields.many2one('mrp.production','MO Reference', store=True),
     }
 
 
