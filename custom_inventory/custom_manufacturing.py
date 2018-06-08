@@ -16,6 +16,12 @@ class custom_manufacturing_stages(osv.osv):
 class custom_manufacturing(osv.osv):
     _inherit = 'mrp.production'
     _columns = {
+        'location_src_id': fields.many2one('stock.location', 'Raw Materials Location', required=True,
+                                           readonly=True,
+                                           help="Location where the system will look for components."),
+        'location_dest_id': fields.many2one('stock.location', 'Finished Products Location', required=True,
+                                            readonly=True,
+                                            help="Location where the system will stock the finished products."),
         'stage': fields.many2one('custom.production.stages', 'Stage', store=True, compute='assign_stage')
 
     }
