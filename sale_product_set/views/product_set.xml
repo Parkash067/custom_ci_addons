@@ -21,6 +21,9 @@
             <field name="arch" type="xml">
             <form string="Product set" version="7.0">
                 <sheet>
+                    <header>
+                            <button name="create_bom" type="object" class="oe_highlight" string="Create BOM"/>
+                        </header>
                     <group>
                         <field name="name" select="1"/>
                         <field name="set_line_ids">
