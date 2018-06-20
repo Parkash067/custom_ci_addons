@@ -11,7 +11,13 @@ class custom_sale(osv.osv):
     _columns = {
         'so_type': fields.selection([('distribution', 'Materials Distribution')], 'Operation', store=True),
         'mo_reference': fields.many2one('mrp.production','MO Reference', store=True),
+        'product_name': fields.related('mo_reference', 'product_id', relation="product.product", type='many2one',
+                                     string="Product", store=True),
+        'qty': fields.related('mo_reference', 'product_qty', type='float', string='Quantity', store=True),
     }
+
+    # 'product': fields.many2one('mo_reference.product_id', string='Product Name',readonly=True),
+    # }
 
 
 class custom_sale_line(osv.osv):

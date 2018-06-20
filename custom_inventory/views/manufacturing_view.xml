@@ -111,6 +111,9 @@
                     <field name="message_unread" invisible="1"/>
                     <field name="date_order"/>
                     <field name="partner_id" string="Department"/>
+                    <field name="mo_reference"/>
+                    <field name="product_name"/>
+                    <field name="qty"/>
                     <field name="state" invisible="1"/>
                 </tree>
             </field>
@@ -146,6 +149,8 @@
                             <field name="partner_id" string='Department' on_change="onchange_partner_id(partner_id, context)" domain="[('custom_type','=','department')]" context="{'search_default_customer':1, 'show_address': 1}" options='{"always_reload": True}'/>
                             <field name="so_type" required="1"/>
                             <field name="mo_reference" required="1"/>
+                            <field name="product_name" readonly="1"/>
+                            <field name="qty" readonly="1"/>
                             <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'invoice'}"/>
                             <field name="partner_shipping_id" on_change="onchange_delivery_id(company_id, partner_id, partner_shipping_id, fiscal_position)" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>
                             <field name="project_id" context="{'partner_id':partner_invoice_id, 'manager_id': user_id, 'default_pricelist_id':pricelist_id, 'default_name':name, 'default_type': 'contract'}" groups="sale.group_analytic_accounting" domain="[('type','in',['view','normal','contract'])]"/>

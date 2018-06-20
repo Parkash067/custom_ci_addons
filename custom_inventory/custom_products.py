@@ -45,6 +45,25 @@ class custom_stock_picking(osv.osv):
         'custom_move_type': fields.selection([('File Claim', 'File Claim'), ('Return against claim', 'Return against claim')], string='Move Type', store=True)
     }
 
+    @api.model
+    def create(self, values):
+        # Override the original create function for the res.partner model
+        record = super(custom_stock_picking, self).create(values)
+        # Change the values of a variable in this super function
+        if record.claim_ref:
+            pickings = self.env['stock.picking'].search([('id','=',record.claim_ref.id)])
+            for picking_line in pickings[0].move_lines:
+                self.env['stock.move'].create({
+                    'picking_id': record.id,
+                    'name': picking_line.product_id.name,
+                    'product_id': picking_line.product_id.id,
+                    'product_uom_qty': picking_line.product_uom_qty,
+                    'product_uom': picking_line.product_uom.id,
+                    'location_id': picking_line.location_dest_id.id,
+                    'location_dest_id': picking_line.location_id.id
+                })
+        return record
+
     @api.one
     @api.depends('state')
     def update_custom_status(self):
