@@ -93,6 +93,7 @@ class custom_mrp_product_produce(osv.osv_memory):
         return res
 
     def do_produce(self, cr, uid, ids, context=None):
+        products = [1856,1850,1851,1852,1853,1854,1855,1857,1858]
         stock_production_lot = self.pool.get('stock.production.lot')
         production_id = context.get('active_id', False)
         cr.execute("""select product_id from mrp_production where id=%s""" % (production_id))
@@ -102,13 +103,14 @@ class custom_mrp_product_produce(osv.osv_memory):
         for line in data.production_lines:
             self.pool.get('mrp.production').action_produce(cr, uid, production_id,
                                                            line.product_qty, line.mode, data, context=context)
-            rec_id = stock_production_lot.create(cr, uid, {'name': line.engine_number,
-                                                           'chassis_number': line.chassis_number,
-                                                           'color': line.color,
-                                                           'model': line.model,
-                                                           'year': line.year,
-                                                           'product_id': product_id
-                                                           }, context=context)
+            if product_id in products:
+                rec_id = stock_production_lot.create(cr, uid, {'name': line.engine_number,
+                                                               'chassis_number': line.chassis_number,
+                                                               'color': line.color,
+                                                               'model': line.model,
+                                                               'year': line.year,
+                                                               'product_id': product_id
+                                                               }, context=context)
         return {}
 
 

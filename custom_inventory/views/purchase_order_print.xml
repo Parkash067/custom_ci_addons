@@ -9,10 +9,14 @@
                             <div class="oe_structure"/>
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <span><b>Supplier:</b></span>
+                                    <span>
+                                        <b>Supplier:</b>
+                                    </span>
                                     <span t-field="o.partner_id.name"/>
                                     <br/>
-                                    <span><b>Address:</b></span>
+                                    <span>
+                                        <b>Address:</b>
+                                    </span>
                                     <span t-if="o.partner_id.street">
                                         <span t-field="o.partner_id.street"/>
                                         <br/>
@@ -50,6 +54,11 @@
                             <h2 t-if="o.state != 'draft'">Purchase Order
                                 <span t-field="o.name"/>
                             </h2>
+                            <p>
+                                <strong>Please supply us the following parts of UNION START MOTORCYCLE according to the
+                                    purchase order and condition as:
+                                </strong>
+                            </p>
                             <h2 t-if="o.state == 'draft'">Request for Quotation N°
                                 <span t-field="o.name"/>
                             </h2>
@@ -173,6 +182,67 @@
                                     </table>
                                 </div>
                             </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-xs-8 pull-left">
+                                    <table class="table">
+                                        <tr>
+                                            <td>
+                                                <strong>Delivery Address:</strong>
+                                            </td>
+                                            <td>
+                                                <strong>Plot No B-6 Scheme 33, Super Highway S.I.T.E Karachi</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Delivery Period:</strong>
+                                            </td>
+                                            <td>
+                                                <strong>As Per Delivery Schedule</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Payment Schedule:</strong>
+                                            </td>
+                                            <td>
+                                                <strong>Prepayment</strong>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-xs-4 pull-left">
+                                    <table class="table table-condensed">
+                                        <tr>
+                                            <td>
+                                                <strong>Prepared By:</strong>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                                <div class="col-xs-4 pull-right">
+                                    <table class="table table-condensed">
+                                        <tr>
+                                            <td>
+                                                <strong>Authorized Signature</strong>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+                            <br/>
+                            <strong>
+                                <p>Note: Please email the copy of current period of exemption certificate for our record
+                                    and tax administration<br/>Email: info@sara-industries.com
+                                </p>
+                            </strong>
                             <p t-field="o.notes"/>
                             <div class="oe_structure"/>
                         </div>

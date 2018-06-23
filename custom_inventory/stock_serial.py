@@ -1,7 +1,7 @@
 from openerp import models,fields,api,_
 from openerp.osv import fields,osv
 from datetime import datetime
-
+from openerp.exceptions import ValidationError
 
 class custom_stock_serial(osv.osv):
     _inherit = 'stock.production.lot'
@@ -30,3 +30,13 @@ class custom_stock_serial(osv.osv):
         'name': 'SAE-',
         'chassis_number': 'SAC-',
     }
+
+    @api.constrains('name')
+    def _check_unique_constraint(self):
+        if len(self.search([('name', '=', self.name),])) > 1:
+            raise ValidationError("This engine number already exists and violates unique field constraint")
+
+    @api.constrains('chassis_number')
+    def _check_unique_constraint(self):
+        if len(self.search([('chassis_number', '=', self.chassis_number), ])) > 1:
+            raise ValidationError("This chassis number already exists and violates unique field constraint")

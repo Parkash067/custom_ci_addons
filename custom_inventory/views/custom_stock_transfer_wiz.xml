@@ -9,15 +9,25 @@
                 <xpath expr="//form" position="inside">
                     <label for="total_quantity"/>
                     <field name="total_quantity" readonly="1"/>
+                    <field name="status" readonly="1"/>
                 </xpath>
                 <xpath expr="//tree/field[@name='lot_id']" position="attributes">
                     <attribute name="string">Engine Number</attribute>
+                </xpath>
+                 <xpath expr="//tree/field[@name='lot_id']" position="attributes">
+                    <attribute name="options">{'create': false, 'create_edit': false}</attribute>
+                </xpath>
+                 <xpath expr="//tree/field[@name='quantity']" position="attributes">
+                    <attribute name="readonly">1</attribute>
                 </xpath>
                 <xpath expr="//tree/field[@name='lot_id']" position="after">
                     <field name="chassis_number" />
                     <field name="color" />
                     <field name="model" />
                     <field name="year" />
+                </xpath>
+                <xpath expr="//tree/field[@name='lot_id']" position="attributes">
+                    <attribute name="domain">[('status','=',parent.status),]</attribute>
                 </xpath>
             </field>
         </record>

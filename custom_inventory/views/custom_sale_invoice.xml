@@ -731,7 +731,7 @@
                                             <t t-set="record_collection"
                                                t-value="account_invoice.get_data('Sara Automobiles')"/>
                                             <img t-att-src="'data:image/png;base64,%s' %record_collection"
-                                                 style="margin-right:30px; width:20%;float:right;"/>
+                                                 style="margin-right:30px; width:30%;float:right;margin-right:25px"/>
                                         </t>
                                         <t t-if="account_invoice.header == 'Allied Business Corporation'">
                                             <t t-set="record_collection"
@@ -750,15 +750,15 @@
                                                 <t t-set="record_collection"
                                                    t-value="account_invoice.get_data('Sara Automobiles')"/>
                                                 <img t-att-src="'data:image/png;base64,%s' %record_collection"
-                                                     style="margin-right:30px;width:20%;float:right;"/>
+                                                     style="margin-right:30px;width:30%;float:right;margin-right:25px"/>
                                             </t>
                                         </t>
                                     </div>
                                     <br/>
                                     <br/>
-                                    <div style="width:30%; border-bottom:1px solid black; float:right; margin-right:10px;"/>
-                                    <br/><br/><br/>
-                                    <div style="width:35%; float:right; margin-right:-15px;">
+                                    <div style="width:50%; border-bottom:1px solid black; float:right; margin-right:10px;"/>
+                                    <br/><br/><br/><br/><br/><br/>
+                                    <div style="width:35%; float:right; margin-right:15px">
                                         <strong>Authorized Signature</strong>
                                     </div>
                                 </div>

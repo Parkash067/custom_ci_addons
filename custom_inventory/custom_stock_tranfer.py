@@ -2,15 +2,17 @@ from openerp import models,fields,api,_
 from openerp.osv import fields,osv
 from datetime import datetime
 
+lot_ids = []
+
 
 class custom_stock_transfer_details_items(osv.TransientModel):
     _inherit = 'stock.transfer_details_items'
     _columns = {
-        'chassis_number': fields.char('Chassis Number'),
+        'chassis_number': fields.char('Chassis Number',compute='fetch_info',readonly=True),
         'engine_number': fields.char('Engine No.'),
-        'color': fields.char('Color'),
-        'model': fields.char('Model'),
-        'year': fields.char('Year'),
+        'color': fields.char('Color',compute='fetch_info',readonly=True),
+        'model': fields.char('Model',compute='fetch_info',readonly=True),
+        'year': fields.char('Year',compute='fetch_info',readonly=True),
         'location': fields.boolean('Loc'),
     }
 
@@ -20,6 +22,13 @@ class custom_stock_transfer_details_items(osv.TransientModel):
     }
 
     @api.onchange('lot_id')
+    def onchange_field_id(self):
+        if self.lot_id:
+            lot_ids.append(self.lot_id.id)
+            return {'domain':{'lot_id': [('id', 'not in',lot_ids),('status','=','Available'),]}}
+    
+    @api.one
+    @api.depends('lot_id')
     def fetch_info(self):
         if self.lot_id:
             self.chassis_number = self.lot_id.chassis_number
@@ -44,6 +53,7 @@ class custom_stock_transfer_details(osv.TransientModel):
     _inherit = 'stock.transfer_details'
     _description = 'Picking wizard'
     _columns = {
+        'status':fields.char('Status'),
         'total_quantity': fields.float('Total Quantity'),
         'selected_quantity': fields.float('Selected Quantity', compute='select_quantity'),
     }
@@ -91,6 +101,17 @@ class custom_stock_transfer_details(osv.TransientModel):
                 items.append(item)
             elif op.package_id:
                 packs.append(item)
+
+        operation = str((picking.name)).split("\\")[1]
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>oepratiyon",operation)
+        if operation == 'IN':
+            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..in', picking.name)
+            res.update(status='Issued')
+        elif operation == 'OUT':
+            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.out.', picking.name)
+            res.update(status='Available')
+        else:
+            res.update(status='No Status')
         res.update(item_ids=items, total_quantity=count)
         res.update(packop_ids=packs)
         return res
