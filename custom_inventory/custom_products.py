@@ -146,6 +146,8 @@ class custom_stock_move(osv.osv):
         'inv_num_abc': fields.related('certificate_invoice', 'abc_inv_serial', type='char', string='ABC Inv',
                                        store=True),
         'dealer_name': fields.related('partner_id', 'name', type='char', string='DO Date', store=True),
+        'invoice_creation': fields.selection([('Create Invoice','Create Invoice')], string='Invoice', store=True),
+        'create_inv': fields.boolean('Invoiced', store=True, compute='com_create_invoice')
     }
 
     _defaults = {
@@ -154,6 +156,17 @@ class custom_stock_move(osv.osv):
         'status': 'draft',
         'certificate_lock': False
     }
+
+    @api.one
+    @api.depends('invoice_creation')
+    def com_create_invoice(self):
+        if len(self)>0:
+            for line in self:
+                line.create_view_invoice()
+                line.create_inv = True
+        else:
+            self.create_view_invoice()
+            self.create_inv = True
 
     def create(self, cr, uid, vals, context=None):
         vals['certificate_serial'] = self.pool.get('ir.sequence').get(cr, uid, 'certificate.serial')
@@ -201,8 +214,7 @@ class custom_stock_move(osv.osv):
         img_qr = base64.decodestring(img_str)
         self.write({'qr_code': img_str})
         return ''
-        # return "Product Name : " + str(self.product_id.name)
-        #return "Engine Number : "+str(self.engine_number) + "\n" + "Chasis Number : " + str(self.chassis_number) + "\n" + "Model : " + self.model + "\n"+ "Brand : " + 'Union Start' + "\n" +"HP : " + '70' + "\n" +" 'MANUFACTURED BY SARA AUTOMOBILE INDUSTERIES'"
+
     def issuance(self):
         self.certificate_issuance = 1
         return ''
@@ -210,6 +222,7 @@ class custom_stock_move(osv.osv):
     def check_issuance(self):
         return int(self.certificate_issuance)
 
+    @api.cr_uid_ids_context
     def create_view_invoice(self, cr, uid, ids, context=None):
         inv_ids = 0
         sp = 0.0
