@@ -22,6 +22,7 @@ class ProductSetAd(models.TransientModel):
         if not so_id:
             return
         so = self.env['sale.order'].browse(so_id)
+        so.update({'product_set':self.product_set_id.name})
         max_sequence = 0
         if so.order_line:
             max_sequence = max([line.sequence for line in so.order_line])

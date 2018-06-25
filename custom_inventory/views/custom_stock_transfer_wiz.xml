@@ -15,7 +15,7 @@
                     <attribute name="string">Engine Number</attribute>
                 </xpath>
                  <xpath expr="//tree/field[@name='lot_id']" position="attributes">
-                    <attribute name="options">{'create': false, 'create_edit': false}</attribute>
+                    <attribute name="options">{'limit':1, 'create': false, 'create_edit': false}</attribute>
                 </xpath>
                  <xpath expr="//tree/field[@name='quantity']" position="attributes">
                     <attribute name="readonly">1</attribute>

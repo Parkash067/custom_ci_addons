@@ -6,9 +6,8 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="custom_inventory.my_own_layout_po">
                         <div class="page">
-                            <div class="oe_structure"/>
-                            <div class="row">
-                                <div class="col-xs-6">
+                            <div class="row" style="font-size:12px;">
+                                <div class="col-xs-6" style="font-size:12px;">
                                     <span>
                                         <b>Supplier:</b>
                                     </span>
@@ -51,18 +50,18 @@
                                     </span>
                                 </div>
                             </div>
-                            <h2 t-if="o.state != 'draft'">Purchase Order
+                            <h3 t-if="o.state != 'draft'">Purchase Order
                                 <span t-field="o.name"/>
-                            </h2>
-                            <p>
+                            </h3>
+                            <p style="font-size:12px;">
                                 <strong>Please supply us the following parts of UNION START MOTORCYCLE according to the
                                     purchase order and condition as:
                                 </strong>
                             </p>
-                            <h2 t-if="o.state == 'draft'">Request for Quotation N°
+                            <h3 t-if="o.state == 'draft'">Request for Quotation N°
                                 <span t-field="o.name"/>
-                            </h2>
-                            <div class="row mt32 mb32">
+                            </h3>
+                            <div class="row mt32 mb32" style="font-size:12px;">
                                 <div t-if="o.name" class="col-xs-3">
                                     <strong>Our Order Reference:</strong>
                                     <p t-field="o.name"/>
@@ -80,7 +79,7 @@
                                     <p t-field="o.validator"/>
                                 </div>
                             </div>
-                            <table class="table table-condensed">
+                            <table class="table table-condensed" style="font-size:12px;">
                                 <thead>
                                     <tr>
                                         <th>
@@ -129,9 +128,9 @@
                                 </tbody>
                             </table>
 
-                            <div class="row">
-                                <div class="col-xs-4 pull-right">
-                                    <table class="table table-condensed">
+                            <div class="row" style="font-size:12px;">
+                                <div class="col-xs-4 pull-right" style="font-size:12px;">
+                                    <table class="table table-condensed" style="font-size:12px;">
                                         <tr class="border-black">
                                             <td>
                                                 <strong>Total Without Taxes</strong>
@@ -182,10 +181,9 @@
                                     </table>
                                 </div>
                             </div>
-                            <br/>
                             <div class="row">
-                                <div class="col-xs-8 pull-left">
-                                    <table class="table">
+                                <div class="col-xs-10 pull-left">
+                                    <table class="table" style="font-size:12px;">
                                         <tr>
                                             <td>
                                                 <strong>Delivery Address:</strong>
@@ -215,8 +213,8 @@
                                 </div>
                             </div>
                             <br/>
-                            <div class="row">
-                                <div class="col-xs-4 pull-left">
+                            <div class="row" style="font-size:12px;">
+                                <div class="col-xs-4 pull-left" style="font-size:12px;">
                                     <table class="table table-condensed">
                                         <tr>
                                             <td>
@@ -226,7 +224,7 @@
                                     </table>
 
                                 </div>
-                                <div class="col-xs-4 pull-right">
+                                <div class="col-xs-4 pull-right" style="font-size:12px;">
                                     <table class="table table-condensed">
                                         <tr>
                                             <td>
@@ -237,14 +235,11 @@
 
                                 </div>
                             </div>
-                            <br/>
-                            <strong>
+                            <strong style="font-size:10px;">
                                 <p>Note: Please email the copy of current period of exemption certificate for our record
                                     and tax administration<br/>Email: info@sara-industries.com
                                 </p>
                             </strong>
-                            <p t-field="o.notes"/>
-                            <div class="oe_structure"/>
                         </div>
                     </t>
                 </t>

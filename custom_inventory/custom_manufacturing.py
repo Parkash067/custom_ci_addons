@@ -107,8 +107,8 @@ class custom_mrp_product_produce(osv.osv_memory):
                 rec_id = stock_production_lot.create(cr, uid, {'name': line.engine_number,
                                                                'chassis_number': line.chassis_number,
                                                                'color': line.color,
-                                                               'model': line.model,
-                                                               'year': line.year,
+                                                               # 'model': '70 CC',
+                                                               # 'year': '2018',
                                                                'product_id': product_id
                                                                }, context=context)
         return {}

@@ -158,6 +158,7 @@
                         <group>
                             <field name="date_order"/>
                             <field name="client_order_ref"/>
+                            <field name="product_set" readonly="1"/>
                             <field domain="[('type','=','sale')]" name="pricelist_id" groups="product.group_sale_pricelist" on_change="onchange_pricelist_id(pricelist_id,order_line)"/>
                             <field name="currency_id" invisible="1"/>
                         </group>
@@ -282,9 +283,9 @@
                                 <field name="mode"/>
                                 <field name="engine_number"/>
                                 <field name="chassis_number"/>
-                                <field name="color"/>
-                                <field name="model"/>
-                                <field name="year"/>
+                                <!--<field name="color"/>-->
+                                <!--<field name="model"/>-->
+                                <!--<field name="year"/>-->
                                 <!--<field name="lot_id" domain="[('product_id', '=', product_id)]" context="{'default_product_id':product_id}" groups="stock.group_production_lot"/> -->
                             </tree>
                         </field>
@@ -310,5 +311,6 @@
                 </xpath>
             </field>
         </record>
+
     </data>
 </openerp>
