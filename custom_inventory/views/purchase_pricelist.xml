@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="custom_purchase_price_list" model="ir.actions.act_window">
+            <field name="name">Purchase Price List</field>
+            <field name="res_model">purchase.price.list</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+
+        <menuitem
+                name="Price List"
+                action="custom_purchase_price_list"
+                id="menu_custom_purchase_price_list"
+                sequence="150"
+                parent="purchase.menu_purchase_config_purchase"
+        >
+        </menuitem>
+
+        <record id="price_tree" model="ir.ui.view">
+            <field name="name">Price Tree</field>
+            <field name="model">purchase.price.list</field>
+            <field name="arch" type="xml">
+                <tree string="Price Tree" version="8.0">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="price"/>
+                </tree>
+            </field>
+        </record>
+        <record id="price_form" model="ir.ui.view">
+            <field name="name">Price Form</field>
+            <field name="model">purchase.price.list</field>
+            <field name="arch" type="xml">
+                <form string="Price Tree" version="8.0">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="price"/>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>

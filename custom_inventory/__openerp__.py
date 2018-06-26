@@ -76,6 +76,7 @@ Dashboard / Reports for Inventory Management will include:
         'views/page_setup.xml',
         'views/account_voucher.xml',
         'views/material_issuance.xml',
+        'views/purchase_pricelist.xml',
         #'data/schedule_rule.xml'
         'views/custom_product_template.xml',
         ],
