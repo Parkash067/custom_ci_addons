@@ -171,14 +171,15 @@ class custom_stock_move(osv.osv):
     @api.one
     @api.depends('invoice_creation')
     def com_create_invoice(self):
-        if self.partner_id and self.engine_number and self.chassis_number and self.color and self.model and self.year and self.do_number:
-            if len(self)>0:
-                for line in self:
-                    line.create_view_invoice()
-                    line.create_inv = True
-            else:
-                self.create_view_invoice()
-                self.create_inv = True
+        if self.invoice_creation:
+            if self.partner_id and self.engine_number and self.chassis_number and self.color and self.model and self.year and self.do_number:
+                if len(self)>0:
+                    for line in self:
+                        line.create_view_invoice()
+                        line.create_inv = True
+                else:
+                    self.create_view_invoice()
+                    self.create_inv = True
 
     def create(self, cr, uid, vals, context=None):
         vals['certificate_serial'] = self.pool.get('ir.sequence').get(cr, uid, 'certificate.serial')
