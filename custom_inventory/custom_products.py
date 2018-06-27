@@ -32,6 +32,7 @@ class custom_product_template(osv.osv):
 class custom_stock_picking(osv.osv):
     _inherit = 'stock.picking'
     _columns = {
+        'po_ref': fields.many2one('purchase.order',store=True,string='PO Ref'),
         'custom_status': fields.selection([('Claimed', 'Claimed'), ('Returned', 'Returned')],'Status',store=True, default='Claimed', compute='update_custom_status'),
         'dc': fields.char('DC No.', store=True),
         'in_remarks': fields.char('Remarks', store=True),

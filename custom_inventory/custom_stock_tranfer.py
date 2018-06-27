@@ -1,5 +1,5 @@
-from openerp import models,fields,api,_
-from openerp.osv import fields,osv
+from openerp import models, fields, api, _
+from openerp.osv import fields, osv
 from datetime import datetime
 
 lot_ids = []
@@ -8,11 +8,11 @@ lot_ids = []
 class custom_stock_transfer_details_items(osv.TransientModel):
     _inherit = 'stock.transfer_details_items'
     _columns = {
-        'chassis_number': fields.char('Chassis Number',compute='fetch_info',readonly=True),
+        'chassis_number': fields.char('Chassis Number', compute='fetch_info', readonly=True),
         'engine_number': fields.char('Engine No.'),
-        'color': fields.char('Color',compute='fetch_info',readonly=True),
-        'model': fields.char('Model',compute='fetch_info',readonly=True),
-        'year': fields.char('Year',compute='fetch_info',readonly=True),
+        'color': fields.char('Color', compute='fetch_info', readonly=True),
+        'model': fields.char('Model', compute='fetch_info', readonly=True),
+        'year': fields.char('Year', compute='fetch_info', readonly=True),
         'location': fields.boolean('Loc'),
     }
 
@@ -25,8 +25,8 @@ class custom_stock_transfer_details_items(osv.TransientModel):
     def onchange_field_id(self):
         if self.lot_id:
             lot_ids.append(self.lot_id.id)
-            return {'domain':{'lot_id': [('id', 'not in',lot_ids),('status','=','Available'),]}}
-    
+            return {'domain': {'lot_id': [('id', 'not in', lot_ids), ('status', '=', 'Available'), ]}}
+
     @api.one
     @api.depends('lot_id')
     def fetch_info(self):
@@ -34,7 +34,7 @@ class custom_stock_transfer_details_items(osv.TransientModel):
             self.chassis_number = self.lot_id.chassis_number
             self.color = self.lot_id.color
             self.model = self.lot_id.model
-            self.year =  self.lot_id.year
+            self.year = self.lot_id.year
 
     @api.multi
     def split_quantities(self):
@@ -53,7 +53,7 @@ class custom_stock_transfer_details(osv.TransientModel):
     _inherit = 'stock.transfer_details'
     _description = 'Picking wizard'
     _columns = {
-        'status':fields.char('Status'),
+        'status': fields.char('Status'),
         'total_quantity': fields.float('Total Quantity'),
         'selected_quantity': fields.float('Selected Quantity', compute='select_quantity'),
     }
@@ -103,7 +103,7 @@ class custom_stock_transfer_details(osv.TransientModel):
                 packs.append(item)
 
         operation = str((picking.name)).split("\\")[1]
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>oepratiyon",operation)
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>oepratiyon", operation)
         if operation == 'IN':
             print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..in', picking.name)
             res.update(status='Issued')
@@ -132,19 +132,28 @@ class custom_stock_transfer_details(osv.TransientModel):
             if self.picking_id.state not in ['assigned', 'partially_available']:
                 raise Warning(_('You cannot transfer a picking in state \'%s\'.') % self.picking_id.state)
             stock_wh_obj = self.env['stock.warehouse'].search([('name', '=', 'Allied Business Corporation')])
-            picking_id = self.env['stock.picking.type'].search([('name', '=', 'Receipts'),
-                                                                ('warehouse_id', '=', stock_wh_obj.id)])
+            _picking_id = self.env['stock.picking.type'].search([('name', '=', 'Receipts'),
+                                                                 ('warehouse_id', '=', stock_wh_obj.id)])
             if self.picking_id.partner_id.name == 'Allied Business Corporation':
                 purchase_order = {
                     'partner_id': 3695,
                     'company_id': 3,
-                    'picking_type_id': picking_id.id,
+                    'picking_type_id': _picking_id.id,
                     'location_id': 116,
                     'date_order': fields.datetime.now(),
                     'invoice_method': 'picking',
                     'pricelist_id': 2,
                 }
                 order_id = self.env['purchase.order'].create(purchase_order)
+                self.picking_id.write({'po_ref': order_id.id})
+            if self.picking_id.partner_id.name == 'Sara Automobiles' and len(_picking_id) > 0:
+                po = self.env['purchase.order'].search([('name', '=', self.picking_id.origin),])
+                do = self.env['stock.picking'].search([('po_ref', '=', po.id),])
+                for line in do.stock_split_lines:
+                    self.env['stock.production.lot'].create({'name': line.engine_number,
+                                                             'chassis_number': line.chassis_number,
+                                                             'product_id': 1862
+                                                             })
             processed_ids = []
             # Create new and update existing pack operations
             for lstits in [self.item_ids, self.packop_ids]:
@@ -164,9 +173,9 @@ class custom_stock_transfer_details(osv.TransientModel):
                     }
                     if self.picking_id.partner_id.customer and self.picking_id.picking_type_id.name == 'Receipts':
                         self.env.cr.execute("""update stock_production_lot set status='%s' where name='%s'""" % (
-                        'Available', prod.lot_id.name))
+                            'Available', prod.lot_id.name))
 
-                    if self.picking_id.partner_id.customer and self.picking_id.picking_type_id.name=='Delivery Orders' and self.picking_id.partner_id.custom_type != 'department':
+                    if self.picking_id.partner_id.customer and self.picking_id.picking_type_id.name == 'Delivery Orders' and self.picking_id.partner_id.custom_type != 'department':
                         stock_moves = {
                             'engine_number': prod.lot_id.name,
                             'chassis_number': prod.lot_id.chassis_number,
@@ -180,10 +189,11 @@ class custom_stock_transfer_details(osv.TransientModel):
                             'date': prod.date if prod.date else datetime.now(),
                         }
                         self.env['custom.stock.move'].create(stock_moves)
-                        self.env.cr.execute("""update stock_production_lot set status='%s' where name='%s'"""%('Issued',prod.lot_id.name))
+                        self.env.cr.execute("""update stock_production_lot set status='%s' where name='%s'""" % (
+                        'Issued', prod.lot_id.name))
                         if self.picking_id.partner_id.name == 'Allied Business Corporation':
                             purchase_order_lines = {
-                                'product_id': 1865,#prod.product_id.id,
+                                'product_id': 1862,  # prod.product_id.id,
                                 'name': prod.product_id.name,
                                 'product_uom': prod.product_uom_id.id,
                                 'product_qty': prod.quantity,
@@ -200,7 +210,8 @@ class custom_stock_transfer_details(osv.TransientModel):
                         packop_id = self.env['stock.pack.operation'].create(pack_datas)
                         processed_ids.append(packop_id.id)
             # Delete the others
-            packops = self.env['stock.pack.operation'].search(['&', ('picking_id', '=', self.picking_id.id), '!', ('id', 'in', processed_ids)])
+            packops = self.env['stock.pack.operation'].search(
+                ['&', ('picking_id', '=', self.picking_id.id), '!', ('id', 'in', processed_ids)])
             packops.unlink()
 
             # Execute the transfer of the picking
@@ -209,5 +220,3 @@ class custom_stock_transfer_details(osv.TransientModel):
 
         else:
             raise osv.except_osv(_('Warning!'), _('You cannot transfer items more than DO/PO'))
-
-

@@ -14,6 +14,7 @@
                      <field name="model"/>
                      <field name="year"/>
                      <field name="status" readonly="1"/>
+                     <field name="company" readonly="1"/>
                  </xpath>
              </field>
          </record>

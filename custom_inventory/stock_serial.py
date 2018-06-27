@@ -7,6 +7,8 @@ from openerp.exceptions import ValidationError
 class custom_stock_serial(osv.osv):
     _inherit = 'stock.production.lot'
     _columns = {
+        'company': fields.related('product_id', 'company_id', relation="res.company", type='many2one',
+                                       string="Company", store=True),
         'status': fields.selection([('Available', 'Available'),
                                     ('Issued', 'Issued')], string='Status', store=True),
         'chassis_number': fields.char('Chassis No.', store=True),
@@ -31,12 +33,12 @@ class custom_stock_serial(osv.osv):
 
     @api.constrains('name')
     def _check_unique_constraint(self):
-        if len(self.search([('name', '=', self.name), ])) > 1:
+        if len(self.search([('name', '=', self.name),('company', '=', self.company.id)])) > 1:
             raise ValidationError("This engine number already exists and violates unique field constraint")
 
     @api.constrains('chassis_number')
     def _check_unique_constraint_(self):
-        if len(self.search([('chassis_number', '=', self.chassis_number), ])) > 1:
+        if len(self.search([('name', '=', self.name),('company', '=', self.company.id)])) > 1:
             raise ValidationError("This chassis number already exists and violates unique field constraint")
 
     @api.one
