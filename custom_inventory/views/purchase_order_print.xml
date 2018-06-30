@@ -83,6 +83,9 @@
                                 <thead>
                                     <tr>
                                         <th>
+                                            S.No.
+                                        </th>
+                                        <th>
                                             <strong>Description</strong>
                                         </th>
                                         <th>
@@ -104,6 +107,9 @@
                                 </thead>
                                 <tbody>
                                     <tr t-foreach="o.order_line" t-as="line">
+                                        <td>
+                                            <span t-esc="line_index+1"/>
+                                        </td>
                                         <td>
                                             <span t-field="line.name"/>
                                         </td>
