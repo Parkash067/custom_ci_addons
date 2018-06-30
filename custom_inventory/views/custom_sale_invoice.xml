@@ -7,6 +7,10 @@
                     <t>
                         <div class="page">
                             <div class="row">
+                                <span t-esc="account_invoice.generate_qr_code()"/>
+                                <span t-field="account_invoice.qr_code" widget="image"
+                                      t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}"
+                                      style="position: absolute;top: 100px;left: 870px;"/>
                                 <t t-if="account_invoice.header == 'Sara Automobiles'">
                                     <h1 t-esc="'%s' %res_company.name" style="padding:10px;max-width:100%;height:auto;width:100%;margin-left:auto;
                                          margin-right:auto;text-align:center;"/>
@@ -87,20 +91,20 @@
                                 </h2>
                                 <t t-if="account_invoice.header=='/'">
                                     <t t-if="account_invoice.partner_id=='Allied Business Corporation'">
-                                        <h3 align="center">Sales Tax Registration No.: 17-00-8711-009-55</h3>
+                                        <h3 align="center">Sales Tax Registration No.: 17-12-8708-004-73</h3>
                                         <hr style="border-top:1px solid black;"/>
                                     </t>
                                     <t t-if="account_invoice.partner_id!='Allied Business Corporation'">
-                                        <h3 align="center">Sales Tax Registration No.: 17-12-8708-007-73</h3>
+                                        <h3 align="center">Sales Tax Registration No.: 17-00-8711-009-55</h3>
                                         <hr style="border-top:1px solid black;"/>
                                     </t>
                                 </t>
                                 <t t-if="account_invoice.header=='Allied Business Corporation'">
-                                    <h3 align="center">Sales Tax Registration No.: 17-00-8711-009-55</h3>
+                                    <h3 align="center">Sales Tax Registration No.: 17-12-8708-004-73</h3>
                                     <hr style="border-top:1px solid black;"/>
                                 </t>
                                 <t t-if="account_invoice.header=='Sara Automobiles'">
-                                    <h3 align="center">Sales Tax Registration No.: 17-12-8708-007-73</h3>
+                                    <h3 align="center">Sales Tax Registration No.: 17-00-8711-009-55</h3>
                                     <hr style="border-top:1px solid black;"/>
                                 </t>
                                 <div style="font-size:18px">
@@ -757,7 +761,12 @@
                                     <br/>
                                     <br/>
                                     <div style="width:50%; border-bottom:1px solid black; float:right; margin-right:10px;"/>
-                                    <br/><br/><br/><br/><br/><br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
                                     <div style="width:35%; float:right; margin-right:15px">
                                         <strong>Authorized Signature</strong>
                                     </div>

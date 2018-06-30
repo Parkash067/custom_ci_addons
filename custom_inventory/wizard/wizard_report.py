@@ -22,6 +22,7 @@ class WizardReports(osv.TransientModel):
         'partner_id': fields.many2one('res.partner',string='Dealer'),
         'date_from': fields.date('Start Date'),
         'date_to': fields.date('End Date'),
+        'bank': fields.many2one('account.journal','Bank')
     }
 
     _defaults = {
@@ -64,16 +65,32 @@ class WizardReports(osv.TransientModel):
         result=[]
         account_ids = self.env['account.account'].search(
             [['type', '=', 'liquidity'], ['company_id', '=', 1]])
-        for id in account_ids:
-            self.env.cr.execute("""select av.number,av.date,av.cheque_date,aml.ref,aml.credit,av.cheque_no
-            from account_voucher as av inner join account_move as am on av.number = am.name 
-            inner join account_move_line as aml on am.id = aml.move_id where aml.credit>0 and av.type='payment'
-            and aml.account_id=%s and av.cheque_date is not null and av.date between '%s' and '%s'
-            order by av.date"""%(id.id,self.date_from,self.date_to))
-            data = self.env.cr.dictfetchall()
-            if len(data)>0:
-                result.append([{'bank': id.name, 'details': data}])
-        return result
+        if self.bank:
+            for id in account_ids:
+                self.env.cr.execute("""select av.number,av.date,av.cheque_date,aml.ref,aml.credit,av.cheque_no,rp.name as supplier
+                from account_voucher as av inner join account_move as am on av.number = am.name 
+                inner join account_move_line as aml on am.id = aml.move_id 
+                inner join res_partner as rp on av.partner_id = rp.id
+                where av.journal_id=%s and aml.credit>0 and av.type='payment'
+                and aml.account_id=%s and av.cheque_date is not null and av.date between '%s' and '%s'
+                order by av.date"""%(self.bank.id,id.id,self.date_from,self.date_to))
+                data = self.env.cr.dictfetchall()
+                if len(data)>0:
+                    result.append([{'bank': id.name, 'details': data}])
+            return result
+        else:
+            for id in account_ids:
+                self.env.cr.execute("""select av.number,av.date,av.cheque_date,aml.ref,aml.credit,av.cheque_no,rp.name as supplier
+                from account_voucher as av inner join account_move as am on av.number = am.name 
+                inner join account_move_line as aml on am.id = aml.move_id 
+                inner join res_partner as rp on av.partner_id = rp.id
+                where aml.credit>0 and av.type='payment'
+                and aml.account_id=%s and av.cheque_date is not null and av.date between '%s' and '%s'
+                order by av.date"""%(id.id,self.date_from,self.date_to))
+                data = self.env.cr.dictfetchall()
+                if len(data)>0:
+                    result.append([{'bank': id.name, 'details': data}])
+            return result
 
     def certificate_issuance_dealer_wise(self):
         self.env.cr.execute("""

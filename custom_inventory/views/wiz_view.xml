@@ -10,6 +10,7 @@
                     <group string="Generic Wizard">
                         <field name="date_from"/>
                         <field name="date_to"/>
+                        <field name="bank"  attrs="{'invisible':[('type','!=','Post Dated Cheque Report')]}"/>
                     </group>
                     <group>
                         <field name="partner_id"  attrs="{'invisible':['|','|',('type','=','Certificate Issuance With Invoice Date Wise'),('type','=','Post Dated Cheque Report'),('type','=','Finished Products')]}"/>

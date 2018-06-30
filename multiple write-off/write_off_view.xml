@@ -46,7 +46,7 @@
                         <strong> Multiple Write-Off </strong>
                         <tree editable="top" string="Multiparts" >
                             <field name="account" required="1"/>
-                            <field name="taxes"/>
+                            <!--<field name="taxes"/>-->
                             <field name="writeoff_amount" required="1"  sum="Total Amount"/>
                             <field name="comment" required="1"/>
                         </tree>

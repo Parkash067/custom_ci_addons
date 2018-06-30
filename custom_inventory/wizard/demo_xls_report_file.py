@@ -17,7 +17,7 @@ income_tax = ['Sr.No', 'Taxpayer NTN', 'Taxpayer Name / Business Name','Taxpayer
               'Payment Date','Cheque No. & Date', 'Bank Name','Taxable Amount','Tax Rate', 'Tax Amount', 'Deposite Date']
 
 purchase_register = ['Sr.No', 'NTN#', 'Name of the Supplier', 'Address', 'Item Description','Invoice No.',
-              'Invoice Date', 'Quantity', 'Rate', 'Val Excl. S.Tax','Sales Tax 17%', 'Val Inc. S.Tax', 'With Held 20%']
+              'Invoice Date', 'Quantity', 'Rate', 'Val Excl. S.Tax','Sales Tax 17%','Extra 2%', 'Val Inc. S.Tax', 'With Held 20%']
 
 
 class demo_xls_report_file(osv.osv_memory):

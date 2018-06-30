@@ -35,6 +35,9 @@
                                                     Cheque Date
                                                 </td>
                                                 <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                    Supplier
+                                                </td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center;">
                                                     Debit
                                                 </td>
                                                 <td style="border: 1px solid black; padding:5px; text-align:center;">
@@ -44,8 +47,8 @@
                                                     Credit
                                                 </td>
                                             </tr>
-                                            <tr style="border: 1px solid black; padding:5px; text-align:center;">
-                                                <t t-foreach="l[0]['details']" t-as="p">
+                                            <t style="border: 1px solid black; padding:5px; text-align:center;">
+                                                <tr t-foreach="l[0]['details']" t-as="p">
                                                     <td style="border: 1px solid black; padding:5px; text-align:center;">
                                                         <span t-esc="p['number']"/>
                                                     </td>
@@ -54,6 +57,9 @@
                                                     </td>
                                                     <td style="border: 1px solid black; padding:5px; text-align:center;">
                                                         <span t-esc="p['cheque_date']"/>
+                                                    </td>
+                                                     <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="p['supplier']"/>
                                                     </td>
                                                     <td style="border: 1px solid black; padding:5px; text-align:center;">
                                                         <span t-esc="p['ref']"/>
@@ -65,10 +71,10 @@
                                                         <span t-esc="p['credit']"/>
                                                          <t t-set="total" t-value="total+p['credit']"/>
                                                     </td>
-                                                </t>
-                                            </tr>
+                                                </tr>
+                                            </t>
                                             <tr style="border: 1px solid black; padding:5px; text-align:center;">
-                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bold" colspan="5">Total</td>
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bold" colspan="6">Total</td>
                                                 <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bold" ><span t-esc="total"/> </td>
                                             </tr>
                                             <t t-set="total" t-value="0"/>

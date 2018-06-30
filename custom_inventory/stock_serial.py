@@ -44,7 +44,8 @@ class custom_stock_serial(osv.osv):
     @api.one
     @api.depends('product_id')
     def fetch_color(self):
-        if self.product_id:
+        products = [1856, 1850, 1851, 1852, 1853, 1854, 1855, 1857, 1858]
+        if self.product_id and self.product_id in products:
             color = ''
             attribute = (self.product_id.attribute_value_ids[0].name).split(' ')
             if attribute[0] == 'Durbi' or attribute[0] == 'Smart' or attribute[0] == 'Self':

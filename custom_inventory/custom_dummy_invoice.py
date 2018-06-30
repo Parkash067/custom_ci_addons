@@ -4,7 +4,9 @@ from openerp.osv import fields, osv
 from openerp import api
 from datetime import date,time
 from openerp.tools import amount_to_text_en
-
+import qrcode
+import cStringIO
+import base64
 
 class custom_dummy_invoice(osv.osv):
     _name = "custom.dummy.invoice"
@@ -48,7 +50,30 @@ class custom_dummy_invoice(osv.osv):
         'wht': fields.float('W.H.T', store=True, readonly=True, default=0.0, compute='cal_tax_and_untaxedamount'),
         'further_tax': fields.float('Further Tax', store=True, readonly=True, default=0.0, compute='cal_tax_and_untaxedamount'),
         'comment': fields.text('Comment', store=True),
+        'qr_code': fields.binary('QR Code', store=True),
     }
+    
+    def generate_qr_code(self):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=2,
+            border=4,
+
+        )
+        qr.add_data('Engine Number : ' + self.engine_number + '\n' +
+                    'Chasis Number : ' + self.chassis_number + '\n' +
+                    'Model : ' + '2018' + '\n' +
+                    'Brand : ' + 'Union Star' + '\n' +
+                    'HP : ' + '70 CC' + '\n'
+                    + 'MANUFACTURED BY SARA AUTOMOBILE INDUSTERIES')
+        qr.make(fit=True)
+        img = qr.make_image()
+        buffer = cStringIO.StringIO()
+        img.save(buffer, format("PNG"))
+        img_str = base64.b64encode(buffer.getvalue())
+        self.write({'qr_code': img_str})
+        return ''
 
     def create(self, cr, uid, vals, context=None):
         vals['sara_inv_serial'] = self.pool.get('ir.sequence').get(cr, uid, 'sara.inv.serial')
