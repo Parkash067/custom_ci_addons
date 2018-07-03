@@ -11,6 +11,7 @@
                     <label for="total_quantity"/>
                     <field name="total_quantity" readonly="1"/>
                     <field name="status" readonly="1"/>
+                    <field name="picking_type" readonly="1"/>
                 </xpath>
                 <xpath expr="//tree/field[@name='lot_id']" position="attributes">
                     <attribute name="string">Engine Number</attribute>

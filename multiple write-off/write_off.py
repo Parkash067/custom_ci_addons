@@ -20,6 +20,53 @@ class writeoff_amount(osv.osv):
 
     }
 
+    def voucher_move_line_create(self, cr, uid, voucher_id, line_total, move_id, company_currency, current_currency,
+                                 context=None):
+        '''
+        Create one account move line, on the given account move, per voucher line where amount is not 0.0.
+        It returns Tuple with tot_line what is total of difference between debit and credit and
+        a list of lists with ids to be reconciled with this format (total_deb_cred,list_of_lists).
+
+        :param voucher_id: Voucher id what we are working with
+        :param line_total: Amount of the first line, which correspond to the amount we should totally split among all voucher lines.
+        :param move_id: Account move wher those lines will be joined.
+        :param company_currency: id of currency of the company to which the voucher belong
+        :param current_currency: id of currency of the voucher
+        :return: Tuple build as (remaining amount not allocated on voucher lines, list of account_move_line created in this method)
+        :rtype: tuple(float, list of int)
+        '''
+        tot_line = line_total
+        tot_amount = 0.0
+        move_line_obj = self.pool.get('account.move.line')
+        obj = self.pool.get('account.voucher').browse(cr, uid, voucher_id, context)
+        for line in obj.write_off_line:
+            tot_amount += line.writeoff_amount
+
+        voucher = self.pool.get('account.voucher').browse(cr, uid, voucher_id, context=context)
+        rec_lst_ids = []
+        if obj.multi_counter_parts == True:
+            for line in voucher.line_ids:
+                move_line = {
+                    'journal_id': voucher.journal_id.id,
+                    'period_id': voucher.period_id.id,
+                    'name': line.name or '/',
+                    'account_id': voucher.partner_id.property_account_payable.id,
+                    'move_id': move_id,
+                    'partner_id': voucher.partner_id.id,
+                    'currency_id': line.move_line_id and (
+                            company_currency <> line.move_line_id.currency_id.id and line.move_line_id.currency_id.id) or False,
+                    'analytic_account_id': line.account_analytic_id and line.account_analytic_id.id or False,
+                    'quantity': 1,
+                    'credit': 0.0,
+                    'debit': tot_amount,
+                    'date': voucher.date
+                }
+                voucher_line = move_line_obj.create(cr, uid, move_line)
+                rec_lst_ids = [voucher_line, line.move_line_id.id]
+            return (tot_line, rec_lst_ids)
+        else:
+            return super(writeoff_amount,self).voucher_move_line_create(cr, uid, voucher_id, line_total, move_id, company_currency, current_currency,context=None)
+
     def writeoff_move_line_get(self, cr, uid, voucher_id, account, line_total,comment,payment_method, move_id, name, company_currency, current_currency, context=None):
         '''
         Set a dict to be use to create the writeoff move line.
@@ -61,7 +108,7 @@ class writeoff_amount(osv.osv):
                 sign = voucher.type == 'payment' and -1 or 1
                 move_line = {
                     'name': write_off_name or name,
-                    'account_id': account,
+                    'account_id': account_id,
                     'move_id': move_id,
                     'partner_id': voucher.partner_id.id,
                     'date': voucher.date,
@@ -185,7 +232,7 @@ class writeoff_amount(osv.osv):
                 # We automatically reconcile the account move lines.
                 reconcile = False
                 for rec_ids in rec_list_ids:
-                    if len(rec_ids) >= 2:
+                    if type(rec_ids) is int or type(rec_ids) is list and len(rec_ids)>=2:
                         reconcile = move_line_pool.reconcile_partial(cr, uid, rec_ids,
                                                                      writeoff_acc_id=voucher.writeoff_acc_id.id,
                                                                      writeoff_period_id=voucher.period_id.id,
