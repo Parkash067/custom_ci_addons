@@ -112,18 +112,20 @@ class custom_stock_transfer_details(osv.TransientModel):
             elif op.package_id:
                 packs.append(item)
 
-        operation = str((picking.name)).split("\\")[1]
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>oepratiyon", operation)
-        if operation == 'IN':
-            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..in', picking.name)
-            res.update(status='Issued')
-        elif operation == 'OUT':
+        operation = str((picking.name)).split("\\")
+        if len(operation)>0:
+            operation = str((picking.name)).split("\\")[1]
+            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>oepratiyon", operation)
+            if operation == 'IN':
+                print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..in', picking.name)
+                res.update(status='Issued')
+            elif operation == 'OUT':
 
-            print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.out.', picking.name)
-            res.update(picking_type='sale')
-            res.update(status='Available')
-        else:
-            res.update(status='No Status')
+                print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.out.', picking.name)
+                res.update(picking_type='sale')
+                res.update(status='Available')
+            else:
+                res.update(status='No Status')
         res.update(item_ids=items, total_quantity=count)
         res.update(packop_ids=packs)
         return res
