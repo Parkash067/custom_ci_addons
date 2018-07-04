@@ -26,7 +26,8 @@ class custom_stock_transfer_details_items(osv.TransientModel):
     def pre_check_quantity_limit(self):
         if self.transfer_id.picking_type != 'sale':
             return None
-        products = [1856, 1850, 1851, 1852, 1853, 1854, 1855, 1857, 1858]
+        products = [1856, 1850, 1851, 1852, 1853, 1854, 1855, 1857, 1858,
+                    1862, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987]
         if self.product_id.id in products and self.quantity > 1:
             self.quantity = 1
 
@@ -114,13 +115,12 @@ class custom_stock_transfer_details(osv.TransientModel):
 
         operation = str((picking.name)).split("\\")
         if len(operation)>0:
-            operation = str((picking.name)).split("\\")[1]
+            operation = operation[1]
             print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>oepratiyon", operation)
             if operation == 'IN':
                 print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..in', picking.name)
                 res.update(status='Issued')
             elif operation == 'OUT':
-
                 print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.out.', picking.name)
                 res.update(picking_type='sale')
                 res.update(status='Available')
@@ -138,6 +138,17 @@ class custom_stock_transfer_details(osv.TransientModel):
                 return True
             else:
                 return False
+
+    def fetch_product(self, product_id):
+        #variant = self.env['product.attribute.value.product.product.rel']
+        self.env.cr.execute("""select * from product_attribute_value_product_product_rel where prod_id='%s'"""%(product_id))
+        rec = self.env.cr.dictfetchall()[0]
+        variant_id = rec['att_id']
+        product_id = rec['prod_id']
+        self.env.cr.execute(
+            """select * from product_attribute_value_product_product_rel where prod_id !='%s' and att_id = '%s'""" % (product_id,variant_id))
+        new_product = self.env.cr.dictfetchall()[0]['prod_id']
+        return new_product
 
     @api.one
     def do_detailed_transfer(self):
@@ -166,7 +177,7 @@ class custom_stock_transfer_details(osv.TransientModel):
                 for line in do.stock_split_lines:
                     self.env['stock.production.lot'].create({'name': line.engine_number,
                                                              'chassis_number': line.chassis_number,
-                                                             'product_id': 1862
+                                                             'product_id': self.fetch_product(line.product_id.id)
                                                              })
             processed_ids = []
             # Create new and update existing pack operations
@@ -207,7 +218,7 @@ class custom_stock_transfer_details(osv.TransientModel):
                             'Issued', prod.lot_id.name))
                         if self.picking_id.partner_id.name == 'Allied Business Corporation':
                             purchase_order_lines = {
-                                'product_id': 1862,  # prod.product_id.id,
+                                'product_id': self.fetch_product(prod.product_id.id),  # prod.product_id.id,
                                 'name': prod.product_id.name,
                                 'product_uom': prod.product_uom_id.id,
                                 'product_qty': prod.quantity,
