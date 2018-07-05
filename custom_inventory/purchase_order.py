@@ -9,12 +9,36 @@ from openerp.tools import float_compare
 import openerp.addons.decimal_precision as dp
 
 
+class po_invoice_line(models.Model):
+    _inherit = "account.invoice"
+
+    sto = fields.Float('STO', store=True)
+    sti = fields.Float('STI', store=True)
+    et = fields.Float('ET', store=True)
+    stwh = fields.Float('STWH', store=True)
+    gst = fields.Float('GST', store=True)
+
+    @api.multi
+    def button_reset_taxes(self):
+        for i in self.tax_line:
+            if i.name == 'OUTPUT TAX 17.00%':
+                self.sto = float(i.amount)
+            elif i['name'] == 'INPUT TAX 17.00%':
+                self.sti = float(i.amount)
+            elif i['name'] == 'EXTRA TAX 2%':
+                self.et = float(i.amount)
+            elif i['name'] == 'SALES TAX WITH HELD':
+                self.stwh = float(i.amount)
+            elif i['name'] == 'GST 17%':
+                self.gst = float(i.amount)
+        return True
+
+
 class po(models.Model):
     _inherit = "purchase.order"
 
     tax_line = fields.One2many('po.taxes', 'po_id', string='Tax Lines',
                                readonly=True, states={'draft': [('readonly', False)]}, copy=True)
-
     @api.multi
     def button_reset_taxes(self):
         taxes_list = []
@@ -25,6 +49,16 @@ class po(models.Model):
         self.invalidate_cache()
         for i in taxes_list:
             self.env['po.taxes'].create({'po_id': self.id, 'name': i['name'], 'amount': i['amount']})
+            if i['name'] == 'OUTPUT TAX 17.00%':
+                self.sto = float(i['amount'])
+            elif i['name'] == 'INPUT TAX 17.00%':
+                self.sti = float(i['amount'])
+            elif i['name'] == 'EXTRA TAX 2%':
+                self.et = float(i['amount'])
+            elif i['name'] == 'SALES TAX WITH HELD':
+                self.stwh = float(i['amount'])
+            elif i['name'] == 'GST 17%':
+                self.gst = float(i['amount'])
 
 
 class po_order_taxes(models.Model):

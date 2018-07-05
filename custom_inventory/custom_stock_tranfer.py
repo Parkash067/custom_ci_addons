@@ -175,6 +175,8 @@ class custom_stock_transfer_details(osv.TransientModel):
                 po = self.env['purchase.order'].search([('name', '=', self.picking_id.origin), ])
                 do = self.env['stock.picking'].search([('po_ref', '=', po.id), ])
                 for line in do.stock_split_lines:
+                    print ">>>>>>>>>>>>>>>>>>>>>>>print>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+                    print line
                     self.env['stock.production.lot'].create({'name': line.engine_number,
                                                              'chassis_number': line.chassis_number,
                                                              'product_id': self.fetch_product(line.product_id.id)

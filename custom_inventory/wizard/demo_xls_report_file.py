@@ -306,7 +306,7 @@ class xls_report(osv.osv_memory):
     def purchase_register_report(self,cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids[0], context=context)
         cr.execute(
-            "select rp.ntn,rp.name,rp.street,rp.city,av.date_invoice,av.amount_tax,av.number,av.amount_total,av.amount_untaxed,avl.name as description,avl.quantity,avl.price_unit from account_invoice as av inner join res_partner as rp on av.partner_id = rp.id "
+            "select rp.ntn,rp.name,rp.street,rp.city,av.date_invoice,av.amount_tax,av.sto,av.sti,av.et,av.stwh,av.number,av.amount_total,av.amount_untaxed,avl.name as description,avl.quantity,avl.price_unit from account_invoice as av inner join res_partner as rp on av.partner_id = rp.id "
             "inner join account_invoice_line as avl on av.id = avl.invoice_id where av.date_invoice between'" + str(
                 obj.date_from) + "'" + " and '" + str(
                 obj.date_to) + "'" + "and av.type='in_invoice' order by date_invoice asc")
@@ -369,9 +369,10 @@ class xls_report(osv.osv_memory):
                         ws.write(i + 1, 7, data[i]['quantity'], new_style7)
                         ws.write(i + 1, 8, data[i]['price_unit'], new_style7)
                         ws.write(i + 1, 9, data[i]['amount_untaxed'], new_style7)
-                        ws.write(i + 1, 10, data[i]['amount_tax'], new_style7)
-                        ws.write(i + 1, 11, data[i]['amount_total'], new_style7)
-                        ws.write(i + 1, 12, '', new_style7)
+                        ws.write(i + 1, 10, data[i]['sti'], new_style7)
+                        ws.write(i + 1, 11, data[i]['et'], new_style7)
+                        ws.write(i + 1, 12, data[i]['amount_total'], new_style7)
+                        ws.write(i + 1, 13, data[i]['stwh'], new_style7)
 
             elif obj.type == 'IncomeTax Report':
                 for i in range(len(income_tax)):
