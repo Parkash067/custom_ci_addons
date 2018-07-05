@@ -114,7 +114,7 @@ class custom_stock_transfer_details(osv.TransientModel):
                 packs.append(item)
 
         operation = str((picking.name)).split("\\")
-        if len(operation)>0:
+        if len(operation) > 0:
             operation = operation[1]
             print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>oepratiyon", operation)
             if operation == 'IN':
@@ -140,13 +140,15 @@ class custom_stock_transfer_details(osv.TransientModel):
                 return False
 
     def fetch_product(self, product_id):
-        #variant = self.env['product.attribute.value.product.product.rel']
-        self.env.cr.execute("""select * from product_attribute_value_product_product_rel where prod_id='%s'"""%(product_id))
+        # variant = self.env['product.attribute.value.product.product.rel']
+        self.env.cr.execute(
+            """select * from product_attribute_value_product_product_rel where prod_id='%s'""" % (product_id))
         rec = self.env.cr.dictfetchall()[0]
         variant_id = rec['att_id']
         product_id = rec['prod_id']
         self.env.cr.execute(
-            """select * from product_attribute_value_product_product_rel where prod_id !='%s' and att_id = '%s'""" % (product_id,variant_id))
+            """select * from product_attribute_value_product_product_rel where prod_id !='%s' and att_id = '%s'""" % (
+            product_id, variant_id))
         new_product = self.env.cr.dictfetchall()[0]['prod_id']
         return new_product
 
@@ -173,10 +175,8 @@ class custom_stock_transfer_details(osv.TransientModel):
                 self.picking_id.write({'po_ref': order_id.id})
             if self.picking_id.partner_id.name == 'Sara Automobiles' and len(_picking_id) > 0:
                 po = self.env['purchase.order'].search([('name', '=', self.picking_id.origin), ])
-                do = self.env['stock.picking'].search([('po_ref', '=', po.id), ])
+                do = self.env['stock.picking'].search([('po_ref', '=', po.id), ('custom_status', '=', False)])
                 for line in do.stock_split_lines:
-                    print ">>>>>>>>>>>>>>>>>>>>>>>print>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-                    print line
                     self.env['stock.production.lot'].create({'name': line.engine_number,
                                                              'chassis_number': line.chassis_number,
                                                              'product_id': self.fetch_product(line.product_id.id)
