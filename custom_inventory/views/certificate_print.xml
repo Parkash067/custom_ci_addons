@@ -1,78 +1,114 @@
-<?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
-        <template id="certificate_print">
-           <t t-call='report.html_container'>
-               <t t-foreach="docs" t-as="certificate">
-                   <t>
-                       <span t-esc="certificate.generate_qr_code()"/>
-                       <t t-if="(certificate.counter!=0 and certificate.status=='Approved' and certificate.certificate_lock==False) or (certificate.counter==0 and certificate.status=='draft' and certificate.certificate_lock==False)">
-                            <div class="page">
-                                <span t-esc="certificate.certificate_serial" style="float:right;margin-top:60px;margin-right:80px"/><br/>
-                                <span t-field="certificate.qr_code" widget="image" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}" style="float:right;margin-top:100px;margin-right:-70px;width:100px;height:100px;" />
-                                <!--<img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', certificate.generate_qr_code(), 100, 100)" style="float:right;margin-top:100px;margin-right:-70px"/>-->
-                                <t t-if="certificate.check_issuance()==1">
-                                    <div>
-                                        <div style="width:10px; height:10px; background:black; border-radius:100px;margin-top:100px;margin-left:50px;float:left">
+<?xml version="1.0"?>
+<t t-name="custom_inventory.certificate_print">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="certificate">
+            <t>
+                <span t-esc="certificate.generate_qr_code()"/>
+                <t t-if="(certificate.counter!=0 and certificate.status=='Approved' and certificate.certificate_lock==False) or (certificate.counter==0 and certificate.status=='draft' and certificate.certificate_lock==False)">
+                    <div class="page">
+                        <span t-esc="certificate.certificate_serial"
+                              style="float:right;margin-top:80px;margin-right:80px"/>
+                        <br/>
+                        <span t-field="certificate.qr_code" widget="image"
+                              t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}"
+                              style="float:right;margin-top:115px;margin-right:-70px;width:100px;height:100px;"/>
+                        <!--<img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', certificate.generate_qr_code(), 100, 100)" style="float:right;margin-top:120px;margin-right:-70px"/>-->
+                        <t t-if="certificate.check_issuance()==1">
+                            <div>
+                                <div style="width:10px; height:10px; background:black; border-radius:100px;margin-top:100px;margin-left:50px;float:left">
 
-                                        </div>
-                                        <h6 style="margin-top:210px;">
-                                            <strong><span style="margin-left:450px;" t-esc="certificate.product_id.default_code"/></strong>
-                                        </h6>
-                                        <h5>
-                                            <strong>
-                                                <span t-esc="certificate.engine_number" style="margin-left:100px;"/>
-                                                <span t-esc="certificate.chassis_number" style="margin-left:120px"/>
-                                            </strong>
-                                        </h5>
-                                    </div>
-                                    <div style="margin-top:500px">
-                                        <span t-field="certificate.qr_code" widget="image" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}" style="float:left;margin-left:110px;height:60px;width:60px;margin-top:-20px;"/>
-                                        <span t-esc="certificate.certificate_serial" style="float:right;margin-right:90px;margin-top:3px"/><br/><br/>
-                                        <span t-esc="certificate.partner_id.name" style="float:left;font-size:16px;font-weight:bold;margin-left:100px;margin-top:13px;"/>
-                                        <span t-esc="certificate.partner_id.city" style="float:left;font-size:16px;font-weight:bold;margin-left:300px;"/><br/><br/>
-                                        <span t-esc="certificate.model" style="float:left;font-size:16px;font-weight:bold;margin-left:130px;margin-top:5px;"/>
-                                        <span t-esc="certificate.product_id.default_code" style="float:left;font-size:16px;font-weight:bold;margin-left:170px;margin-top:5px;"/>
-                                        <span t-esc="certificate.color" style="font-size:16px;font-weight:bold;margin-left:170px;margin-top:20px;"/><br/><br/>
-                                        <span t-esc="certificate.engine_number" style="float:left;font-size:16px;font-weight:bold;margin-left:120px;margin-top:-3px;"/>
-                                        <span t-esc="certificate.chassis_number" style="float:left;font-size:16px;font-weight:bold;margin-left:110px;margin-top:-3px;"/>
-                                        <span t-esc="certificate.inc_in_counter()"/>
-                                    </div>
-                                </t>
-                                <t t-if="certificate.check_issuance()==0">
-                                    <div>
-                                        <div style="width:10px; height:10px; background:black; border-radius:100px;margin-top:100px;margin-left:50px;float:left">
+                                </div>
+                                <h6 style="margin-top:225px;">
+                                    <strong>
+                                        <span style="margin-left:447px;" t-esc="certificate.product_id.default_code"/>
+                                    </strong>
+                                </h6>
+                                <h5>
+                                    <strong>
+                                        <span t-esc="certificate.engine_number" style="margin-left:95px;"/>
+                                        <span t-esc="certificate.chassis_number" style="margin-left:120px"/>
+                                    </strong>
+                                </h5>
+                            </div>
+                            <div style="margin-top:500px">
+                                <span t-field="certificate.qr_code" widget="image"
+                                      t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}"
+                                      style="float:left;margin-left:110px;height:50px;width:60px;margin-top:-15px;"/>
+                                <span t-esc="certificate.certificate_serial"
+                                      style="float:right;margin-right:90px;margin-top:3px"/>
+                                <br/>
+                                <br/>
+                                <span t-esc="certificate.partner_id.name"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:100px;margin-top:13px;"/>
+                                <span t-esc="certificate.partner_id.city"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:300px;"/>
+                                <br/>
+                                <br/>
+                                <span t-esc="certificate.model"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:130px;margin-top:5px;"/>
+                                <span t-esc="certificate.product_id.default_code"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:170px;margin-top:5px;"/>
+                                <span t-esc="certificate.color"
+                                      style="font-size:16px;font-weight:bold;margin-left:170px;margin-top:20px;"/>
+                                <br/>
+                                <br/>
+                                <span t-esc="certificate.engine_number"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:120px;margin-top:-3px;"/>
+                                <span t-esc="certificate.chassis_number"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:110px;margin-top:-3px;"/>
+                                <span t-esc="certificate.inc_in_counter()"/>
+                            </div>
+                        </t>
+                        <t t-if="certificate.check_issuance()==0">
+                            <div>
+                                <div style="width:10px; height:10px; background:black; border-radius:100px;margin-top:100px;margin-left:50px;float:left">
 
-                                        </div>
-                                        <h6 style="margin-top:210px;">
-                                            <strong><span style="margin-left:450px;" t-esc="certificate.product_id.default_code"/></strong>
-                                        </h6>
-                                        <h5>
-                                            <strong>
-                                                <span t-esc="certificate.engine_number" style="margin-left:100px;"/>
-                                                <span t-esc="certificate.chassis_number" style="margin-left:120px"/>
-                                            </strong>
-                                        </h5>
-                                    </div>
-                                    <div style="margin-top:500px">
-                                        <span t-field="certificate.qr_code" widget="image" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}" style="float:left;margin-left:110px;height:60px;width:60px;margin-top:-20px;" />
-                                        <span t-esc="certificate.certificate_serial" style="float:right;margin-right:90px;margin-top:3px"/><br/><br/>
-                                        <span t-esc="certificate.partner_id.name" style="float:left;font-size:16px;font-weight:bold;margin-left:100px;margin-top:13px;"/>
-                                        <span t-esc="certificate.partner_id.city" style="float:left;font-size:16px;font-weight:bold;margin-left:300px;"/><br/><br/>
-                                        <span t-esc="certificate.model" style="float:left;font-size:16px;font-weight:bold;margin-left:130px;margin-top:5px;"/>
-                                        <span t-esc="certificate.product_id.default_code" style="float:left;font-size:16px;font-weight:bold;margin-left:170px;margin-top:5px;"/>
-                                        <span t-esc="certificate.color" style="font-size:16px;font-weight:bold;margin-left:170px;margin-top:20px;"/><br/><br/>
-                                        <span t-esc="certificate.engine_number" style="float:left;font-size:16px;font-weight:bold;margin-left:120px;margin-top:-3px;"/>
-                                        <span t-esc="certificate.chassis_number" style="float:left;font-size:16px;font-weight:bold;margin-left:110px;margin-top:-3px;"/>
-                                        <span t-esc="certificate.inc_in_counter()"/>
-                                    </div>
-                               </t>
-                           </div>
-                       </t>
-                   </t>
-                   <p style="page-break-before: always;"/>
-               </t>
-           </t>
-        </template>
-    </data>
-</openerp>
+                                </div>
+                                <h6 style="margin-top:225px;">
+                                    <strong>
+                                        <span style="margin-left:450px;" t-esc="certificate.product_id.default_code"/>
+                                    </strong>
+                                </h6>
+                                <h5>
+                                    <strong>
+                                        <span t-esc="certificate.engine_number" style="margin-left:80px;"/>
+                                        <span t-esc="certificate.chassis_number" style="margin-left:120px"/>
+                                    </strong>
+                                </h5>
+                            </div>
+                            <div style="margin-top:500px">
+                                <span t-field="certificate.qr_code" widget="image"
+                                      t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}"
+                                      style="float:left;margin-left:110px;height:50px;width:60px;margin-top:-15px;"/>
+                                <span t-esc="certificate.certificate_serial"
+                                      style="float:right;margin-right:90px;margin-top:3px"/>
+                                <br/>
+                                <br/>
+                                <span t-esc="certificate.partner_id.name"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:100px;margin-top:13px;"/>
+                                <span t-esc="certificate.partner_id.city"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:300px;"/>
+                                <br/>
+                                <br/>
+                                <span t-esc="certificate.model"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:130px;margin-top:5px;"/>
+                                <span t-esc="certificate.product_id.default_code"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:170px;margin-top:5px;"/>
+                                <span t-esc="certificate.color"
+                                      style="font-size:16px;font-weight:bold;margin-left:170px;margin-top:20px;"/>
+                                <br/>
+                                <br/>
+                                <span t-esc="certificate.engine_number"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:90px;margin-top:-3px;"/>
+                                <span t-esc="certificate.chassis_number"
+                                      style="float:left;font-size:16px;font-weight:bold;margin-left:110px;margin-top:-3px;"/>
+                                <span t-esc="certificate.inc_in_counter()"/>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+            <p style="page-break-before: always;"/>
+        </t>
+    </t>
+</t>
