@@ -215,11 +215,11 @@ class custom_stock_move(osv.osv):
 
         )
         qr.add_data('Engine Number : ' + self.engine_number + '\n' +
-                    'Chasis Number : ' + self.chassis_number + '\n' +
+                    'Chassis Number : ' + self.chassis_number + '\n' +
                     'Model : ' + self.model + '\n' +
                     'Brand : ' + self.product_id.name + '\n' +
                     'HP : ' + self.product_id.default_code + '\n'
-                    + 'MANUFACTURED BY SARA AUTOMOBILE INDUSTERIES')
+                    + 'MANUFACTURED BY SARA AUTOMOBILE INDUSTRIES')
         qr.make(fit=True)
         img = qr.make_image()
         buffer = cStringIO.StringIO()
