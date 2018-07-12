@@ -128,7 +128,7 @@
                 <form string="Sales Order">
                     <header>
                         <button name="action_view_delivery" string="View Materials" type="object" class="oe_highlight"
-                           groups="base.group_user" attrs="{'invisible': [('state','!=','progress')]}"/>
+                           groups="base.group_user" />
                         <button name="action_button_confirm"  string="Distribute" class="oe_highlight" type="object" groups="base.group_user" attrs="{'invisible': [('state','!=','draft')]}" />
                         <field name="state" widget="statusbar" invisible="1"
                                statusbar_visible="draft,sent,progress,done" statusbar_colors='{"invoice_except":"red","waiting_date":"blue"}'/>
