@@ -161,12 +161,12 @@ class custom_stock_move(osv.osv):
 
     @api.constrains('engine_number')
     def _check_unique_constraint_(self):
-        if len(self.search([('engine_number', '=', self.engine_number), ])) > 1 and self.product_id.company_id.name =='Sara Automobiles':
+        if len(self.search([('engine_number', '=', self.engine_number),('partner_id', '=', self.partner_id.id), ])) > 1 and self.product_id.company_id.name =='Sara Automobiles':
             raise ValidationError("This engine number already exists and violates unique field constraint")
 
     @api.constrains('chassis_number')
     def _check_unique_constraint(self):
-        if len(self.search([('chassis_number', '=', self.chassis_number), ])) > 1 and self.product_id.company_id.name =='Sara Automobiles':
+        if len(self.search([('chassis_number', '=', self.chassis_number),('partner_id', '=', self.partner_id.id), ])) > 1 and self.product_id.company_id.name =='Sara Automobiles':
             raise ValidationError("This chassis number already exists and violates unique field constraint")
 
     @api.one

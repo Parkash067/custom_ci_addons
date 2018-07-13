@@ -101,16 +101,13 @@ class custom_mrp_product_produce(osv.osv_memory):
         assert production_id, "Production Id should be specified in context as a Active ID."
         data = self.browse(cr, uid, ids[0], context=context)
         for line in data.production_lines:
-            self.pool.get('mrp.production').action_produce(cr, uid, production_id,
-                                                           line.product_qty, line.mode, data, context=context)
             if product_id in products:
                 rec_id = stock_production_lot.create(cr, uid, {'name': line.engine_number,
                                                                'chassis_number': line.chassis_number,
                                                                'color': line.color,
-                                                               # 'model': '70 CC',
-                                                               # 'year': '2018',
                                                                'product_id': product_id
                                                                }, context=context)
+        self.pool.get('mrp.production').action_produce(cr, uid, production_id,data.product_qty, data.mode, data, context=context)
         return {}
 
 

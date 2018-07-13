@@ -118,6 +118,7 @@
                     <field name="product_name"/>
                     <field name="qty"/>
                     <field name="state" invisible="1"/>
+                    <field name="status"/>
                 </tree>
             </field>
         </record>
@@ -153,6 +154,7 @@
                             <field name="so_type" required="1"/>
                             <field name="mo_reference" required="1"/>
                             <field name="product_name" readonly="1"/>
+                            <field name="status" readonly="1"/>
                             <field name="qty" readonly="1"/>
                             <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'invoice'}"/>
                             <field name="partner_shipping_id" on_change="onchange_delivery_id(company_id, partner_id, partner_shipping_id, fiscal_position)" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>

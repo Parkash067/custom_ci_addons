@@ -32,5 +32,15 @@
             <field name="padding">4</field>
             <field name="suffix">/%(month)s/%(year)s</field>
         </record>
+
+         <record id="custom_material_distribution" model="ir.sequence.type">
+            <field name="name">MD</field>
+            <field name="code">mat.dis.serial</field>
+         </record>
+        <record id="custom_material_distribution_" model="ir.sequence">
+            <field name="name">Material Distribution Serial</field>
+            <field name="code">mat.dis.serial</field>
+            <field name="padding">4</field>
+        </record>
     </data>
 </openerp>

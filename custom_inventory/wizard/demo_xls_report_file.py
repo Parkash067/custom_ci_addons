@@ -208,6 +208,7 @@ class xls_report(osv.osv_memory):
             self.env.cr.execute("select rp.name as customer,ai.partner_id,sum(ai.amount_total) as amount_total from account_invoice as ai inner join res_partner as rp on ai.partner_id = rp.id where ai.date_invoice between'"+self.date_from+"'"+"and'"+self.date_to+"'"+"and ai.partner_id="+str(rec['partner_id'])+"group by rp.name,ai.partner_id")
             data = self.env.cr.dictfetchall()
             customer = self.env['res.partner'].search([['id', '=', rec['partner_id']], ])
+
             if len(data)>0:
                 rec['sale_amount'] = data[0]['amount_total']
                 rec['customer'] = customer.name
@@ -217,6 +218,7 @@ class xls_report(osv.osv_memory):
                 rec['customer'] = customer.name
                 new.append(rec)
         for i in new:
+            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>i",i)
             if int(i['opening'])>0 or int(i['collection'])>0 or int(i['sale_amount'])>0:
                 final_res.append(i)
 
