@@ -4,6 +4,7 @@ from datetime import datetime
 import time
 
 lot_ids = []
+product_id = []
 
 
 class custom_stock_transfer_details_items(osv.TransientModel):
@@ -35,7 +36,7 @@ class custom_stock_transfer_details_items(osv.TransientModel):
     def onchange_field_id(self):
         if self.lot_id:
             lot_ids.append(self.lot_id.id)
-            return {'domain': {'lot_id': [('id', 'not in', lot_ids), ('status', '=', 'Available'), ]}}
+            return {'domain': {'lot_id': [('id', 'not in', lot_ids), ('status', '=', 'Available'),('product_id','in',[self.product_id.id]) ]}}
 
     @api.one
     @api.depends('lot_id')
