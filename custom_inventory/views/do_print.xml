@@ -77,7 +77,7 @@
                                                     </td>
                                                 </t>
                                             </tr>
-                                            <t t-if="do.picking_type_id.name=='Receipts'">
+                                            <t>
                                                 <tr>
                                                     <td style="width:140px; border-right:1px solid black; border-top:1px solid black; padding:3px; !important;">
                                                         <strong>Ref</strong>
