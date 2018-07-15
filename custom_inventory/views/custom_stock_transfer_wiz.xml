@@ -29,7 +29,7 @@
                     <field name="year" />
                 </xpath>
                 <xpath expr="//tree/field[@name='lot_id']" position="attributes">
-                    <attribute name="domain">[('status','=',parent.status),]</attribute>
+                    <attribute name="domain">[('product_id','=',product_id),('status','=',parent.status),]</attribute>
                 </xpath>
             </field>
         </record>

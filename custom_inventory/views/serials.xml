@@ -41,6 +41,7 @@
             <field name="name">Material Distribution Serial</field>
             <field name="code">mat.dis.serial</field>
             <field name="padding">4</field>
+            <field name="prefix">MD</field>
         </record>
     </data>
 </openerp>

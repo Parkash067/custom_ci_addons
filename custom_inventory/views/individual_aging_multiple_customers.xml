@@ -36,6 +36,10 @@
                                                     Invoice No.
                                                 </td>
                                                 <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
+                                                    Days
+                                                </td>
+
+                                                <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
                                                     Amount Balance
                                                 </td>
                                                 <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
@@ -64,7 +68,7 @@
                                         <tbody class="invoice_tbody">
                                             <t t-foreach="doc.individual_aging_report()" t-as="l">
                                                 <tr style="background:royalblue;color:white;font-weight:bold;text-align:center;">
-                                                    <td colspan="11" t-esc="l['customer']"
+                                                    <td colspan="12" t-esc="l['customer']"
                                                         style="border: 1px solid black; padding:5px;"/>
                                                 </tr>
                                                 <tr t-foreach="l['details']" t-as="o">
@@ -76,6 +80,9 @@
                                                     </td>
                                                     <td style="border: 1px solid black; padding:5px; text-align:center;">
                                                         <span t-esc="o['number']"/>
+                                                    </td>
+                                                    <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                                        <span t-esc="doc.get_tiem_diff_between(o['date_invoice'],doc.date_to)"/>
                                                     </td>
                                                     <td style="border: 1px solid black; padding:5px; text-align:center;">
                                                         <span t-esc="'{0:,.2f}'.format(int(o['amount_total']))"/>
@@ -126,7 +133,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;"
-                                                        colspan="3">Total
+                                                        colspan="4">Total
                                                     </td>
                                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">
                                                         <span t-esc="'{0:,.2f}'.format(int(total))"/>

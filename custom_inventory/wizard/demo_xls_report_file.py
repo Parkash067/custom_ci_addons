@@ -5,6 +5,7 @@ import xlwt
 import StringIO
 import base64
 from datetime import datetime
+from dateutil.relativedelta import *
 
 sales_register = ['Sr.No.', 'NTN', 'NIC', 'Buyer\'s Name', 'Description', 'Engine Number', 'Chassis Number',
                   'Inv No.', 'Inv Date', 'Excl Value', 'Futher Tax', 'S.T.Value', 'Incl.Value']
@@ -139,6 +140,14 @@ class xls_report(osv.osv_memory):
             rec['days'] = delta.days
             _list.append(rec)
         return _list
+
+    def get_tiem_diff_between(self, d1, d2):
+        d1 = str(d1).split('-')
+        d2 = str(d2).split('-')
+        d1 = date(int(d1[0]), int(d1[1]), int(d1[2]))
+        d2 = date(int(d2[0]), int(d2[1]), int(d2[2]))
+        delta = d2 - d1
+        return delta.days
 
     def individual_aging_report(self):
         if self.partner_id:

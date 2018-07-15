@@ -25,6 +25,7 @@
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Serial No.</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Date</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Invoice No.</td>
+                                        <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Days</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">Amount Balance</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">1-30</td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; ">31-45</td>
@@ -45,6 +46,9 @@
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="l['number']"/>
+                                        </td>
+                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
+                                            <span t-esc="doc.get_tiem_diff_between(l['date_invoice'],doc.date_to)"/>
                                         </td>
                                         <td style="border: 1px solid black; padding:5px; text-align:center;">
                                             <span t-esc="'{0:,.2f}'.format(int(l['amount_total']))"/>
@@ -94,7 +98,7 @@
                                         </td>
                                     </tr>
                                      <tr>
-                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;" colspan="3">Total</td>
+                                     <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder;" colspan="4">Total</td>
                                      <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(total))"/></td>
                                      <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(one))"/></td>
                                      <td style="border: 1px solid black; padding:5px; text-align:center; font-weight:bolder; "><span t-esc="'{0:,.2f}'.format(int(two))"/></td>

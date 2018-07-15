@@ -36,7 +36,8 @@ class custom_stock_transfer_details_items(osv.TransientModel):
     def onchange_field_id(self):
         if self.lot_id:
             lot_ids.append(self.lot_id.id)
-            return {'domain': {'lot_id': [('id', 'not in', lot_ids), ('status', '=', 'Available'),('product_id','in',[self.product_id.id]) ]}}
+            return {'domain': {'lot_id': [('id', 'not in', lot_ids), ('status', '=', 'Available'),
+                                          ('product_id', 'in', [self.product_id.id])]}}
 
     @api.one
     @api.depends('lot_id')
@@ -149,7 +150,7 @@ class custom_stock_transfer_details(osv.TransientModel):
         product_id = rec['prod_id']
         self.env.cr.execute(
             """select * from product_attribute_value_product_product_rel where prod_id !='%s' and att_id = '%s'""" % (
-            product_id, variant_id))
+                product_id, variant_id))
         new_product = self.env.cr.dictfetchall()[0]['prod_id']
         return new_product
 
@@ -174,16 +175,6 @@ class custom_stock_transfer_details(osv.TransientModel):
                 }
                 order_id = self.env['purchase.order'].create(purchase_order)
                 self.picking_id.write({'po_ref': order_id.id})
-            if self.picking_id.partner_id.name == 'Sara Automobiles' and len(_picking_id) > 0:
-                po = self.env['purchase.order'].search([('name', '=', self.picking_id.origin), ])
-                do = self.env['stock.picking'].search([('po_ref', '=', po.id), ('custom_status', '=', False)])
-                print(">>>>>>>>>>>>>>>>>>>>>>>>do>>>>>>>>>>>>>>>>>>",do)
-                for line in do.stock_split_lines:
-                    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>line>>>>>>>>>>>>>>>>>>>>",line)
-                    self.env['stock.production.lot'].create({'name': line.engine_number,
-                                                             'chassis_number': line.chassis_number,
-                                                             'product_id': self.fetch_product(line.product_id.id)
-                                                             })
             processed_ids = []
             # Create new and update existing pack operations
             for lstits in [self.item_ids, self.packop_ids]:
@@ -232,6 +223,11 @@ class custom_stock_transfer_details(osv.TransientModel):
                                 'order_id': order_id.id
                             }
                             self.env['purchase.order.line'].create(purchase_order_lines)
+                            self.env['stock.production.lot'].create({'name': prod.lot_id.name,
+                                                                     'chassis_number': prod.lot_id.chassis_number,
+                                                                     'product_id': self.fetch_product(
+                                                                         prod.product_id.id)
+                                                                     })
                     if prod.packop_id:
                         prod.packop_id.with_context(no_recompute=True).write(pack_datas)
                         processed_ids.append(prod.packop_id.id)
