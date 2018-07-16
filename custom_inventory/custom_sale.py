@@ -15,7 +15,8 @@ class custom_sale(osv.osv):
         'product_name': fields.related('mo_reference', 'product_id', relation="product.product", type='many2one',
                                        string="Product", store=True),
         'qty': fields.related('mo_reference', 'product_qty', type='float', string='Quantity', store=True),
-        'status': fields.selection([('draft', 'Draft'), ('done', 'Done')], string='Status', store=True, compute='fetch_status')
+        'status': fields.selection([('draft', 'Draft'), ('done', 'Done')], string='Status', store=True,
+                                   compute='fetch_status')
     }
 
     def create(self, cr, uid, vals, context=None):
@@ -32,6 +33,22 @@ class custom_sale(osv.osv):
                 self.status = 'draft'
             elif self.state == 'progress':
                 self.status = 'done'
+
+    @api.multi
+    def fetch_products(self):
+        if self.mo_reference:
+            self._cr.execute("DELETE FROM sale_order_line WHERE order_id=%s", (self.id,))
+            product_code = str(self.mo_reference.product_id.default_code).strip()
+            product = self.env['product.set'].search([('name', 'like', product_code)])[0]
+            for _product in product.set_line_ids:
+                self.env['sale.order.line'].create({
+                    'product_id': _product.product_id.id,
+                    'product_uom_qty': _product.quantity*self.mo_reference.product_qty,
+                    'name': _product.product_id.name,
+                    'order_id': self.id,
+                })
+
+
 # 'product': fields.many2one('mo_reference.product_id', string='Product Name',readonly=True),
 # }
 

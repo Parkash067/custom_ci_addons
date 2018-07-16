@@ -112,9 +112,10 @@
             <field name="arch" type="xml">
                 <tree string="Quotation" fonts="bold:message_unread==True" colors="grey:state=='cancel';blue:state in ('waiting_date','manual');red:state in ('invoice_except','shipping_except')">
                     <field name="message_unread" invisible="1"/>
+                    <field name="name" readonly="1"/>
+                     <field name="mo_reference"/>
                     <field name="date_order"/>
                     <field name="partner_id" string="Department"/>
-                    <field name="mo_reference"/>
                     <field name="product_name"/>
                     <field name="qty"/>
                     <field name="state" invisible="1"/>
@@ -168,6 +169,8 @@
                             <field name="currency_id" invisible="1"/>
                         </group>
                     </group>
+                    <separator/>
+                    <button name="fetch_products" type="object" string="Fetch Products" class="oe_highlight"  attrs="{'invisible': [('mo_reference','=',False)]}"/>
                     <notebook>
                         <page string="Distribution Lines">
                             <field name="order_line">

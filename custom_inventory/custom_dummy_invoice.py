@@ -62,11 +62,11 @@ class custom_dummy_invoice(osv.osv):
 
         )
         qr.add_data('Engine Number : ' + self.engine_number + '\n' +
-                    'Chasis Number : ' + self.chassis_number + '\n' +
+                    'Chassis Number : ' + self.chassis_number + '\n' +
                     'Model : ' + '2018' + '\n' +
                     'Brand : ' + 'Union Star' + '\n' +
                     'HP : ' + '70 CC' + '\n'
-                    + 'MANUFACTURED BY SARA AUTOMOBILE INDUSTERIES')
+                    + 'MANUFACTURED BY SARA AUTOMOBILE INDUSTRIES')
         qr.make(fit=True)
         img = qr.make_image()
         buffer = cStringIO.StringIO()
@@ -150,7 +150,7 @@ class custom_dummy_invoice_lines(osv.osv):
         elif self.name.ntn == False and self.name.partner_id != 'Allied Business Corporation':
             sales_tax = round(self.price_unit * 17 / 100)
             wht = round((self.quantity * self.price_unit + sales_tax) * 0.2 / 100)
-            further_tax = round(self.price_unit * 2 / 100)
+            further_tax = round(self.price_unit * 3 / 100)
             self.sales_tax = sales_tax
             self.wht = wht
             self.further_tax = further_tax

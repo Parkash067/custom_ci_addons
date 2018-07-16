@@ -92,7 +92,7 @@ class po_line(osv.osv):
         if self.product_id == False:
             return None
         data = self.env['purchase.price.list'].search([('code', '=', self.product_id.default_code)])
-        self.price_unit = data.price if len(data) > 0 else 0.0
+        self.price_unit = data[0].price if len(data) > 0 else 0.0
         self.name = self.product_id.name
         self.date_planned = self.order_id.date_order
 
@@ -102,6 +102,6 @@ class po_line(osv.osv):
             return None
         data = self.env['purchase.price.list'].search([('code', '=', self.product_id.default_code)])
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        self.price_unit = data.price*self.product_qty if len(data) > 0 else 0.0
+        self.price_unit = data[0].price*self.product_qty if len(data) > 0 else 0.0
 
 

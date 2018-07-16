@@ -28,8 +28,8 @@
                                         </h6>
                                         <h5>
                                             <strong>
-                                                <span t-esc="certificate.engine_number" style="margin-left:95px;"/>
-                                                <span t-esc="certificate.chassis_number" style="margin-left:120px"/>
+                                                <span t-esc="certificate.engine_number" style="margin-left:80px;"/>
+                                                <span t-esc="certificate.chassis_number" style="margin-left:107px"/>
                                             </strong>
                                         </h5>
                                     </div>
@@ -76,7 +76,7 @@
                                         <h5>
                                             <strong>
                                                 <span t-esc="certificate.engine_number" style="margin-left:80px;"/>
-                                                <span t-esc="certificate.chassis_number" style="margin-left:120px"/>
+                                                <span t-esc="certificate.chassis_number" style="margin-left:107px"/>
                                             </strong>
                                         </h5>
                                     </div>

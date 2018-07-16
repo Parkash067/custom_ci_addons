@@ -19,7 +19,7 @@
                         </h1>
                         <div style="max-width:100%;height:auto;width:80%;margin-left:auto;margin-right:auto;text-align:center;">
                             <span style="text-decoration:underline; font-size:18px;">Plot No B-6 Scheme 33,
-                                Super Highway S.I.T.E Karachi, Tel:02132736673
+                                Super Highway S.I.T.E Karachi, Tel:021-32736973
                             </span>
                             <t t-if="do.picking_type_id.name!='Receipts'">
                                 <h3 style="text-decoration:underline;">Delivery Order / Gate Pass</h3>

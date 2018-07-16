@@ -211,7 +211,7 @@
                                                 <strong>Payment Schedule:</strong>
                                             </td>
                                             <td>
-                                                <strong>Prepayment</strong>
+                                                <strong><span t-esc="o.payment_term_id.name"/> </strong>
                                             </td>
                                         </tr>
                                     </table>
@@ -243,7 +243,7 @@
                             </div>
                             <strong style="font-size:10px;">
                                 <p>Note: Please email the copy of current period of exemption certificate for our record
-                                    and tax administration<br/>Email: info@sara-industries.com
+                                    and tax administration<br/>Email: purchase@sara-industries.com
                                 </p>
                             </strong>
                         </div>
