@@ -125,7 +125,7 @@ class custom_dummy_invoice_lines(osv.osv):
         'price_unit': fields.float('Unit Price', store=True,default=0.0),
         'sales_tax': fields.float('Sales Tax 17%', store=True,default=0.0, compute='cal_wht_further_tax'),
         'wht': fields.float('W.H.T', store=True, default=0.0, compute='cal_wht_further_tax'),
-        'further_tax': fields.float('Further Tax 2%', store=True, compute='cal_wht_further_tax'),
+        'further_tax': fields.float('Further Tax 3%', store=True, compute='cal_wht_further_tax'),
         'price_subtotal': fields.float('Incl. Value', store=True, readonly=True,default=0.0, compute='basic_amount'),
         'chassis_number': fields.char('Chassis No.'),
         'engine_number': fields.char('Engine No.'),

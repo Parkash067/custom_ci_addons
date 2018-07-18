@@ -8,9 +8,7 @@
         <template id="my_own_layout_header">
             <div class="header">
                 <div class="row">
-                    <t t-if="do.partner_id.company_id.name == 'Sara Automobiles'">
-
-
+                    <t t-if="do.partner_id.company_id.name == 'SARA AUTOMOBILE INDUSTRIES'">
                         <h1 style="padding:3px;max-width:100%;height:auto;width:100%;margin-left:auto;
                                          margin-right:auto;text-align:center;">
                             <span style="margin-left:10px;">SARA</span>
