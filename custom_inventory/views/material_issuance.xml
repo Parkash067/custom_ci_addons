@@ -28,6 +28,9 @@
                                 <strong>Department:</strong>
                                 <span t-esc="o.partner_id.name"/>
                                 <br/>
+                                <strong>Reference:</strong>
+                                <span t-esc="o.name"/>
+                                <br/>
                                 <strong>Date:</strong>
                                 <span t-esc="o.date_order"/>
                                 <br/>

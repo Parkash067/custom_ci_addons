@@ -53,11 +53,11 @@ class WizardReports(osv.TransientModel):
 
     def finished_products(self):
         self.env.cr.execute("""
-        select pt.name as product,spl.name as engine_number,spl.chassis_number,sq.qty,spl.color,spl.model,spl.year
+        select pp.name_template as product,spl.name as engine_number,spl.chassis_number,spl.color,spl.model,spl.year
         from stock_production_lot as spl 
-        inner join product_template as pt on spl.product_id = pt.id
-        inner join stock_quant as sq on spl.id = sq.lot_id where spl.status != 'Issued' and spl.create_date between '%s' and '%s'
-        """%(self.date_from,self.date_to+" 23:00:00"))
+        inner join product_product as pp on spl.product_id = pp.id
+        where spl.create_date between '%s' and '%s'
+        """%(self.date_from,self.date_to+" 23:59:59"))
         result = self.env.cr.dictfetchall()
         return result
 
