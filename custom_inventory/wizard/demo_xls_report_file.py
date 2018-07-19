@@ -195,7 +195,7 @@ class xls_report(osv.osv_memory):
         new = []
         _res = []
         result = []
-        self.env.cr.execute('select id from res_partner where res_partner.customer=True')
+        self.env.cr.execute('select id from res_partner where res_partner.customer=True and company_id =%s'%(self.company_id.id))
         customers = self.env.cr.dictfetchall()
         for customer in customers:
             if self.company_id.name == 'Sara Automobiles':
@@ -208,13 +208,28 @@ class xls_report(osv.osv_memory):
                     data[0]['opening'] = 0
                     data[0]['partner_id'] = customer['id']
                     result.append(data)
+            else:
+                self.env.cr.execute(
+                    "select sum(account_move_line.debit) - sum(account_move_line.credit) as opening from account_move_line inner join account_move on account_move_line.move_id = account_move.id where account_move_line.date < '" + str(
+                        self.date_from) + "'" + "and account_move_line.partner_id=" + str(customer[
+                                                                                              'id']) + "and account_move.state='posted'and account_move_line.company_id=3 and(account_move_line.account_id=38 or account_move_line.account_id=30)")
+                data = self.env.cr.dictfetchall()
+                if data[0]['opening'] != None:
+                    data[0]['partner_id'] = customer['id']
+                    result.append(data)
+                else:
+                    data[0]['opening'] = 0
+                    data[0]['partner_id'] = customer['id']
+                    result.append(data)
         for records in result:
             for rec in records:
                 collection = self.collection_report_(rec['partner_id'])
                 rec['collection'] = collection
                 _res.append(rec)
         for rec in _res:
-            self.env.cr.execute("select rp.name as customer,ai.partner_id,sum(ai.amount_total) as amount_total from account_invoice as ai inner join res_partner as rp on ai.partner_id = rp.id where ai.date_invoice between'"+self.date_from+"'"+"and'"+self.date_to+"'"+"and ai.partner_id="+str(rec['partner_id'])+"group by rp.name,ai.partner_id")
+            self.env.cr.execute("""select rp.name as customer,ai.partner_id,sum(ai.amount_total) as amount_total from account_invoice as ai
+             inner join res_partner as rp on ai.partner_id = rp.id
+             where ai.date_invoice between '%s' and '%s' and ai.type='out_invoice' and ai.partner_id=%s group by rp.name,ai.partner_id"""%(self.date_from,self.date_to,rec['partner_id']))
             data = self.env.cr.dictfetchall()
             customer = self.env['res.partner'].search([['id', '=', rec['partner_id']], ])
 
@@ -227,12 +242,10 @@ class xls_report(osv.osv_memory):
                 rec['customer'] = customer.name
                 new.append(rec)
         for i in new:
-            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>i",i)
             if int(i['opening'])>0 or int(i['collection'])>0 or int(i['sale_amount'])>0:
                 final_res.append(i)
 
         for i in final_res:
-            print(i['partner_id'])
             self.env.cr.execute("""
             select sum(av.amount_total) as sales_return from account_invoice as av where av.type='out_refund' and av.partner_id=%s group by av.amount_total"""%(i['partner_id']))
             data = self.env.cr.dictfetchall()
