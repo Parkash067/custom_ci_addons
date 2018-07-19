@@ -33,5 +33,17 @@
                 </xpath>
             </field>
         </record>
+          <record model="ir.ui.view" id="custom_customer_id">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='fiscal_position']" position="after">
+                    <separator string="Reset Account Heads" attrs="{'invisible': [('state','!=','draft')]}"/>
+                    <br/>
+                    <button name="account_head" string="Reset Heads" type="object" class="oe_highlight" attrs="{'invisible': [('state','!=','draft')]}"/>
+                </xpath>
+            </field>
+        </record>
     </data>
 </openerp>
