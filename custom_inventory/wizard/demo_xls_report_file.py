@@ -75,18 +75,18 @@ class xls_report(osv.osv_memory):
         'type': '/'
     }
 
-    def check_dates(self, cr, uid, ids, context=None):
-        wizard = self.browse(cr, uid, ids, context=context)[0]
-        if wizard.date_from:
-            if wizard.date_from > wizard.date_to:
-                return False
-            if wizard.date_to > fields.date.today():
-                return False
-        return True
-
-    _constraints = [(check_dates,
-                     'Error: Invalid Dates\nDate From must be less than Date To\nDate To must not be greater than todays date.',
-                     ['date_from', 'date_to']), ]
+    # def check_dates(self, cr, uid, ids, context=None):
+    #     wizard = self.browse(cr, uid, ids, context=context)[0]
+    #     if wizard.date_from:
+    #         if wizard.date_from > wizard.date_to:
+    #             return False
+    #         if wizard.date_to > fields.date.today():
+    #             return False
+    #     return True
+    #
+    # _constraints = [(check_dates,
+    #                  'Error: Invalid Dates\nDate From must be less than Date To\nDate To must not be greater than todays date.',
+    #                  ['date_from', 'date_to']), ]
 
     def report_data(self, data,account_head):
         res = {}
