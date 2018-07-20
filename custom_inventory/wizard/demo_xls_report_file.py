@@ -172,13 +172,21 @@ class xls_report(osv.osv_memory):
             res = []
             for partner in self.partner_ids:
                 self.env.cr.execute(
-                    "select account_invoice.number,account_invoice.partner_id,account_invoice.date_invoice,account_invoice.residual as amount_total from account_invoice where account_invoice.date_invoice between'" + str(
+                    "select account_invoice.number,account_invoice.partner_id,account_invoice.date_invoice,account_invoice.residual as amount_total,account_invoice.origin from account_invoice where account_invoice.date_invoice between'" + str(
                         self.date_from) + "'" + " and '" + str(
                         self.date_to) + "'" + "and state='open'" + "and account_invoice.company_id=" + str(
                         self.company_id.id) + "and account_invoice.partner_id=" + str(
                         partner.partner_id.id) + "and type='out_invoice'order by account_invoice.date_invoice")
                 data = self.env.cr.dictfetchall()
                 result = self.cal_aging_brackets(data)
+                for i in result:
+                    sps = stock_picking_obj.search([('origin', '=', i['origin'],)])
+                    for sp in sps:
+                        self.env.cr.execute("""select sum(amount_total) as return_amount from account_invoice as av where type='out_refund' and (state='paid' or state ='open') and origin='%s'
+                        """ % (sp.name))
+                        amount = self.env.cr.dictfetchall()
+                        if len(amount) > 0 and amount[0]['return_amount'] != None:
+                            i['amount_total'] = i['amount_total'] - amount[0]['return_amount']
                 res.append({'customer':partner.partner_id.name,'details':result})
             return res
 
