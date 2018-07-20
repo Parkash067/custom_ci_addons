@@ -82,7 +82,7 @@
                                                         <span t-esc="o['number']"/>
                                                     </td>
                                                     <td style="border: 1px solid black; padding:5px; text-align:center;">
-                                                        <span t-esc="doc.get_tiem_diff_between(o['date_invoice'],doc.date_to)"/>
+                                                        <span t-esc="o['days']"/>
                                                     </td>
                                                     <td style="border: 1px solid black; padding:5px; text-align:center;">
                                                         <span t-esc="'{0:,.2f}'.format(int(o['amount_total']))"/>
