@@ -14,7 +14,7 @@
                     <field name="write_off_line" colspan="4" nolabel="1" attrs="{'invisible': [('multi_counter_parts','=',False)]}">
                         <strong> Multiple Write-Off </strong>
                         <tree editable="top" string="Multiparts" >
-                            <field name="account" required="1"/>
+                            <field name="account" required="1" domain="[('company_id','=',parent.company_id)]"/>
                             <field name="writeoff_amount" required="1"  sum="Total Amount"/>
                             <field name="comment" required="1"/>
                         </tree>
