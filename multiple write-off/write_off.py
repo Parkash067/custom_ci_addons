@@ -45,7 +45,7 @@ class writeoff_amount(osv.osv):
         voucher = self.pool.get('account.voucher').browse(cr, uid, voucher_id, context=context)
         rec_lst_ids = []
         if obj.multi_counter_parts == True:
-            for line in voucher.line_ids:
+            for line in voucher.line_dr_ids:
                 move_line = {
                     'journal_id': voucher.journal_id.id,
                     'period_id': voucher.period_id.id,
@@ -58,7 +58,7 @@ class writeoff_amount(osv.osv):
                     'analytic_account_id': line.account_analytic_id and line.account_analytic_id.id or False,
                     'quantity': 1,
                     'credit': 0.0,
-                    'debit': tot_amount,
+                    'debit': line.amount,
                     'date': voucher.date
                 }
                 voucher_line = move_line_obj.create(cr, uid, move_line)
@@ -243,7 +243,9 @@ class writeoff_amount(osv.osv):
                 for dr_id in obj.line_dr_ids:
                     c_move_id = move_line_pool.search(cr, uid, [('id', '=', dr_id.move_line_id.id)])[0]
                     _rec_ids.append(c_move_id)
-                _rec_ids.append(move_line_pool.search(cr, uid, [('move_id', '=', move_id), ('debit', '>', 0)])[0])
+                new_ids = move_line_pool.search(cr, uid, [('move_id', '=', move_id), ('debit', '>', 0)])
+                for new_id in new_ids:
+                    _rec_ids.append(new_id)
                 if len(_rec_ids) >= 2:
                     print(">>>>>>>>>>>>>>>>>>>>>>>Rec_ids>>>>>>>>>>>>>>>>>>>>>>>>>>", _rec_ids)
                     reconcile = move_line_pool.reconcile_partial(cr, uid, _rec_ids,
